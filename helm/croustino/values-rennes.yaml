@@ -6,3 +6,7 @@ front:
   nodePort: 30080
 monitoring:
   enabled: true
+# TP 10 : images tirées depuis Harbor avec le compte robot du projet croustino
+imageRegistry: 10.10.0.10:30002/croustino
+imagePullSecrets:
+  - name: harbor-croustino
