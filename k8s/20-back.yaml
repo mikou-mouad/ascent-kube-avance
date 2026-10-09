@@ -15,6 +15,7 @@ spec:
       labels:
         app: back
     spec:
+      serviceAccountName: back
       containers:
         - name: back
           image: ghcr.io/mikou-mouad/croustino-back:1.0
