@@ -1,0 +1,20 @@
+# Croustino « avant Kubernetes » : tout tourne sur une seule machine.
+# docker compose up --build  puis  http://localhost:8000
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: croustino
+      POSTGRES_USER: croustino
+      POSTGRES_PASSWORD: croissant-chaud
+  back:
+    build: ./back
+    environment:
+      DB_HOST: postgres
+      DB_USER: croustino
+      DB_PASSWORD: croissant-chaud
+    depends_on: [postgres]
+  front:
+    build: ./front
+    ports: ["8000:80"]
+    depends_on: [back]
