@@ -1,0 +1,60 @@
+# Elasticsearch (1 nœud) et Kibana gérés par l'opérateur ECK, dans le namespace logging.
+# Prérequis : opérateur ECK installé (voir l'énoncé du TP 08).
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: logs
+  namespace: logging
+spec:
+  version: 8.17.0
+  nodeSets:
+    - name: default
+      count: 1
+      config:
+        # Évite d'avoir à régler vm.max_map_count sur les nœuds
+        node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              env:
+                - name: ES_JAVA_OPTS
+                  value: "-Xms1g -Xmx1g"
+              resources:
+                requests: { cpu: 500m, memory: 2Gi }
+                limits: { memory: 2Gi }
+      volumeClaimTemplates:
+        - metadata:
+            name: elasticsearch-data
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 5Gi
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: logs
+  namespace: logging
+spec:
+  version: 8.17.0
+  count: 1
+  elasticsearchRef:
+    name: logs
+  http:
+    service:
+      spec:
+        type: NodePort
+        ports:
+          - name: https
+            port: 5601
+            targetPort: 5601
+            nodePort: 30561
+  podTemplate:
+    spec:
+      containers:
+        - name: kibana
+          resources:
+            requests: { cpu: 200m, memory: 1Gi }
+            limits: { memory: 1Gi }

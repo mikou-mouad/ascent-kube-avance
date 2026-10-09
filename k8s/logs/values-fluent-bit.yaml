@@ -1,0 +1,30 @@
+# Fluent Bit (DaemonSet) : lit /var/log/containers sur chaque nœud,
+# ajoute les métadonnées Kubernetes et envoie tout dans Elasticsearch.
+# helm install fluent-bit fluent/fluent-bit -n logging -f k8s/logs/values-fluent-bit.yaml
+
+# Mot de passe de l'utilisateur "elastic", généré par ECK
+env:
+  - name: ES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: logs-es-elastic-user
+        key: elastic
+
+config:
+  # Les entrées (tail des logs des conteneurs) et le filtre "kubernetes"
+  # (Merge_Log On : les logs JSON du back deviennent des champs) sont ceux du chart.
+  outputs: |
+    [OUTPUT]
+        Name               es
+        Match              kube.*
+        Host               logs-es-http.logging.svc
+        Port               9200
+        HTTP_User          elastic
+        HTTP_Passwd        ${ES_PASSWORD}
+        tls                On
+        tls.verify         Off
+        Logstash_Format    On
+        Logstash_Prefix    kube
+        Replace_Dots       On
+        Suppress_Type_Name On
+        Retry_Limit        False

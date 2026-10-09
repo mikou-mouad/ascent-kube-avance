@@ -8,6 +8,10 @@ imageRegistry: ghcr.io/mikou-mouad
 imagePullSecrets: []
 #  - name: harbor-croustino
 
+# ServiceMonitor, alertes et dashboard Grafana (nécessite kube-prometheus-stack, TP 07).
+monitoring:
+  enabled: false
+
 db:
   nom: croustino
   utilisateur: croustino
