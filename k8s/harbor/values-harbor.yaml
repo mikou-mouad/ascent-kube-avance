@@ -1,0 +1,29 @@
+# Harbor allégé pour le cluster de formation : HTTP sur un NodePort, sans TLS.
+# helm install harbor harbor/harbor -n harbor --create-namespace -f k8s/harbor/values-harbor.yaml
+expose:
+  type: nodePort
+  tls:
+    enabled: false
+  nodePort:
+    ports:
+      http:
+        nodePort: 30002
+
+# Adresse utilisée par les clients (docker, skopeo, containerd) : à adapter à votre control plane
+externalURL: http://10.10.0.10:30002
+
+harborAdminPassword: Harbor12345   # mot de passe de formation, à changer
+
+persistence:
+  persistentVolumeClaim:
+    registry:
+      size: 5Gi
+    jobservice:
+      jobLog:
+        size: 1Gi
+    database:
+      size: 1Gi
+    redis:
+      size: 1Gi
+    trivy:
+      size: 5Gi
