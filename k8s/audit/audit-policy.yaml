@@ -1,0 +1,37 @@
+# Politique d'audit de l'API server.
+# Les règles sont évaluées dans l'ordre : la première qui correspond décide du niveau.
+# Niveaux : None < Metadata < Request < RequestResponse
+apiVersion: audit.k8s.io/v1
+kind: Policy
+omitStages:
+  - RequestReceived
+rules:
+  # 1. Bruit : sondes de santé, événements, renouvellement des leases
+  - level: None
+    nonResourceURLs: ["/healthz*", "/livez*", "/readyz*", "/version", "/metrics"]
+  - level: None
+    resources:
+      - group: ""
+        resources: ["events"]
+      - group: "coordination.k8s.io"
+        resources: ["leases"]
+  - level: None
+    userGroups: ["system:nodes"]
+
+  # 2. Secrets et ConfigMaps : on note qui y touche, jamais leur contenu
+  - level: Metadata
+    resources:
+      - group: ""
+        resources: ["secrets", "configmaps"]
+
+  # 3. Lectures : trop nombreuses pour être tracées
+  - level: None
+    verbs: ["get", "list", "watch"]
+
+  # 4. Modifications dans les namespaces de Croustino : tout le détail
+  - level: RequestResponse
+    namespaces: ["croustino", "croustino-lyon"]
+    verbs: ["create", "update", "patch", "delete", "deletecollection"]
+
+  # 5. Toutes les autres modifications : qui, quoi, quand
+  - level: Metadata
