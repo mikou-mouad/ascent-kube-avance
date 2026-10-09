@@ -1,4 +1,4 @@
-FROM nginx:1.27-alpine
+FROM public.ecr.aws/docker/library/nginx:1.27-alpine
 
 ARG APP_VERSION=1.0
 ARG COULEUR=#b5651d
