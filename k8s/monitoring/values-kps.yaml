@@ -1,0 +1,31 @@
+# kube-prometheus-stack allégé pour le cluster de formation.
+# helm install kps prometheus-community/kube-prometheus-stack -n monitoring --create-namespace -f k8s/monitoring/values-kps.yaml
+alertmanager:
+  service:
+    type: NodePort
+    nodePort: 30093
+
+grafana:
+  adminPassword: croustino   # mot de passe de formation
+  service:
+    type: NodePort
+    nodePort: 30300
+  sidecar:
+    dashboards:
+      # Charge les dashboards fournis par des ConfigMaps de tous les namespaces
+      searchNamespace: ALL
+
+prometheus:
+  service:
+    type: NodePort
+    nodePort: 30090
+  prometheusSpec:
+    retention: 2d
+    # Prendre en compte les ServiceMonitors / PodMonitors / règles de tous les charts,
+    # pas seulement ceux portant le label de la release kps.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    resources:
+      requests: { cpu: 200m, memory: 512Mi }
+      limits: { memory: 1Gi }

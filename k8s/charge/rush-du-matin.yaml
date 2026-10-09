@@ -1,0 +1,32 @@
+# Simule le rush de 7h : 3 clients passent 600 commandes chacun.
+# Environ 20 % des commandes dépassent la fournée et sont rejetées.
+# kubectl apply -f k8s/charge/rush-du-matin.yaml   (à relancer : kubectl delete job rush-du-matin d'abord)
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rush-du-matin
+  namespace: croustino
+spec:
+  parallelism: 3
+  completions: 3
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: clients
+          image: curlimages/curl:8.11.1
+          command: ["sh", "-c"]
+          args:
+            - |
+              set -- croissant pain-chocolat pain-raisins chausson
+              i=0
+              while [ $i -lt 600 ]; do
+                n=$((RANDOM % 4 + 1)); eval produit=\${$n}
+                quantite=$((RANDOM % 30 + 1))
+                curl -s -o /dev/null -w "%{http_code} " -X POST http://back:8080/api/commandes \
+                  -H 'Content-Type: application/json' \
+                  -d "{\"client\":\"client-$HOSTNAME-$i\",\"produit\":\"$produit\",\"quantite\":$quantite}"
+                i=$((i + 1))
+                sleep 0.2
+              done
