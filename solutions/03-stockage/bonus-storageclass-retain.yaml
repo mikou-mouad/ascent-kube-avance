@@ -1,0 +1,10 @@
+# Bonus : une StorageClass qui conserve le volume quand le PVC est supprimé.
+# Test : créer un PVC avec storageClassName: local-path-retain et un pod qui l'utilise,
+# supprimer le pod puis le PVC : le PV passe en Released au lieu de disparaître.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path-retain
+provisioner: rancher.io/local-path
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer

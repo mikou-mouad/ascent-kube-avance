@@ -1,0 +1,12 @@
+# Étape 3 : PVC de test. Pas de storageClassName : la StorageClass par défaut (local-path) est utilisée.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-pvc
+  namespace: croustino
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
