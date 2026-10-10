@@ -25,6 +25,20 @@
 | Le back | ServiceAccount `back` | aucun accès à l'API (il n'en a pas besoin) |
 | La CI | ServiceAccount `ci-deployer` | mettre à jour l'image des Deployments de `croustino`, rien d'autre |
 
+## Avant de commencer : passer sur la branche du TP
+
+Sur le **control plane** :
+
+```bash
+cd ~/croustino
+git fetch
+git stash -u          # met de côté vos fichiers du TP précédent
+git checkout tp-04-rbac
+```
+
+La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
+
 ## Partie 1 – Authentification (40 min)
 
 ### 1. Qui suis-je ?
