@@ -1,5 +1,24 @@
 # Correction du TP 06 – Helm
 
+Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+
+- `README.md`
+- `helm/croustino/Chart.yaml`
+- `helm/croustino/templates/NOTES.txt`
+- `helm/croustino/templates/_helpers.tpl`
+- `helm/croustino/templates/back.yaml`
+- `helm/croustino/templates/configmap.yaml`
+- `helm/croustino/templates/front.yaml`
+- `helm/croustino/templates/postgres.yaml`
+- `helm/croustino/templates/secret.yaml`
+- `helm/croustino/templates/serviceaccount.yaml`
+- `helm/croustino/values-lyon.yaml`
+- `helm/croustino/values-rennes.yaml`
+- `helm/croustino/values.yaml`
+- `programme-3-jours.md`
+
+Pour les comparer à votre travail : `diff -r solutions/06-helm/k8s k8s` (ou `helm`).
+
 Le chart est dans `helm/croustino/`.
 
 - **PVC retrouvé :** un StatefulSet nomme ses PVC `<template>-<statefulset>-<ordinal>`. Le chart garde les noms `data` et `postgres` : le nouveau `postgres-0` réutilise `data-postgres-0`, que `kubectl delete` n'avait pas supprimé.
