@@ -35,8 +35,8 @@ spec:
           command: ["stress", "--vm", "1", "--vm-bytes", "__STRESS__", "--vm-hang", "0"]
           resources:
             requests:
-              cpu: 500m
+              cpu: "1"
               memory: __MEMOIRE__
             limits:
-              cpu: 500m
+              cpu: "1"
               memory: __MEMOIRE__

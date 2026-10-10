@@ -66,7 +66,7 @@ Dans un second terminal, suivez les pods, et gardez le site ouvert sur ClientWeb
 kubectl get pods -n croustino -o wide -w
 ```
 
-En une à deux minutes, vous devez observer :
+`promos` remplit la mémoire en une à trois minutes (`kubectl top pods -n croustino` montre sa consommation monter). Vous devez ensuite observer :
 
 - les pods `promos` qui tournent, un par worker, sans jamais redémarrer ;
 - les pods de Croustino (back, front, PostgreSQL) en `Evicted`, `OOMKilled`, `Pending` ou `CrashLoopBackOff` : **le site tombe** ;
