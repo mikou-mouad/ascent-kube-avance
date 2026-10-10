@@ -183,15 +183,36 @@
 </div>
 <div style="display:flex;gap:40px">
 <div style="flex:1;display:flex;flex-direction:column;gap:20px">
-<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Branche tp-NN</b></span> = l'énoncé du TP NN + l'application dans l'état attendu au début du TP.</p>
-<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>La correction</b></span> d'un TP, c'est la branche suivante.</p>
-<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Bloqué ?</b></span> On repart de la bonne branche, sans perdre la suite.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Branche tp-NN</b></span> = l'application au début du TP NN, son énoncé et sa correction.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>La correction</b></span> est dans solutions/, sans rien du TP suivant.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Bloqué ?</b></span> On consulte la correction, ou on repart de la branche suivante.</p>
 </div>
 <div style="flex:1;background:#1E1814;border-radius:16px;padding:32px 36px;display:flex;flex-direction:column">
 <p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.6;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># TP 02, sur le control plane</span><br>git clone https://github.com/<br>&#160;&#160;mikou-mouad/ascent-kube-avance.git<br>&#160;&#160;~/croustino<br><br><span style="color:#A89580"># début de chaque TP suivant</span><br>cd ~/croustino &amp;&amp; git fetch<br>git stash -u<br>git checkout <span style="color:#E9A23B">tp-03-stockage</span></p>
 </div>
 </div>
-<aside>Montrer le dépôt sur GitHub. Les dossiers : app/ (le code), k8s/ (les manifests), helm/ (à partir du TP 06), tp/ (les énoncés), solutions/ (les réponses aux questions).</aside>
+<aside>Montrer le dépôt sur GitHub. Les dossiers : app/ (le code), k8s/ (les manifests), helm/ (à partir du TP 06), tp/ (les énoncés), solutions/NN-*/ (la correction de chaque TP : fichiers corrigés et réponses aux questions). La correction est volontairement accessible : chacun avance à son rythme.</aside>
+</section>
+<section id="j1-debut" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Jour 1 · 9h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">De la VM au cluster</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#2B1D14;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">OÙ EN EST CROUSTINO</p>
+<p style="font-size:30px;line-height:1.45;color:#F3E9DC">Une seule VM : front, back et PostgreSQL.</p>
+<p style="font-size:30px;line-height:1.45;color:#F3E9DC">Coupée à chaque mise à jour.</p>
+<p style="font-size:30px;line-height:1.45;color:#F3E9DC">Saturée au rush de 7h.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">AUJOURD'HUI</p>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h15</p><p style="font-size:28px">Ch. 0 · Mise à niveau</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h45</p><p style="font-size:28px">Ch. 1 · TP 01 : installer le cluster</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">12h00</p><p style="font-size:28px">Ch. 2 · Première migration</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">13h30</p><p style="font-size:28px">TP 02 : déployer Croustino</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">15h30</p><p style="font-size:28px">Ch. 3 · Stockage et TP 03</p></div>
+</div>
+</div>
+<aside>Annoncer les horaires : 9h00 – 12h30, 13h30 – 17h00, pauses à 10h30 et 15h15. Ce soir, Croustino tourne sur un cluster et ne perd plus ses commandes.</aside>
 </section>
 <section id="c0-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 0 · L'incident</p>
@@ -372,7 +393,15 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">snapshot des 3 VM pris</p></div>
 </div>
 </div>
-<aside>Pendant les temps d'attente (apt, pull des images), poser les questions de l'énoncé : swap, br_netfilter, driver cgroup, apt-mark hold. Correction : solutions/01-installation.md dans la branche tp-02.</aside>
+<aside>Pendant les temps d'attente (apt, pull des images), poser les questions de l'énoncé : swap, br_netfilter, driver cgroup, apt-mark hold. Correction : solutions/01-installation/, dans la branche du TP.</aside>
+</section>
+<section id="pause-j1-matin" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 1 · 10h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 10h45</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Laissez tourner les installations : on reprend le TP 01 au retour.</p>
+<aside>Pendant la pause, faire le point sur l'avancement de chacun : nœuds préparés ? kubeadm init lancé ?</aside>
 </section>
 <section id="c2-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 2 · L'incident</p>
@@ -476,6 +505,14 @@
 </div>
 <aside>/readyz du back teste la base : si PostgreSQL est arrêté, le back sort du Service au lieu de renvoyer des erreurs. Bonus du TP : passer PostgreSQL à 0 réplica et observer les endpoints.</aside>
 </section>
+<section id="dej-j1" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="•" style="color:#E9A23B;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B;text-align:center">Jour 1 · 12h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause déjeuner</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 13h30</p>
+<p style="font-size:30px;color:#D6E4F2;text-align:center">Cet après-midi : Croustino arrive sur le cluster (TP 02).</p>
+<aside>Vérifier avant la pause que les 3 nœuds sont Ready chez tout le monde : le TP 02 commence directement au retour.</aside>
+</section>
 <section id="c2-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
 <div style="display:flex;flex-direction:column;gap:24px">
 <x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
@@ -502,7 +539,15 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous savez revenir à la 1.0</p></div>
 </div>
 </div>
-<aside>Correction : branche tp-03-stockage, dossier k8s/. Question de fin à garder pour la suite : que se passe-t-il si le pod PostgreSQL redémarre ?</aside>
+<aside>Correction : solutions/02-deploiement/, dans la branche du TP. Question de fin à garder pour la suite : que se passe-t-il si le pod PostgreSQL redémarre ?</aside>
+</section>
+<section id="pause-j1-aprem" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 1 · 15h15</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 15h30</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : mardi, 8h05… les commandes du matin ont disparu.</p>
+<aside>Le site doit tourner chez tout le monde avant le chapitre 3 : c'est lui qu'on va casser.</aside>
 </section>
 <section id="c3-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 3 · L'incident</p>
@@ -568,6 +613,32 @@
 </div>
 <aside>local-path est parfait pour la formation mais lie le volume à un nœud. En production : un stockage réseau ou distribué (Longhorn, Ceph, CSI du cloud). On le reverra au chapitre 11 pendant le drain des nœuds.</aside>
 </section>
+<section id="c3-pvc-yaml" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">PVC et PV en YAML</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>1. Le PVC</b></span> : ce qu'on écrit</p>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">apiVersion: v1<br>kind: PersistentVolumeClaim<br>metadata:<br>&#160;&#160;name: <span style="color:#E9A23B">test-pvc</span><br>spec:<br>&#160;&#160;accessModes:<br>&#160;&#160;- ReadWriteOnce<br>&#160;&#160;resources:<br>&#160;&#160;&#160;&#160;requests:<br>&#160;&#160;&#160;&#160;&#160;&#160;storage: 100Mi<br><span style="color:#A89580"># pas de storageClassName :</span><br><span style="color:#A89580"># la classe par défaut</span></p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>2. Le pod</b></span> qui l'utilise</p>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Pod<br>metadata: {name: conso}<br>spec:<br>&#160;&#160;volumes:<br>&#160;&#160;- name: <span style="color:#8FC1F0">data</span><br>&#160;&#160;&#160;&#160;persistentVolumeClaim:<br>&#160;&#160;&#160;&#160;&#160;&#160;claimName: <span style="color:#E9A23B">test-pvc</span><br>&#160;&#160;containers:<br>&#160;&#160;- name: conso<br>&#160;&#160;&#160;&#160;image: busybox<br>&#160;&#160;&#160;&#160;volumeMounts:<br>&#160;&#160;&#160;&#160;- name: <span style="color:#8FC1F0">data</span><br>&#160;&#160;&#160;&#160;&#160;&#160;mountPath: /data</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>3. Le PV</b></span> : créé tout seul</p>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#2B1D14;white-space:nowrap">kind: PersistentVolume<br>metadata:<br>&#160;&#160;name: pvc-3f2a…<br>spec:<br>&#160;&#160;capacity:<br>&#160;&#160;&#160;&#160;storage: 100Mi<br>&#160;&#160;accessModes:<br>&#160;&#160;- ReadWriteOnce<br>&#160;&#160;claimRef:<br>&#160;&#160;&#160;&#160;name: <span style="color:#B5651D">test-pvc</span><br>&#160;&#160;storageClassName: local-path<br>&#160;&#160;hostPath:<br>&#160;&#160;&#160;&#160;path: /opt/local-path-…</p>
+</div>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#5A4636"><span style="color:#2B1D14"><b>accessModes</b></span> : ReadWriteOnce (un nœud), ReadOnlyMany, ReadWriteMany (plusieurs nœuds, stockage réseau).</p>
+<aside>On n'écrit que le PVC et le pod. Le PV est visible avec kubectl get pv -o yaml : il est lié au PVC par claimRef. Le volume du pod (data) fait le lien entre volumeMounts et le PVC. Le pod du TP est lancé avec kubectl run --overrides, qui contient exactement ce YAML en JSON.</aside>
+</section>
 <section id="c3-sts" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
 <h2 style="font-family:'Fraunces', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1">StatefulSet : un nom et un volume par pod</h2>
@@ -616,7 +687,49 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">… et les commandes sont toujours là</p></div>
 </div>
 </div>
-<aside>Correction : branche tp-04-rbac (k8s/10-postgres.yaml) et solutions/03-stockage.md. Le Service doit être supprimé puis recréé en headless : un Service existant ne peut pas changer de clusterIP.</aside>
+<aside>Correction : solutions/03-stockage/, dans la branche du TP. Le Service doit être supprimé puis recréé en headless : un Service existant ne peut pas changer de clusterIP.</aside>
+</section>
+<section id="fin-j1" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Fin du jour 1 · 17h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#FBF6EE">Croustino a quitté sa VM</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#3A2A1F;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">AUJOURD'HUI</p>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Un cluster kubeadm de 3 nœuds</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Croustino déployé, mis à jour sans coupure</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Les commandes survivent au pod</p></div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1F4F82;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#FBE3BC">DEMAIN, CHEZ CROUSTINO</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Le stagiaire supprime la prod.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Un service mange toute la RAM.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">On ouvre à Lyon.</p>
+</div>
+</div>
+<p style="font-size:30px;color:#E8D9C4">Avant de partir : un tour de table, ce qui était clair et ce qui l'était moins.</p>
+<aside>Laisser les VM allumées : on repart demain du cluster d'aujourd'hui. Les participants en retard peuvent rattraper avec la branche tp-03-stockage.</aside>
+</section>
+<section id="j2-debut" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Jour 2 · 9h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Croustino grandit</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#2B1D14;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">OÙ EN EST CROUSTINO</p>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Cluster de 3 nœuds</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Front, back et base déployés</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Mises à jour sans coupure</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Commandes persistantes</p></div>
+<p style="font-size:28px;line-height:1.4;color:#E9A23B">Mais tout le monde est admin.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">AUJOURD'HUI</p>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h10</p><p style="font-size:28px">Ch. 4 · Authentification et RBAC</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">13h30</p><p style="font-size:28px">Ch. 5 · Capacité</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">14h40</p><p style="font-size:28px">Ch. 6 · Helm : on ouvre à Lyon</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">16h30</p><p style="font-size:28px">Ch. 7 · Monitoring (début)</p></div>
+</div>
+</div>
+<aside>Récapitulatif rapide du jour 1 (10 min). Vérifier que tous les clusters ont redémarré correctement et que le site répond. Un participant en retard repart de la branche tp-04-rbac.</aside>
 </section>
 <section id="c4-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 4 · L'incident</p>
@@ -682,6 +795,14 @@
 </div>
 </div>
 <aside>Le script tp/04-rbac/creer-utilisateur.sh enchaîne les 4 étapes. Dans le TP, Malik est créé à la main pour comprendre, Théo et Inès avec le script. Un certificat client ne se révoque pas : on préfère des certificats courts et des droits donnés aux groupes.</aside>
+</section>
+<section id="pause-j2-matin" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 2 · 10h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 10h45</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : on donne enfin à chacun les bons droits (RBAC).</p>
+<aside>Avant la pause, la partie 1 du TP 04 doit être faite : Malik, Théo et Inès ont leur kubeconfig.</aside>
 </section>
 <section id="c4-rbac" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
@@ -763,7 +884,15 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">la CI change l'image, et rien d'autre</p></div>
 </div>
 </div>
-<aside>Partie 1 (40 min) avant la pause : identités. Partie 2 (1 h 25) après : RBAC et ServiceAccounts. Correction : branche tp-05-capacite, dossier k8s/rbac/.</aside>
+<aside>Partie 1 (40 min) avant la pause : identités. Partie 2 (1 h 25) après : RBAC et ServiceAccounts. Correction : solutions/04-rbac/, dans la branche du TP.</aside>
+</section>
+<section id="dej-j2" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="•" style="color:#E9A23B;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B;text-align:center">Jour 2 · 12h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause déjeuner</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 13h30</p>
+<p style="font-size:30px;color:#D6E4F2;text-align:center">Cet après-midi : un service gourmand, puis l'ouverture à Lyon.</p>
+<aside>Conseiller un snapshot des workers avant le TP 05 : l'incident sature vraiment la mémoire des nœuds.</aside>
 </section>
 <section id="c5-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 5 · L'incident</p>
@@ -774,11 +903,11 @@
 <p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Vendredi<br>7h02</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:28px">
-<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Un prestataire a déployé le service « promos » dans <span style="color:#FBF6EE"><b>croustino</b></span>. Il consomme 1,5 Go par pod, sans aucune limite. Les nœuds saturent, le noyau tue des processus au hasard : <span style="color:#FBF6EE"><b>le back redémarre en boucle en plein rush.</b></span></p>
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Un prestataire a déployé le service « promos » dans <span style="color:#FBF6EE"><b>croustino</b></span>. Copié d'un traitement big data, chaque pod réserve et consomme presque toute la mémoire d'un worker. Les pods de Croustino, qui ne déclarent rien, sont sacrifiés : <span style="color:#FBF6EE"><b>back et PostgreSQL évincés en plein rush.</b></span></p>
 <p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« Un seul service mal écrit, et c'est tout Croustino qui tombe ? » — Sophie</p>
 </div>
 </div>
-<aside>Le cluster est partagé : sans limites, le voisin le plus gourmand gagne. Sur la VM, c'était pareil, mais au moins on voyait le coupable avec top.</aside>
+<aside>Le cluster est partagé. Paradoxe à faire trouver aux participants : promos, qui consomme tout, survit, parce qu'il a déclaré ses ressources (QoS Guaranteed). Croustino, qui ne déclare rien (BestEffort), est le premier sacrifié. Le TP le reproduit avec k8s/capacite/lancer-promos.sh.</aside>
 </section>
 <section id="c5-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 5 · La solution</p>
@@ -790,12 +919,12 @@
 <div style="display:flex;gap:18px">
 <div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">back</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 100m / 128Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 256Mi</p></div>
 <div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">postgres</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 500m / 512Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 512Mi</p></div>
-<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">promos</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">défaut 256Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">→ OOMKilled, seul</p></div>
+<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">promos</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">demande 7 Gi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">→ refusé (max 1Gi)</p></div>
 </div>
 <p style="font-size:26px;color:#5A4636"><span style="color:#2B1D14"><b>CONTENEUR</b></span> · requests (réservé) et limits (plafond)</p>
 </div>
 </div>
-<aside>Avec la limite, promos est tué tout seul (OOMKilled) au lieu d'emporter le nœud. Le quota empêche une équipe de consommer tout le cluster, même avec des pods raisonnables.</aside>
+<aside>Avec le LimitRange, promos est refusé dès la création : aucun conteneur ne peut dépasser 1Gi. En déclarant leurs ressources, back et PostgreSQL deviennent Burstable et Guaranteed : ils ne sont plus les premiers sacrifiés. Le quota empêche une équipe de réserver tout le cluster, même avec des pods raisonnables.</aside>
 </section>
 <section id="c5-requests" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 5 · Le concept</p>
@@ -876,7 +1005,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">postgres est en QoS Guaranteed</p></div>
 </div>
 </div>
-<aside>Supprimer promos après l'étape 3 pour ne pas gêner les TP suivants. Correction : branche tp-06-helm (k8s/capacite/ et ressources dans k8s/).</aside>
+<aside>Supprimer promos après l'étape 3 pour ne pas gêner les TP suivants. Correction : solutions/05-capacite/, dans la branche du TP.</aside>
 </section>
 <section id="c6-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 6 · L'incident</p>
@@ -996,7 +1125,15 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">helm list -A montre deux releases</p></div>
 </div>
 </div>
-<aside>Prévoir imageRegistry et imagePullSecrets dans les values dès maintenant : ils serviront au TP 10. Correction : branche tp-07-monitoring, dossier helm/croustino/.</aside>
+<aside>Prévoir imageRegistry et imagePullSecrets dans les values dès maintenant : ils serviront au TP 10. Correction : solutions/06-helm/, dans la branche du TP.</aside>
+</section>
+<section id="pause-j2-aprem" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 2 · 15h15</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 15h30</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : Rennes passe sous Helm, sans perdre une commande.</p>
+<aside>Le chart doit être écrit avant la pause (étape 3 du TP 06). Au retour : migration de Rennes et installation de Lyon.</aside>
 </section>
 <section id="c7-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 7 · L'incident</p>
@@ -1091,7 +1228,7 @@
 <p style="font-size:28px;line-height:1.4;color:#5A4636"><span style="color:#2B1D14"><b>rate()</b></span> : un compteur ne fait que monter et repart à zéro quand le pod redémarre. On regarde sa pente.</p>
 </div>
 </div>
-<aside>Le chart Croustino livre aussi une PrometheusRule (alertes) et le dashboard en ConfigMap avec le label grafana_dashboard : tout est versionné avec l'application. Correction dans helm/croustino/templates/monitoring.yaml.</aside>
+<aside>Le chart Croustino livre aussi une PrometheusRule (alertes) et le dashboard en ConfigMap avec le label grafana_dashboard : tout est versionné avec l'application. Correction dans solutions/07-monitoring/.</aside>
 </section>
 <section id="c7-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
 <div style="display:flex;flex-direction:column;gap:24px">
@@ -1119,7 +1256,51 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">l'alerte passe en Firing</p></div>
 </div>
 </div>
-<aside>Jour 2 à 16h50 : on lance juste l'installation (les pods mettent quelques minutes). Jour 3 au matin : exploitation. Prometheus :30090, Grafana :30300 (admin / croustino), Alertmanager :30093. Correction : branche tp-08-logs.</aside>
+<aside>Jour 2 à 16h50 : on lance juste l'installation (les pods mettent quelques minutes). Jour 3 au matin : exploitation. Prometheus :30090, Grafana :30300 (admin / croustino), Alertmanager :30093. Correction : solutions/07-monitoring/, dans la branche du TP.</aside>
+</section>
+<section id="fin-j2" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Fin du jour 2 · 17h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#FBF6EE">Croustino a grandi, proprement</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#3A2A1F;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">AUJOURD'HUI</p>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Chacun son identité et ses droits</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Des limites et un quota par équipe</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Rennes et Lyon déployés avec Helm</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Prometheus et Grafana installés</p></div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1F4F82;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#FBE3BC">DEMAIN, CHEZ CROUSTINO</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Une commande disparaît.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Le back est supprimé à 3h du matin.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Docker Hub nous bloque.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">La veille de l'Épiphanie…</p>
+</div>
+</div>
+<aside>Laisser tourner kube-prometheus-stack cette nuit : demain matin, les graphes auront de l'historique. Participants en retard : branche tp-07-monitoring.</aside>
+</section>
+<section id="j3-debut" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Jour 3 · 9h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Exploiter Croustino en production</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#2B1D14;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">OÙ EN EST CROUSTINO</p>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Rennes et Lyon sous Helm</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Droits, limites et quotas</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Prometheus installé</p></div>
+<p style="font-size:28px;line-height:1.4;color:#E9A23B">Mais quand ça casse, on ne voit encore rien.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">AUJOURD'HUI</p>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h10</p><p style="font-size:28px">Ch. 7 · Dashboard et alertes</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">10h00</p><p style="font-size:28px">Ch. 8 · Logs avec EFK</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">11h25</p><p style="font-size:28px">Ch. 9 · Audit</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">13h30</p><p style="font-size:28px">Ch. 10 · Harbor</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">14h35</p><p style="font-size:28px">Ch. 11 · Architecture et mises à jour</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">16h35</p><p style="font-size:28px">Épilogue et bilan</p></div>
+</div>
+</div>
+<aside>Récapitulatif rapide du jour 2. On reprend directement le TP 07 là où on l'a laissé : Prometheus a tourné toute la nuit. Participants en retard : branche tp-07-monitoring.</aside>
 </section>
 <section id="c8-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 8 · L'incident</p>
@@ -1251,7 +1432,15 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">… et la raison du rejet</p></div>
 </div>
 </div>
-<aside>Ordre important : installer la chaîne de logs AVANT de rejouer la commande, car Fluent Bit ne lit que les nouvelles lignes. Kibana : https sur le port 30561, utilisateur elastic. Correction : solutions/08-logs.md dans tp-09-audit.</aside>
+<aside>Ordre important : installer la chaîne de logs AVANT de rejouer la commande, car Fluent Bit ne lit que les nouvelles lignes. Kibana : https sur le port 30561, utilisateur elastic. Correction : solutions/08-logs/, dans la branche du TP.</aside>
+</section>
+<section id="pause-j3-matin" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 3 · 10h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 10h45</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Elasticsearch démarre pendant la pause. Au retour : l'enquête Lebrun.</p>
+<aside>Lancer l'installation d'ECK et d'Elasticsearch juste avant la pause : il met 2 à 4 minutes à être prêt.</aside>
 </section>
 <section id="c9-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 9 · L'incident</p>
@@ -1354,7 +1543,15 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous listez les tentatives refusées</p></div>
 </div>
 </div>
-<aside>Point de vigilance : une faute de YAML dans kube-apiserver.yaml et l'API ne revient pas. Diagnostic : sudo crictl ps -a --name kube-apiserver puis crictl logs. Correction : solutions/09-audit.md dans tp-10-harbor.</aside>
+<aside>Point de vigilance : une faute de YAML dans kube-apiserver.yaml et l'API ne revient pas. Diagnostic : sudo crictl ps -a --name kube-apiserver puis crictl logs. Correction : solutions/09-audit/, dans la branche du TP.</aside>
+</section>
+<section id="dej-j3" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="•" style="color:#E9A23B;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B;text-align:center">Jour 3 · 12h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause déjeuner</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 13h30</p>
+<p style="font-size:30px;color:#D6E4F2;text-align:center">Cet après-midi : nos propres images, puis la mise à jour du cluster.</p>
+<aside>L'API server doit avoir redémarré avec l'audit chez tout le monde avant la pause. Au retour, désinstaller EFK pour libérer la mémoire avant Harbor.</aside>
 </section>
 <section id="c10-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 10 · L'incident</p>
@@ -1449,7 +1646,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">nginx:1.19 est bloquée par la politique</p></div>
 </div>
 </div>
-<aside>Harbor : http://10.10.0.10:30002, admin / Harbor12345. Le nom du robot contient un $ : toujours entre guillemets simples. Correction : branche tp-11-cycle-de-vie (values-rennes.yaml, solutions/10-harbor.md).</aside>
+<aside>Harbor : http://10.10.0.10:30002, admin / Harbor12345. Le nom du robot contient un $ : toujours entre guillemets simples. Correction : solutions/10-harbor/, dans la branche du TP.</aside>
 </section>
 <section id="c11-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 11 · L'incident</p>
@@ -1531,13 +1728,13 @@
 <x-shape kind="arrow-right" style="background:#2F6FB0;width:46px;height:24px"></x-shape>
 <div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">snapshot restore</p><p style="font-size:24px;color:#EAF1F8">dans un nouveau dossier</p></div>
 <x-shape kind="arrow-right" style="background:#2F6FB0;width:46px;height:24px"></x-shape>
-<div style="flex:1;background:#1F4F82;border-radius:14px;padding:18px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">etcd.yaml</p><p style="font-size:24px;color:#EAF1F8">pointe vers ce dossier</p></div>
+<div style="flex:1;background:#1F4F82;border-radius:14px;padding:18px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">échange</p><p style="font-size:24px;color:#EAF1F8">les données restaurées remplacent les anciennes</p></div>
 </div>
 <div style="background:#1E1814;border-radius:16px;padding:26px 32px;display:flex;flex-direction:column">
-<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># sauvegarde (etcdctl est dans le pod etcd)</span><br>kubectl -n kube-system exec etcd-controlplane -- etcdctl --endpoints=https://127.0.0.1:2379 \<br>&#160;&#160;--cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=…/server.crt --key=…/server.key \<br>&#160;&#160;snapshot save <span style="color:#E9A23B">/var/lib/etcd/sauvegarde-tp11.db</span><br><span style="color:#A89580"># restauration dans un nouveau dossier</span><br>kubectl -n kube-system exec etcd-controlplane -- etcdutl snapshot restore \<br>&#160;&#160;/var/lib/etcd/sauvegarde-tp11.db --data-dir <span style="color:#E9A23B">/var/lib/etcd/restauration</span> …<br><span style="color:#A89580"># puis dans /etc/kubernetes/manifests/etcd.yaml : hostPath → /var/lib/etcd/restauration</span></p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># sauvegarde (etcdctl est dans le pod etcd)</span><br>kubectl -n kube-system exec etcd-controlplane -- etcdctl --endpoints=https://127.0.0.1:2379 \<br>&#160;&#160;--cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=…/server.crt --key=…/server.key \<br>&#160;&#160;snapshot save <span style="color:#E9A23B">/var/lib/etcd/sauvegarde-tp11.db</span><br><span style="color:#A89580"># restauration dans un nouveau dossier</span><br>kubectl -n kube-system exec etcd-controlplane -- etcdutl snapshot restore \<br>&#160;&#160;/var/lib/etcd/sauvegarde-tp11.db --data-dir <span style="color:#E9A23B">/var/lib/etcd/restauration</span> …<br><span style="color:#A89580"># puis : etcd arrêté, /var/lib/etcd remplacé par la restauration, etcd relancé</span></p>
 </div>
 <p style="font-size:28px;line-height:1.45;color:#5A4636">Une restauration ramène <span style="color:#2B1D14"><b>tout</b></span> le cluster en arrière : à réserver aux catastrophes. Pour un namespace, on redéploie depuis Git et Helm.</p>
-<aside>La sauvegarde doit partir hors du control plane (stockage objet, autre site) et être testée. Velero est l'outil de référence pour sauvegarder des namespaces et leurs volumes.</aside>
+<aside>Ne pas faire pointer etcd.yaml vers le dossier restauré : kubeadm régénère ce manifest à la mise à jour, depuis sa propre configuration, et etcd repartirait sur les anciennes données. On remet donc les données restaurées à l'emplacement standard. La sauvegarde doit partir hors du control plane (stockage objet, autre site) et être testée. Velero est l'outil de référence pour sauvegarder des namespaces et leurs volumes.</aside>
 </section>
 <section id="c11-upgrade" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 11 · Le concept</p>
@@ -1570,6 +1767,14 @@
 </div>
 <aside>Pendant tout le TP, une boucle curl surveille le site : les participants voient en direct ce que protège le PDB, et ce qui casse quand le nœud de PostgreSQL est drainé. Excellente discussion pour la question des single points of failure.</aside>
 </section>
+<section id="pause-j3-aprem" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 3 · 15h15</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 15h30</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : sauvegarde d'etcd et mise à jour du cluster, sans couper le site.</p>
+<aside>Conseiller un snapshot des 3 VM pendant la pause : le TP 11 touche à etcd et au control plane.</aside>
+</section>
 <section id="c11-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
 <div style="display:flex;flex-direction:column;gap:24px">
 <x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
@@ -1596,7 +1801,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous expliquez chaque coupure vue</p></div>
 </div>
 </div>
-<aside>Toujours copier etcd.yaml hors du dossier manifests avant de le modifier. Si l'API ne revient pas après la restauration : sudo systemctl restart kubelet. Correction : branche solution-finale.</aside>
+<aside>Toujours copier etcd.yaml hors du dossier manifests avant de le modifier. Si l'API ne revient pas après la restauration : sudo systemctl restart kubelet. Correction : solutions/11-cycle-de-vie/, dans la branche du TP.</aside>
 </section>
 <section id="epilogue" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Épilogue</p>

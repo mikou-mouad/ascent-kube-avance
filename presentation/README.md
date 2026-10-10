@@ -1,6 +1,6 @@
 # La présentation
 
-68 slides : pour chaque chapitre, l'incident chez Croustino, la solution, le concept (schémas et code), puis le TP.
+83 slides : pour chaque chapitre, l'incident chez Croustino, la solution, le concept (schémas et code), puis le TP.
 
 ## Présenter
 

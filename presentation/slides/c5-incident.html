@@ -7,9 +7,9 @@
 <p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Vendredi<br>7h02</p>
 </div>
 <div style="flex:1;display:flex;flex-direction:column;gap:28px">
-<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Un prestataire a déployé le service « promos » dans <span style="color:#FBF6EE"><b>croustino</b></span>. Il consomme 1,5 Go par pod, sans aucune limite. Les nœuds saturent, le noyau tue des processus au hasard : <span style="color:#FBF6EE"><b>le back redémarre en boucle en plein rush.</b></span></p>
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Un prestataire a déployé le service « promos » dans <span style="color:#FBF6EE"><b>croustino</b></span>. Copié d'un traitement big data, chaque pod réserve et consomme presque toute la mémoire d'un worker. Les pods de Croustino, qui ne déclarent rien, sont sacrifiés : <span style="color:#FBF6EE"><b>back et PostgreSQL évincés en plein rush.</b></span></p>
 <p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« Un seul service mal écrit, et c'est tout Croustino qui tombe ? » — Sophie</p>
 </div>
 </div>
-<aside>Le cluster est partagé : sans limites, le voisin le plus gourmand gagne. Sur la VM, c'était pareil, mais au moins on voyait le coupable avec top.</aside>
+<aside>Le cluster est partagé. Paradoxe à faire trouver aux participants : promos, qui consomme tout, survit, parce qu'il a déclaré ses ressources (QoS Guaranteed). Croustino, qui ne déclare rien (BestEffort), est le premier sacrifié. Le TP le reproduit avec k8s/capacite/lancer-promos.sh.</aside>
 </section>

@@ -59,8 +59,9 @@ On l'analyse ensemble, on présente le **concept Kubernetes** qui y répond, pui
 | 11 | Le control plane tombe la veille de l'Épiphanie, la version n'est plus supportée | HA, sauvegarde etcd, mise à jour | Architecture avancée | `tp-11-cycle-de-vie` |
 
 **Les branches :** chaque branche `tp-NN` part de la branche du TP précédent. Elle contient l'énoncé du TP (`tp/NN-*/README.md`) et l'état de l'application à la fin des TP précédents.
-La correction du TP NN est donc la branche suivante, et `solution-finale` contient la correction du TP 11.
-Un participant bloqué fait `git checkout tp-NN` et repart du bon point de départ.
+La correction du TP NN est dans la même branche (`solutions/NN-*/`), sans rien dévoiler du TP suivant.
+Un participant bloqué consulte la correction, ou fait `git checkout tp-NN` pour repartir du bon point de départ.
+`solution-finale` contient l'état final de l'application.
 
 ---
 
