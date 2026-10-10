@@ -1,6 +1,9 @@
-# Le service « promos » écrit à la va-vite par un prestataire : chaque pod
-# s'alloue 90 % de la mémoire disponible du nœud où il tourne, sans aucune limite.
-# Ne pas garder en production !
+# Le service « promos » : le prestataire a copié la configuration d'un traitement
+# big data. Chaque pod réserve (request = limit) et consomme presque toute la
+# mémoire libre d'un worker. Avec request = limit, il est en QoS Guaranteed :
+# Kubernetes le protège, et ce sont les pods sans ressources déclarées qui paient.
+# Ne pas appliquer directement : lancer k8s/capacite/lancer-promos.sh,
+# qui remplace __MEMOIRE__ et __STRESS__ selon la taille des workers.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,13 +21,22 @@ spec:
       labels:
         app: promos
     spec:
+      # Un pod par worker
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: promos
       containers:
         - name: promos
           image: polinux/stress
-          command: ["sh", "-c"]
-          # /proc/meminfo montre la mémoire du nœud : on en prend 90 %.
-          args:
-            - |
-              MO=$(awk '/MemAvailable/ {print int($2 * 0.9 / 1024)}' /proc/meminfo)
-              echo "promos : allocation de ${MO} Mo"
-              exec stress --vm 1 --vm-bytes "${MO}M" --vm-hang 0
+          command: ["stress", "--vm", "1", "--vm-bytes", "__STRESS__", "--vm-hang", "0"]
+          resources:
+            requests:
+              cpu: 500m
+              memory: __MEMOIRE__
+            limits:
+              cpu: 500m
+              memory: __MEMOIRE__
