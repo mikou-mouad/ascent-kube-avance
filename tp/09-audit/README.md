@@ -15,6 +15,20 @@
 - Activer l'audit sur un control plane kubeadm (static pod).
 - Analyser les événements d'audit avec `jq`.
 
+## Avant de commencer : passer sur la branche du TP
+
+Sur le **control plane** :
+
+```bash
+cd ~/croustino
+git fetch
+git stash -u          # met de côté vos fichiers du TP précédent
+git checkout tp-09-audit
+```
+
+La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
+
 ## Étapes
 
 ### 1. Lire la politique

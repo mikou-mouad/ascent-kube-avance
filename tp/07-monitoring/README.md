@@ -14,6 +14,20 @@
 - Écrire des requêtes PromQL.
 - Construire un dashboard et une alerte, et les livrer avec le chart Croustino.
 
+## Avant de commencer : passer sur la branche du TP
+
+Sur le **control plane** :
+
+```bash
+cd ~/croustino
+git fetch
+git stash -u          # met de côté vos fichiers du TP précédent
+git checkout tp-07-monitoring
+```
+
+La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
+
 ## Jour 2 – Lancer l'installation (10 min)
 
 ```bash

@@ -15,12 +15,25 @@
 - Comprendre le cycle PVC → PV et le mode `WaitForFirstConsumer`.
 - Migrer PostgreSQL vers un StatefulSet avec `volumeClaimTemplates`.
 
-## Étapes
+## Avant de commencer : passer sur la branche du TP
 
-Partez de la branche `tp-03-stockage` : `k8s/` contient la correction du TP 02.
+Sur le **control plane** :
 
 ```bash
+cd ~/croustino
+git fetch
+git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-03-stockage
+```
+
+La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
+
+## Étapes
+
+`k8s/` contient la correction du TP 02. Appliquez-la pour partir d'un état propre :
+
+```bash
 kubectl apply -f k8s/
 ```
 

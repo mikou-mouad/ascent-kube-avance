@@ -59,12 +59,8 @@ Réalisez tous les tests de la section 7. Critères de réussite :
 
 - Supprimez les objets de test nginx.
 - Prenez un **snapshot des 3 VM**. Vous y reviendrez en cas de problème pendant la formation.
-- Clonez le dépôt de la formation sur le control plane :
 
-```bash
-sudo apt-get install -y git
-git clone https://github.com/mikou-mouad/ascent-kube-avance.git ~/croustino
-```
+Le dépôt de la formation sera cloné sur le control plane au début du TP 02.
 
 ## Bonus
 
