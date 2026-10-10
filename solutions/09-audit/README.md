@@ -4,7 +4,7 @@
 
 Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
 
-- `kube-apiserver-audit.yaml` : extrait de `/etc/kubernetes/manifests/kube-apiserver.yaml` avec l'audit activé (lignes `# AJOUT`)
+- `kube-apiserver-audit.md` : les trois blocs à **ajouter** dans `/etc/kubernetes/manifests/kube-apiserver.yaml`, et où (ne remplacez jamais ce fichier)
 - la politique d'audit elle-même : `k8s/audit/audit-policy.yaml`
 
 Politique : `k8s/audit/audit-policy.yaml`. Modifications du static pod : voir l'énoncé.

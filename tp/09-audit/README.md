@@ -99,7 +99,7 @@ sudo tail -f /var/log/kubernetes/audit/audit.log | head -3
 > | `open /etc/kubernetes/audit/policy.yaml: no such file` | politique non copiée, ou volume `audit-policy` non monté |
 > | `audit.log` : `no such file` ou `permission denied` | volume `audit-log` manquant |
 >
-> Comparez avec `solutions/09-audit/kube-apiserver-audit.yaml`. En dernier recours, restaurez la sauvegarde : `sudo cp ~/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml`.
+> Comparez avec `solutions/09-audit/kube-apiserver-audit.md`. En dernier recours, restaurez la sauvegarde : `sudo cp ~/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml`.
 
 ### 3. Rejouer la nuit de vendredi
 
