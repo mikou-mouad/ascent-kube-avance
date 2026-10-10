@@ -2,7 +2,6 @@
 
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
-- `README.md`
 - `helm/croustino/Chart.yaml`
 - `helm/croustino/templates/NOTES.txt`
 - `helm/croustino/templates/_helpers.tpl`
@@ -15,7 +14,6 @@ Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dép
 - `helm/croustino/values-lyon.yaml`
 - `helm/croustino/values-rennes.yaml`
 - `helm/croustino/values.yaml`
-- `programme-3-jours.md`
 
 Pour les comparer à votre travail : `diff -r solutions/06-helm/k8s k8s` (ou `helm`).
 
