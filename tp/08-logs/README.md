@@ -1,6 +1,6 @@
 # TP 08 – « La commande perdue »
 
-**Durée :** 55 min · **Branche :** `tp-08-logs` · **Correction :** branche `tp-09-audit` (`solutions/08-logs.md`)
+**Durée :** 55 min · **Branche :** `tp-08-logs` · **Correction :** `solutions/08-logs/`, dans cette branche
 
 ## L'incident
 
@@ -26,7 +26,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-08-logs
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/08-logs/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Étapes

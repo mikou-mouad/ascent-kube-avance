@@ -1,6 +1,6 @@
 # TP 09 – « Qui a supprimé le back à 3h du matin ? »
 
-**Durée :** 50 min · **Branche :** `tp-09-audit` · **Correction :** branche `tp-10-harbor` (`solutions/09-audit.md`)
+**Durée :** 50 min · **Branche :** `tp-09-audit` · **Correction :** `solutions/09-audit/`, dans cette branche
 
 ## L'incident
 
@@ -26,7 +26,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-09-audit
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/09-audit/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Étapes

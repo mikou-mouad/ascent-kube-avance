@@ -1,5 +1,15 @@
 # Correction du TP 04 – Authentification et RBAC
 
+Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+
+- `README.md`
+- `k8s/20-back.yaml`
+- `k8s/rbac/10-utilisateurs.yaml`
+- `k8s/rbac/20-serviceaccounts.yaml`
+- `programme-3-jours.md`
+
+Pour les comparer à votre travail : `diff -r solutions/04-rbac/k8s k8s` (ou `helm`).
+
 Manifests : `k8s/rbac/` et `serviceAccountName: back` dans `k8s/20-back.yaml`.
 
 - **kubernetes-admin :** son certificat porte `O=kubeadm:cluster-admins` (anciennement `system:masters`), groupe lié à `cluster-admin`.

@@ -1,0 +1,62 @@
+# Théo (groupe stagiaires) : lecture seule dans croustino, via le ClusterRole intégré "view".
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: stagiaires-lecture
+  namespace: croustino
+subjects:
+  - kind: Group
+    name: stagiaires
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: view
+  apiGroup: rbac.authorization.k8s.io
+---
+# Malik (groupe dev) : rôle sur mesure, sans accès aux Secrets.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developpeur
+  namespace: croustino
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "endpoints", "persistentvolumeclaims", "events"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/exec", "pods/portforward"]
+    verbs: ["create"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "deployments/scale", "replicasets", "statefulsets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dev-developpeur
+  namespace: croustino
+subjects:
+  - kind: Group
+    name: dev
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: developpeur
+  apiGroup: rbac.authorization.k8s.io
+---
+# Inès (groupe ops) : administratrice du cluster.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ops-cluster-admin
+subjects:
+  - kind: Group
+    name: ops
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io

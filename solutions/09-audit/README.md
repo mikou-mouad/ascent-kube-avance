@@ -1,5 +1,12 @@
 # Correction du TP 09 – Audit
 
+Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+
+- `README.md`
+- `programme-3-jours.md`
+
+Pour les comparer à votre travail : `diff -r solutions/09-audit/k8s k8s` (ou `helm`).
+
 Politique : `k8s/audit/audit-policy.yaml`. Modifications du static pod : voir l'énoncé.
 
 ## Niveaux

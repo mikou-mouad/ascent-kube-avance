@@ -1,0 +1,6 @@
+ville: Rennes
+stockMax: 24
+back:
+  replicas: 2
+front:
+  nodePort: 30080

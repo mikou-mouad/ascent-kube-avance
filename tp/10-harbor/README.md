@@ -1,6 +1,6 @@
 # TP 10 – « Docker Hub nous bloque au rush »
 
-**Durée :** 50 min · **Branche :** `tp-10-harbor` · **Correction :** branche `tp-11-cycle-de-vie` (`helm/croustino/values-rennes.yaml`, `solutions/10-harbor.md`)
+**Durée :** 50 min · **Branche :** `tp-10-harbor` · **Correction :** `solutions/10-harbor/`, dans cette branche
 
 ## L'incident
 
@@ -26,7 +26,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-10-harbor
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/10-harbor/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Étapes
