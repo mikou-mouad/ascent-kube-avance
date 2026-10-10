@@ -15,6 +15,7 @@ Les manifests complets sont dans `k8s/`.
 - **Mot de passe de PostgreSQL :** `envFrom.secretRef` injecte chaque clé du Secret comme variable d'environnement.
 - **readinessProbe :** tant qu'elle échoue, le pod n'est pas ajouté aux endpoints du Service et ne reçoit pas de trafic.
 - **Sélecteur vide de correspondance :** le Service existe, mais n'a aucun endpoint. Les connexions échouent (refus ou timeout).
+- **NodePort sur le control plane :** kube-proxy ouvre le port 30080 sur tous les nœuds, et redirige le trafic vers un pod du front, quel que soit le nœud où il tourne.
 - **Endpoints du back :** `/readyz` teste la base. Tant que PostgreSQL n'est pas prêt, le back reste `0/1 Ready` et n'est pas exposé.
 - **Gains par rapport à la VM :** redémarrage automatique, scaling, mise à jour sans coupure, configuration séparée du code.
   **Ce qui manque :** les données de PostgreSQL vivent dans le conteneur. C'est le prochain incident.
