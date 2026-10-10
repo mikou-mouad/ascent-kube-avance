@@ -15,6 +15,20 @@
 - Scanner les images avec Trivy et bloquer les images vulnérables.
 - Faire tirer les images du cluster depuis un registre privé (containerd, imagePullSecret).
 
+## Avant de commencer : passer sur la branche du TP
+
+Sur le **control plane** :
+
+```bash
+cd ~/croustino
+git fetch
+git stash -u          # met de côté vos fichiers du TP précédent
+git checkout tp-10-harbor
+```
+
+La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
+
 ## Étapes
 
 ### 0. Libérer de la mémoire
