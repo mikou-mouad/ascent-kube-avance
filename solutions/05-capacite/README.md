@@ -14,7 +14,7 @@ Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dép
 - `k8s/capacite/limitrange.yaml`
 - `k8s/capacite/quota.yaml`
 
-Pour les comparer à votre travail : `diff -r solutions/05-capacite/k8s k8s` (ou `helm`).
+Pour les comparer à votre travail : `diff -r solutions/05-capacite/k8s k8s`.
 
 Manifests : `k8s/capacite/limitrange.yaml`, `k8s/capacite/quota.yaml`, `resources` dans `k8s/10-postgres.yaml`, `k8s/20-back.yaml`, `k8s/30-front.yaml`.
 

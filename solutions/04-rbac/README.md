@@ -14,7 +14,7 @@ Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dép
 - `k8s/rbac/10-utilisateurs.yaml`
 - `k8s/rbac/20-serviceaccounts.yaml`
 
-Pour les comparer à votre travail : `diff -r solutions/04-rbac/k8s k8s` (ou `helm`).
+Pour les comparer à votre travail : `diff -r solutions/04-rbac/k8s k8s`.
 
 Manifests : `k8s/rbac/` et `serviceAccountName: back` dans `k8s/20-back.yaml`.
 
