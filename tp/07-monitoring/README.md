@@ -369,7 +369,7 @@ helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-renn
 kubectl get prometheusrule -n croustino
 ```
 
-Dans Prometheus, ouvrez **http://10.10.0.11:30090/rules** (menu **Status > Rule health**) : le groupe `croustino` apparaît, avec la règle `CroustinoRejetsEleves`.
+Dans Prometheus, ouvrez **http://10.10.0.11:30090/rules** (menu **Status > Rule health**) : le groupe `croustino` apparaît, avec la règle `CroustinoRejetsEleves` marquée **OK**. Attention : `OK` indique que la règle s'évalue sans erreur, pas l'état de l'alerte. L'état (Inactive, Pending, Firing) se suit sur la page **Alerts**, à l'étape suivante.
 
 #### 5.3 Déclencher l'alerte
 
@@ -379,7 +379,7 @@ Dans Prometheus, ouvrez **http://10.10.0.11:30090/rules** (menu **Status > Rule 
    kubectl delete job rush-du-matin -n croustino --ignore-not-found
    kubectl apply -f k8s/charge/rush-du-matin.yaml
    ```
-2. Dans Prometheus, ouvrez **http://10.10.0.11:30090/alerts** (menu **Alerts**) et suivez l'état de `CroustinoRejetsEleves`, en rafraîchissant la page :
+2. Dans Prometheus, ouvrez **http://10.10.0.11:30090/alerts** (menu **Alerts**) et suivez l'état de `CroustinoRejetsEleves`, en rafraîchissant la page (si seules les alertes actives sont affichées, utilisez le filtre d'état en haut de la page pour voir aussi les inactives) :
 
 | État | Signification | Quand |
 |------|---------------|-------|
