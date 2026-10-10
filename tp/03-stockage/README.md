@@ -1,6 +1,6 @@
 # TP 03 – « Les commandes du matin ont disparu »
 
-**Durée :** 55 min · **Branche :** `tp-03-stockage` · **Correction :** branche `tp-04-rbac` (`k8s/10-postgres.yaml`)
+**Durée :** 55 min · **Branche :** `tp-03-stockage` · **Correction :** `solutions/03-stockage/`, dans cette branche
 
 ## L'incident
 
@@ -26,7 +26,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-03-stockage
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/03-stockage/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Étapes
