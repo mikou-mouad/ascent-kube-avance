@@ -14,6 +14,20 @@
 - Imposer des valeurs par défaut et des maximums avec LimitRange.
 - Plafonner la consommation d'un namespace avec ResourceQuota.
 
+## Avant de commencer : passer sur la branche du TP
+
+Sur le **control plane** :
+
+```bash
+cd ~/croustino
+git fetch
+git stash -u          # met de côté vos fichiers du TP précédent
+git checkout tp-05-capacite
+```
+
+La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
+
 ## Étapes
 
 ### 1. Capacité du cluster
