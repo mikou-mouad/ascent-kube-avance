@@ -1,6 +1,6 @@
 # TP 02 – Première migration de Croustino
 
-**Durée :** 1 h 45 · **Branche :** `tp-02-deploiement` · **Correction :** branche `tp-03-stockage` (dossier `k8s/`)
+**Durée :** 1 h 45 · **Branche :** `tp-02-deploiement` · **Correction :** `solutions/02-deploiement/`, dans cette branche
 
 ## L'incident
 

@@ -1,5 +1,16 @@
 # Correction du TP 07 – Monitoring
 
+Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+
+- `README.md`
+- `helm/croustino/dashboards/rush-du-matin.json`
+- `helm/croustino/templates/monitoring.yaml`
+- `helm/croustino/values-rennes.yaml`
+- `helm/croustino/values.yaml`
+- `programme-3-jours.md`
+
+Pour les comparer à votre travail : `diff -r solutions/07-monitoring/k8s k8s` (ou `helm`).
+
 ServiceMonitor, alertes et dashboard : `helm/croustino/templates/monitoring.yaml` et `helm/croustino/dashboards/rush-du-matin.json`.
 Le monitoring est activé pour Rennes dans `values-rennes.yaml` (`monitoring.enabled: true`).
 

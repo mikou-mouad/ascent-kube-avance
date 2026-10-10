@@ -1,5 +1,13 @@
 # Correction du TP 10 – Harbor
 
+Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+
+- `README.md`
+- `helm/croustino/values-rennes.yaml`
+- `programme-3-jours.md`
+
+Pour les comparer à votre travail : `diff -r solutions/10-harbor/k8s k8s` (ou `helm`).
+
 `helm/croustino/values-rennes.yaml` pointe maintenant vers `10.10.0.10:30002/croustino` avec le secret `harbor-croustino`.
 
 - **Composants :** `core` (API et logique), `portal` (interface web), `registry` (stockage des images), `jobservice` (scans, réplications, nettoyage), `trivy` (scanner), `database` (PostgreSQL), `redis` (cache et files de tâches), `nginx` (point d'entrée en mode NodePort).

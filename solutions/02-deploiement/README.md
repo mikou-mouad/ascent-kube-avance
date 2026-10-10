@@ -1,5 +1,16 @@
 # Correction du TP 02 – Déploiement de Croustino
 
+Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+
+- `README.md`
+- `k8s/01-secret.yaml`
+- `k8s/02-configmap.yaml`
+- `k8s/20-back.yaml`
+- `k8s/30-front.yaml`
+- `programme-3-jours.md`
+
+Pour les comparer à votre travail : `diff -r solutions/02-deploiement/k8s k8s` (ou `helm`).
+
 Les manifests complets sont dans `k8s/`.
 
 - **Secret :** les valeurs sont seulement encodées en base64, pas chiffrées. Toute personne qui peut lire les Secrets du namespace lit le mot de passe (on le verrouille au TP 04). Le chiffrement au repos dans etcd se configure à part (`EncryptionConfiguration`).

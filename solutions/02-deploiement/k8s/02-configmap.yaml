@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: back-config
+  namespace: croustino
+data:
+  DB_HOST: postgres
+  DB_NAME: croustino
+  VILLE: Rennes
+  STOCK_MAX: "24"
