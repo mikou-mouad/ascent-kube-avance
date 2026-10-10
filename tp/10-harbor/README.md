@@ -84,9 +84,23 @@ skopeo copy --dest-tls-verify=false --dest-creds "$ROBOT:$SECRET" \
 
 ### 4. Scanner
 
-1. Dans le projet, sélectionnez les images et lancez **Scan vulnerability**.
-2. Comparez `nginx:1.19` et `croustino-front:1.1`. Combien de vulnérabilités critiques ?
-3. Dans **Configuration** du projet, activez **Prevent vulnerable images from running** (sévérité *Critical*) et **Automatically scan images on push**.
+Lancez le scan de chaque image :
+
+1. Dans Harbor, ouvrez le projet **croustino**, onglet **Repositories**.
+2. Cliquez sur un dépôt, par exemple `croustino/nginx`.
+3. Cochez l'artefact (la ligne du tag `1.19`), puis cliquez sur **Scan vulnerability**.
+4. Recommencez pour `croustino/croustino-front` (tag `1.1`) et `croustino/croustino-back` (tag `1.0`).
+
+Le scan dure de quelques secondes à une minute. La colonne **Vulnerabilities** de l'artefact affiche alors le nombre de failles et leur gravité. Cliquez sur l'artefact (son *digest* `sha256:…`) pour voir la liste détaillée : identifiant CVE, paquet concerné, version corrigée.
+
+**Question :** comparez `nginx:1.19` et `croustino-front:1.1`. Combien de vulnérabilités critiques pour chacune ? Pourquoi un tel écart ?
+
+Protégez ensuite le projet :
+
+1. Dans le projet **croustino**, onglet **Configuration**.
+2. Cochez **Prevent vulnerable images from running** et choisissez la sévérité **Critical**.
+3. Cochez **Automatically scan images on push**.
+4. Cliquez sur **Save**.
 
 ### 5. Faire confiance au registre (sur les 3 nœuds)
 
