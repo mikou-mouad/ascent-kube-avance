@@ -147,7 +147,8 @@ kubectl uncordon controlplane
 #### Chaque worker, l'un après l'autre
 
 ```bash
-# Sur le worker
+# Sur le worker : la variable VERSION du control plane n'existe pas ici, redéfinissez-la
+VERSION=1.35.X                       # la même version que sur le control plane
 sudo sed -i 's|/v1.34/|/v1.35/|' /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update
 sudo apt-mark unhold kubeadm && sudo apt-get install -y kubeadm="$VERSION-*" && sudo apt-mark hold kubeadm
