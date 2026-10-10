@@ -1,0 +1,41 @@
+# Bonus 2 : un ClusterRole agrégé au rôle intégré "view".
+# Grâce au label, ses règles s'ajoutent automatiquement à "view" (donc aux droits de Théo).
+# Vérifier : kubectl get clusterrole view -o yaml | grep -A3 coordination
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lecteur-croustino
+  labels:
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+rules:
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "watch"]
+---
+# Bonus 3 : Malik peut lire les logs dans kube-system, et rien d'autre.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: lecteur-logs
+  namespace: kube-system
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: malik-lecteur-logs
+  namespace: kube-system
+subjects:
+  - kind: User
+    name: malik
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: lecteur-logs
+  apiGroup: rbac.authorization.k8s.io
