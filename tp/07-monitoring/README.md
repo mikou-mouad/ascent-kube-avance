@@ -243,13 +243,13 @@ Les noms de boutons ci-dessous sont ceux de Grafana 12, installé par le chart.
 5. Sous la requête, ouvrez **Options** et mettez `{{produit}}` dans **Legend** (choisir **Custom**) : chaque courbe porte le nom du produit.
 6. Cliquez sur **Run queries**.
 7. Dans le panneau de droite :
-   - **Visualization** : **Time series** (c'est le choix par défaut) ;
-   - **Title** : `Commandes par minute`.
-8. En haut, cliquez sur **Back to dashboard**.
+   - le type de visualisation est affiché tout en haut : **Time series** par défaut (le lien **Change** à côté permet d'en choisir un autre) ;
+   - **Panel options > Title** : `Commandes par minute`.
+8. En haut à droite, cliquez sur **Back** pour revenir au dashboard. Inutile d'enregistrer à chaque panneau : vos modifications sont conservées tant que vous ne cliquez pas sur **Discard**. On enregistre tout à l'étape 4.4.
 
 #### 4.3 Les trois autres panneaux
 
-Pour chaque panneau : bouton **+** en haut à gauche du dashboard, vignette **Panel**, **Configure visualization**, puis requête en mode **Code**, **Run queries**, réglages à droite, **Back to dashboard**.
+Pour chaque panneau : bouton **+** en haut à gauche du dashboard, vignette **Panel**, **Configure visualization**, puis requête en mode **Code**, **Run queries**, réglages à droite (type de visualisation avec **Change**), **Back**.
 
 | Titre | Requête | Visualization | Réglages à droite |
 |-------|---------|---------------|-------------------|
