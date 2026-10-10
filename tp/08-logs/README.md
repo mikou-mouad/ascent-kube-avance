@@ -98,22 +98,72 @@ kubectl logs deploy/back -n croustino | grep Lebrun     # plus rien
 
 ### 5. Enquêter dans Kibana
 
+#### 5.1 Récupérer le mot de passe
+
+ECK a créé l'utilisateur `elastic` et rangé son mot de passe dans un Secret. Sur le control plane :
+
 ```bash
 kubectl get secret logs-es-elastic-user -n logging -o go-template='{{.data.elastic | base64decode}}'; echo
 ```
 
-Ouvrez `https://<IP d'un nœud>:30561` (certificat auto-signé, utilisateur `elastic`).
+La ligne affichée (une suite de lettres et de chiffres) **est le mot de passe**. Copiez-la : vous en aurez besoin juste après.
 
-1. **Stack Management > Data Views** : créez la vue `kube-*` (champ de temps `@timestamp`).
-2. **Discover** : retrouvez la commande de Mme Lebrun avec une requête KQL.
-3. Répondez : quel est le numéro de commande ? Quel pod l'a traitée ? Pourquoi a-t-elle été rejetée ?
+#### 5.2 Se connecter
 
-Indices KQL : `kubernetes.namespace_name : "croustino"`, `client : "Mme Lebrun"`, `niveau : "ERROR"`.
+1. Dans le navigateur de ClientWeb, ouvrez **https://10.10.0.11:30561** (attention : **https**).
+2. Le navigateur affiche un avertissement de sécurité, car le certificat est auto-signé : cliquez sur **Paramètres avancés**, puis **Continuer vers le site**.
+3. Connectez-vous avec l'utilisateur `elastic` et le mot de passe de l'étape 5.1.
+4. Si Kibana propose de démarrer avec des exemples de données, choisissez **Explore on my own**.
 
-### 6. Pour Sophie
+#### 5.3 Créer la vue sur les logs (Data View)
 
-Lancez le rush (`kubectl delete job rush-du-matin -n croustino --ignore-not-found; kubectl apply -f k8s/charge/rush-du-matin.yaml`).
-Dans Discover, affichez uniquement les colonnes `commande_id`, `client`, `quantite`, `raison` pour les rejets, et sauvegardez la recherche « Commandes rejetées ».
+Une *data view* dit à Kibana quels index lire. Les logs sont dans les index `kube-<date>`.
+
+1. Cliquez sur le menu ☰ en haut à gauche.
+2. Faites défiler le menu jusqu'à la section **Management**, puis cliquez sur **Stack Management**.
+3. Dans la colonne de gauche, section **Kibana**, cliquez sur **Data Views**.
+4. Cliquez sur **Create data view** et remplissez :
+   - **Name** : `kube`
+   - **Index pattern** : `kube-*` (à droite, Kibana doit lister au moins un index `kube-…`)
+   - **Timestamp field** : `@timestamp`
+5. Cliquez sur **Save data view to Kibana**.
+
+#### 5.4 Chercher la commande de Mme Lebrun
+
+1. Menu ☰ > section **Analytics** > **Discover**.
+2. En haut à gauche, vérifiez que la data view sélectionnée est **kube**.
+3. En haut à droite, réglez la période sur **Last 1 hour**, pour couvrir le moment où la commande a été passée.
+4. Dans la barre de recherche, tapez cette requête (langage **KQL**), puis **Entrée** :
+
+   ```
+   kubernetes.namespace_name : "croustino" and client : "Mme Lebrun"
+   ```
+
+5. Vous devez obtenir **2 lignes** : `commande_recue`, puis `commande_rejetee`. Cliquez sur la flèche au début d'une ligne pour voir tous ses champs.
+
+Répondez : quel est le numéro de commande (`commande_id`) ? Quel pod l'a traitée (`kubernetes.pod_name`) ? Pourquoi a-t-elle été rejetée (`raison`) ?
+
+> Aucun résultat ? Élargissez la période (**Last 24 hours**), vérifiez que la commande de l'étape 4 a bien été passée **après** l'installation de Fluent Bit, puis essayez seulement `client : "Mme Lebrun"`.
+
+### 6. Pour Sophie : la liste des commandes rejetées
+
+1. Relancez le rush :
+
+   ```bash
+   kubectl delete job rush-du-matin -n croustino --ignore-not-found
+   kubectl apply -f k8s/charge/rush-du-matin.yaml
+   ```
+
+2. Dans Discover, remplacez la requête par :
+
+   ```
+   kubernetes.namespace_name : "croustino" and evenement : "commande_rejetee"
+   ```
+
+3. Choisissez les colonnes à afficher : dans la liste des champs à gauche, tapez `commande_id` dans la recherche des champs, survolez le champ et cliquez sur le **+** (**Add field as column**). Faites de même pour `client`, `quantite` et `raison`.
+4. En haut à droite, cliquez sur **Save**, nommez la recherche `Commandes rejetées`, puis **Save**.
+
+Sophie peut maintenant rouvrir cette liste à tout moment (Discover > **Open**).
 
 ## Questions de fin
 
