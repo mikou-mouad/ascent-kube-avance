@@ -267,7 +267,12 @@ Vous pouvez déplacer et redimensionner les panneaux à la souris.
 
 1. En haut à droite, cliquez sur la période (**Last 6 hours** par défaut) et choisissez **Last 15 minutes**. Avec la flèche à droite du bouton **Refresh**, choisissez un rafraîchissement automatique de **10s**.
 2. Cliquez sur le bouton bleu **Save** en haut à droite, titre : `Croustino Rennes – Rush du matin`, puis **Save**.
-3. Relancez le rush (étape 3.1) et regardez le dashboard se remplir.
+3. Relancez le rush et regardez le dashboard se remplir.
+
+   ```bash
+   kubectl delete job rush-du-matin -n croustino --ignore-not-found
+   kubectl apply -f k8s/charge/rush-du-matin.yaml
+   ```
 
 Explorez aussi un dashboard fourni par la stack : **Dashboards**, recherchez `Compute Resources / Namespace (Pods)`, puis choisissez `croustino` dans la liste **namespace** en haut.
 
@@ -368,7 +373,12 @@ Dans Prometheus, ouvrez **http://10.10.0.11:30090/rules** (menu **Status > Rule 
 
 #### 5.3 Déclencher l'alerte
 
-1. Relancez le rush (étape 3.1).
+1. Relancez le rush.
+
+   ```bash
+   kubectl delete job rush-du-matin -n croustino --ignore-not-found
+   kubectl apply -f k8s/charge/rush-du-matin.yaml
+   ```
 2. Dans Prometheus, ouvrez **http://10.10.0.11:30090/alerts** (menu **Alerts**) et suivez l'état de `CroustinoRejetsEleves`, en rafraîchissant la page :
 
 | État | Signification | Quand |
