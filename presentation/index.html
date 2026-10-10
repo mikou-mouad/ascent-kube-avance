@@ -568,6 +568,32 @@
 </div>
 <aside>local-path est parfait pour la formation mais lie le volume à un nœud. En production : un stockage réseau ou distribué (Longhorn, Ceph, CSI du cloud). On le reverra au chapitre 11 pendant le drain des nœuds.</aside>
 </section>
+<section id="c3-pvc-yaml" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">PVC et PV en YAML</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>1. Le PVC</b></span> : ce qu'on écrit</p>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">apiVersion: v1<br>kind: PersistentVolumeClaim<br>metadata:<br>&#160;&#160;name: <span style="color:#E9A23B">test-pvc</span><br>spec:<br>&#160;&#160;accessModes:<br>&#160;&#160;- ReadWriteOnce<br>&#160;&#160;resources:<br>&#160;&#160;&#160;&#160;requests:<br>&#160;&#160;&#160;&#160;&#160;&#160;storage: 100Mi<br><span style="color:#A89580"># pas de storageClassName :</span><br><span style="color:#A89580"># la classe par défaut</span></p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>2. Le pod</b></span> qui l'utilise</p>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Pod<br>metadata: {name: conso}<br>spec:<br>&#160;&#160;volumes:<br>&#160;&#160;- name: <span style="color:#8FC1F0">data</span><br>&#160;&#160;&#160;&#160;persistentVolumeClaim:<br>&#160;&#160;&#160;&#160;&#160;&#160;claimName: <span style="color:#E9A23B">test-pvc</span><br>&#160;&#160;containers:<br>&#160;&#160;- name: conso<br>&#160;&#160;&#160;&#160;image: busybox<br>&#160;&#160;&#160;&#160;volumeMounts:<br>&#160;&#160;&#160;&#160;- name: <span style="color:#8FC1F0">data</span><br>&#160;&#160;&#160;&#160;&#160;&#160;mountPath: /data</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>3. Le PV</b></span> : créé tout seul</p>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#2B1D14;white-space:nowrap">kind: PersistentVolume<br>metadata:<br>&#160;&#160;name: pvc-3f2a…<br>spec:<br>&#160;&#160;capacity:<br>&#160;&#160;&#160;&#160;storage: 100Mi<br>&#160;&#160;accessModes:<br>&#160;&#160;- ReadWriteOnce<br>&#160;&#160;claimRef:<br>&#160;&#160;&#160;&#160;name: <span style="color:#B5651D">test-pvc</span><br>&#160;&#160;storageClassName: local-path<br>&#160;&#160;hostPath:<br>&#160;&#160;&#160;&#160;path: /opt/local-path-…</p>
+</div>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#5A4636"><span style="color:#2B1D14"><b>accessModes</b></span> : ReadWriteOnce (un nœud), ReadOnlyMany, ReadWriteMany (plusieurs nœuds, stockage réseau).</p>
+<aside>On n'écrit que le PVC et le pod. Le PV est visible avec kubectl get pv -o yaml : il est lié au PVC par claimRef. Le volume du pod (data) fait le lien entre volumeMounts et le PVC. Le pod du TP est lancé avec kubectl run --overrides, qui contient exactement ce YAML en JSON.</aside>
+</section>
 <section id="c3-sts" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
 <h2 style="font-family:'Fraunces', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1">StatefulSet : un nom et un volume par pod</h2>

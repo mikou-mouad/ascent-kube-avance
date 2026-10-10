@@ -9,7 +9,7 @@
     "c0-incident", "c0-solution", "c0-archi", "c0-boucle",
     "c1-incident", "c1-solution", "c1-etapes", "c1-tp",
     "c2-incident", "c2-solution", "c2-objets", "c2-yaml", "c2-probes", "c2-tp",
-    "c3-incident", "c3-solution", "c3-pvc", "c3-sts", "c3-tp",
+    "c3-incident", "c3-solution", "c3-pvc", "c3-pvc-yaml", "c3-sts", "c3-tp",
     "c4-incident", "c4-solution", "c4-authn", "c4-rbac", "c4-sa", "c4-tp",
     "c5-incident", "c5-solution", "c5-requests", "c5-quota", "c5-tp",
     "c6-incident", "c6-solution", "c6-chart", "c6-cycle", "c6-tp",
