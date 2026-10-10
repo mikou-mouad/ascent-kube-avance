@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: front
-          image: ghcr.io/mikou-mouad/croustino-front:1.1
+          # On déploie la 1.0 ; l'étape 7 passe en 1.1 avec kubectl set image.
+          image: ghcr.io/mikou-mouad/croustino-front:1.0
           ports:
             - name: http
               containerPort: 80
