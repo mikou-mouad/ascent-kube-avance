@@ -326,7 +326,7 @@ Le dashboard montre le problème… à condition que quelqu'un le regarde. Une *
 
 #### 5.1 Tester la condition dans Prometheus
 
-Dans Prometheus (menu **Query**), pendant un rush :
+On quitte Grafana : les alertes se définissent et se suivent dans **Prometheus**. Dans le navigateur de ClientWeb, ouvrez un nouvel onglet sur **http://10.10.0.11:30090/query** (page **Query** de Prometheus) et, pendant un rush, exécutez :
 
 ```promql
 sum(increase(croustino_commandes_rejetees_total{namespace="croustino"}[5m]))
@@ -364,12 +364,12 @@ helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-renn
 kubectl get prometheusrule -n croustino
 ```
 
-Dans Prometheus, menu **Status > Rule health** (anciennes versions : **Status > Rules**) : le groupe `croustino` apparaît, avec la règle `CroustinoRejetsEleves`.
+Dans Prometheus, ouvrez **http://10.10.0.11:30090/rules** (menu **Status > Rule health**) : le groupe `croustino` apparaît, avec la règle `CroustinoRejetsEleves`.
 
 #### 5.3 Déclencher l'alerte
 
 1. Relancez le rush (étape 3.1).
-2. Dans Prometheus, menu **Alerts**, suivez l'état de `CroustinoRejetsEleves`, en rafraîchissant la page :
+2. Dans Prometheus, ouvrez **http://10.10.0.11:30090/alerts** (menu **Alerts**) et suivez l'état de `CroustinoRejetsEleves`, en rafraîchissant la page :
 
 | État | Signification | Quand |
 |------|---------------|-------|
@@ -377,7 +377,7 @@ Dans Prometheus, menu **Status > Rule health** (anciennes versions : **Status > 
 | **Pending** | la condition est vraie, Prometheus attend la durée `for` | quelques secondes après le début du rush |
 | **Firing** | la condition est vraie depuis 1 minute : l'alerte est envoyée | environ 1 min 30 après le début du rush |
 
-3. Ouvrez Alertmanager : `http://10.10.0.11:30093`. L'alerte y apparaît avec son label `severity="warning"`. C'est Alertmanager qui enverrait le mail, le message Slack ou le SMS (aucun destinataire n'est configuré ici).
+3. Ouvrez Alertmanager dans un autre onglet : **http://10.10.0.11:30093**. L'alerte y apparaît avec son label `severity="warning"`. C'est Alertmanager qui enverrait le mail, le message Slack ou le SMS (aucun destinataire n'est configuré ici).
 4. Environ 5 minutes après la fin du rush, `increase(…[5m])` redescend sous 10 : l'alerte repasse en **Inactive** et disparaît d'Alertmanager.
 
 > L'alerte n'apparaît pas dans **Status > Rule health** ? Vérifiez `kubectl get prometheusrule -n croustino`, puis que le `helm upgrade` contient bien `--set monitoring.enabled=true`.
