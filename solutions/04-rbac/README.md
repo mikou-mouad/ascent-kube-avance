@@ -1,5 +1,13 @@
 # Correction du TP 04 – Authentification et RBAC
 
+## YAML prêts à l'emploi
+
+Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
+
+- `csr-malik.yaml` : la CertificateSigningRequest de l'étape 2 (la commande pour y insérer `malik.csr` est en commentaire)
+- `bonus-rbac.yaml` : le ClusterRole agrégé à `view` et la lecture des logs de `kube-system` pour Malik
+- La création complète d'un utilisateur, kubeconfig compris : `tp/04-rbac/creer-utilisateur.sh`
+
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
 - `k8s/20-back.yaml`
