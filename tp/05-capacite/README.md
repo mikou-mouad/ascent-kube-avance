@@ -1,6 +1,6 @@
 # TP 05 – « Le service promos a mangé toute la RAM »
 
-**Durée :** 50 min · **Branche :** `tp-05-capacite` · **Correction :** branche `tp-06-helm` (`k8s/capacite/`, ressources dans `k8s/`)
+**Durée :** 50 min · **Branche :** `tp-05-capacite` · **Correction :** `solutions/05-capacite/`, dans cette branche
 
 ## L'incident
 
@@ -25,7 +25,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-05-capacite
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/05-capacite/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Étapes

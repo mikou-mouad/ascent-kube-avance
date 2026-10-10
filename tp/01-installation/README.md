@@ -1,6 +1,6 @@
 # TP 01 – « Il nous faut un vrai cluster »
 
-**Durée :** 2 h · **Branche :** `tp-01-installation` · **Correction :** branche `tp-02-deploiement` (`solutions/01-installation.md`)
+**Durée :** 2 h · **Branche :** `tp-01-installation` · **Correction :** `solutions/01-installation/`, dans cette branche
 
 ## L'incident
 
