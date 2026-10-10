@@ -390,7 +390,7 @@ Dans Prometheus, ouvrez **http://10.10.0.11:30090/rules** (menu **Status > Rule 
 | **Pending** | la condition est vraie, Prometheus attend la durée `for` | quelques secondes après le début du rush |
 | **Firing** | la condition est vraie depuis 1 minute : l'alerte est envoyée | environ 1 min 30 après le début du rush |
 
-3. Ouvrez Alertmanager dans un autre onglet : **http://10.10.0.11:30093**. Les alertes y sont **regroupées et repliées** : dépliez le groupe `namespace="croustino"` avec le **+**, ou tapez `alertname="CroustinoRejetsEleves"` dans le champ **Filter** puis cliquez sur le **+** bleu. L'alerte apparaît avec ses labels `severity="warning"` et `namespace="croustino"`.
+3. Ouvrez Alertmanager dans un autre onglet : **http://10.10.0.11:30093**. Les alertes y sont **regroupées et repliées** : dépliez le groupe `namespace="croustino"` avec le **+**, ou tapez `alertname="CroustinoRejetsEleves"` dans le champ **Filter** puis cliquez sur le **+** bleu. L'alerte apparaît avec ses labels `severity="warning"` et `namespace="croustino"`. Le mot **null** devant chaque groupe est le nom du destinataire (*receiver*) configuré par défaut par le chart : il ne notifie personne. Brancher un vrai destinataire est un bonus.
 
    Vous verrez aussi d'autres alertes, fournies par la stack : **Watchdog**, toujours active, qui prouve que la chaîne d'alerte fonctionne, et une dizaine d'alertes `kube-system` sur les composants du control plane injoignables (voir la question de l'étape 1). C'est Alertmanager qui enverrait le mail, le message Slack ou le SMS (aucun destinataire n'est configuré ici).
 4. Environ 5 minutes après la fin du rush, `increase(…[5m])` redescend sous 10 : l'alerte repasse en **Inactive** et disparaît d'Alertmanager.
