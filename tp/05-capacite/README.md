@@ -53,32 +53,41 @@ kubectl top pods -n croustino
 
 ### 3. Rejouer l'incident
 
+Le service `promos` réserve et consomme presque toute la mémoire libre de chaque worker. Le script calcule la taille selon vos nœuds :
+
 ```bash
-kubectl apply -f k8s/capacite/promos.yaml
-watch -n 2 'kubectl top nodes; kubectl top pods -n croustino'
+chmod +x k8s/capacite/lancer-promos.sh
+k8s/capacite/lancer-promos.sh
 ```
 
-Chaque pod `promos` s'alloue 90 % de la mémoire disponible de son nœud (voir `kubectl logs -l app=promos`). Dans un second terminal, suivez les pods :
+Dans un second terminal, suivez les pods, et gardez le site ouvert sur ClientWeb :
 
 ```bash
 kubectl get pods -n croustino -o wide -w
 ```
 
-Au bout d'une à deux minutes, vous devez observer :
+En une à deux minutes, vous devez observer :
 
-- des nœuds proches de 100 % de mémoire dans `kubectl top nodes` ;
+- les pods `promos` qui tournent, un par worker, sans jamais redémarrer ;
+- les pods de Croustino (back, front, PostgreSQL) en `Evicted`, `OOMKilled`, `Pending` ou `CrashLoopBackOff` : **le site tombe** ;
 - la condition `MemoryPressure` à `True` : `kubectl describe node worker1 | grep -A 8 Conditions` ;
-- des pods tués ou évincés : colonne `RESTARTS`, statut `OOMKilled` ou `Evicted`, et les événements :
+- les événements : `kubectl get events -n croustino --sort-by=.lastTimestamp | tail -20`.
+
+Comparez les classes QoS :
 
 ```bash
-kubectl get events -n croustino --sort-by=.lastTimestamp | tail -15
+kubectl get pods -n croustino -o custom-columns=NOM:.metadata.name,QOS:.status.qosClass,ETAT:.status.phase
 ```
 
-Sur le worker concerné, le noyau trace aussi ses interventions : `sudo dmesg | grep -i -E "oom|killed process"`.
+**Question :** pourquoi est-ce Croustino qui tombe, alors que c'est `promos` qui consomme la mémoire ?
 
-**Question :** quels pods ont été tués ou évincés ? Est-ce toujours `promos` ? Pourquoi ce choix est-il imprévisible tant que personne ne déclare de ressources ?
+Arrêtez `promos` et nettoyez les pods évincés :
 
-Supprimez ensuite `promos` : `kubectl delete -f k8s/capacite/promos.yaml`. Vérifiez que les pods de Croustino sont tous revenus (`kubectl get pods -n croustino`).
+```bash
+kubectl delete deployment promos -n croustino
+kubectl delete pods -n croustino --field-selector=status.phase=Failed
+kubectl get pods -n croustino -w      # attendre que tout redevienne Running
+```
 
 ### 4. Des valeurs par défaut avec LimitRange
 
@@ -87,7 +96,9 @@ Créez `k8s/capacite/limitrange.yaml` dans `croustino` :
 - par conteneur : request par défaut `100m` CPU / `128Mi`, limit par défaut `500m` / `256Mi` ;
 - maximum par conteneur : `1` CPU / `1Gi`.
 
-Appliquez-le puis redéployez `promos`. Que se passe-t-il ? (`kubectl get pods`, `kubectl describe pod`, `kubectl get events`)
+Appliquez-le puis relancez `k8s/capacite/lancer-promos.sh`. Que se passe-t-il ? (`kubectl get pods -n croustino`, `kubectl describe rs -n croustino -l app=promos`, `kubectl get events -n croustino`)
+
+Supprimez ensuite le Deployment `promos`.
 
 > Un LimitRange ne s'applique qu'aux pods **créés après** lui : faites un `kubectl rollout restart` des Deployments existants et vérifiez leurs ressources.
 
