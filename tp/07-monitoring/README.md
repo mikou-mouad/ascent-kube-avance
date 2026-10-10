@@ -1,6 +1,6 @@
 # TP 07 – « On l'a appris sur les réseaux sociaux »
 
-**Durée :** 1 h (10 min le jour 2, 50 min le jour 3) · **Branche :** `tp-07-monitoring` · **Correction :** branche `tp-08-logs` (`helm/croustino/templates/monitoring.yaml`)
+**Durée :** 1 h (10 min le jour 2, 50 min le jour 3) · **Branche :** `tp-07-monitoring` · **Correction :** `solutions/07-monitoring/`, dans cette branche
 
 ## L'incident
 
@@ -25,7 +25,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-07-monitoring
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/07-monitoring/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Jour 2 – Lancer l'installation (10 min)
