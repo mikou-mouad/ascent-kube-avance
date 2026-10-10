@@ -1,5 +1,12 @@
 # Correction du TP 09 – Audit
 
+## YAML prêts à l'emploi
+
+Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
+
+- `kube-apiserver-audit.yaml` : extrait de `/etc/kubernetes/manifests/kube-apiserver.yaml` avec l'audit activé (lignes `# AJOUT`)
+- la politique d'audit elle-même : `k8s/audit/audit-policy.yaml`
+
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
 
