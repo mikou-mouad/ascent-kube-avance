@@ -251,11 +251,33 @@ Les noms de boutons ci-dessous sont ceux de Grafana 12, installé par le chart.
 
 Pour chaque panneau : bouton **+** en haut à gauche du dashboard, vignette **Panel**, **Configure visualization**, puis requête en mode **Code**, **Run queries**, réglages à droite (type de visualisation avec **Change**), **Back**.
 
-| Titre | Requête | Visualization | Réglages à droite |
-|-------|---------|---------------|-------------------|
-| `Taux de rejet` | la requête de l'étape 3.4 (avec `* 100`) | **Stat** | **Standard options > Unit** : `Percent (0-100)` |
-| `Mémoire par pod` | `sum by (pod) (container_memory_working_set_bytes{namespace="croustino", container!=""})` | **Time series** | **Legend** de la requête : `{{pod}}` ; **Standard options > Unit** : `bytes(IEC)` |
-| `Redémarrages (1 h)` | `sum(increase(kube_pod_container_status_restarts_total{namespace="croustino"}[1h]))` | **Stat** | **Standard options > Decimals** : `0` |
+**Panneau 2 – `Taux de rejet`**
+
+```promql
+sum(rate(croustino_commandes_rejetees_total[5m])) / (sum(rate(croustino_commandes_rejetees_total[5m])) + sum(rate(croustino_commandes_total[5m]))) * 100
+```
+
+- Visualisation : **Stat** (lien **Change**).
+- **Standard options > Unit** : `Percent (0-100)`.
+
+**Panneau 3 – `Mémoire par pod`**
+
+```promql
+sum by (pod) (container_memory_working_set_bytes{namespace="croustino", container!=""})
+```
+
+- Visualisation : **Time series**.
+- **Options > Legend** de la requête : `{{pod}}`.
+- **Standard options > Unit** : `bytes(IEC)`.
+
+**Panneau 4 – `Redémarrages (1 h)`**
+
+```promql
+sum(increase(kube_pod_container_status_restarts_total{namespace="croustino"}[1h]))
+```
+
+- Visualisation : **Stat** (lien **Change**).
+- **Standard options > Decimals** : `0`.
 
 Vous pouvez déplacer et redimensionner les panneaux à la souris.
 
