@@ -1,0 +1,77 @@
+{
+  "title": "Croustino __VILLE__ – Rush du matin",
+  "uid": "croustino-__NAMESPACE__",
+  "tags": ["croustino"],
+  "timezone": "browser",
+  "refresh": "10s",
+  "time": { "from": "now-30m", "to": "now" },
+  "schemaVersion": 39,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Commandes enregistrées par minute",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (produit) (rate(croustino_commandes_total{namespace=\"__NAMESPACE__\"}[1m])) * 60",
+          "legendFormat": "{{produit}}"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Taux de rejet (5 min)",
+      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit" } },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(rate(croustino_commandes_rejetees_total{namespace=\"__NAMESPACE__\"}[5m])) / (sum(rate(croustino_commandes_rejetees_total{namespace=\"__NAMESPACE__\"}[5m])) + sum(rate(croustino_commandes_total{namespace=\"__NAMESPACE__\"}[5m])))"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Redémarrages (1 h)",
+      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"__NAMESPACE__\"}[1h]))"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Mémoire par pod",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "bytes" } },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"__NAMESPACE__\", container!=\"\"})",
+          "legendFormat": "{{pod}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU par pod",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "cores" } },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"__NAMESPACE__\", container!=\"\"}[1m]))",
+          "legendFormat": "{{pod}}"
+        }
+      ]
+    }
+  ]
+}
