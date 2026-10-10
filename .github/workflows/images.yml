@@ -16,6 +16,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
+      # Un build en échec ne doit pas annuler les autres
+      fail-fast: false
       matrix:
         include:
           - { image: croustino-back,  context: app/back,  tag: "1.0", couleur: "" }
