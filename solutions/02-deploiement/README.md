@@ -2,12 +2,10 @@
 
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
-- `README.md`
 - `k8s/01-secret.yaml`
 - `k8s/02-configmap.yaml`
 - `k8s/20-back.yaml`
 - `k8s/30-front.yaml`
-- `programme-3-jours.md`
 
 Pour les comparer à votre travail : `diff -r solutions/02-deploiement/k8s k8s` (ou `helm`).
 
