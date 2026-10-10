@@ -229,24 +229,27 @@ Dans le navigateur de ClientWeb : `http://10.10.0.11:30300`, utilisateur `admin`
 
 #### 4.2 Créer le dashboard et le premier panneau
 
+Les noms de boutons ci-dessous sont ceux de Grafana 12, installé par le chart.
+
 1. Menu ☰ (en haut à gauche) > **Dashboards**, puis bouton **New** > **New dashboard**.
-2. Cliquez sur **+ Add visualization**, puis choisissez la source de données **Prometheus**.
-3. Dans l'éditeur de requête (en bas), passez de **Builder** à **Code** (sélecteur à droite de l'éditeur), puis collez :
+2. Un volet **Add** s'ouvre à droite. Laissez la disposition **Custom grid** et cliquez sur la vignette **Panel** (« Drag or click to add a panel »).
+3. Un panneau « New panel » apparaît : cliquez sur **Configure visualization**. Si Grafana demande une source de données, choisissez **Prometheus**.
+4. Dans l'éditeur de requête (en bas), passez de **Builder** à **Code** (sélecteur à droite de l'éditeur), puis collez :
 
    ```promql
    sum by (produit) (rate(croustino_commandes_total[1m])) * 60
    ```
 
-4. Sous la requête, ouvrez **Options** et mettez `{{produit}}` dans **Legend** (choisir **Custom**) : chaque courbe porte le nom du produit.
-5. Cliquez sur **Run queries**.
-6. Dans le panneau de droite :
+5. Sous la requête, ouvrez **Options** et mettez `{{produit}}` dans **Legend** (choisir **Custom**) : chaque courbe porte le nom du produit.
+6. Cliquez sur **Run queries**.
+7. Dans le panneau de droite :
    - **Visualization** : **Time series** (c'est le choix par défaut) ;
    - **Title** : `Commandes par minute`.
-7. En haut, cliquez sur **Back to dashboard**.
+8. En haut, cliquez sur **Back to dashboard**.
 
 #### 4.3 Les trois autres panneaux
 
-Pour chaque panneau : **Add** > **Visualization** en haut du dashboard, puis requête en mode **Code**, **Run queries**, réglages à droite, **Back to dashboard**.
+Pour chaque panneau : bouton **+** en haut à gauche du dashboard, vignette **Panel**, **Configure visualization**, puis requête en mode **Code**, **Run queries**, réglages à droite, **Back to dashboard**.
 
 | Titre | Requête | Visualization | Réglages à droite |
 |-------|---------|---------------|-------------------|
@@ -258,8 +261,8 @@ Vous pouvez déplacer et redimensionner les panneaux à la souris.
 
 #### 4.4 Régler et enregistrer
 
-1. En haut à droite, choisissez la période **Last 15 minutes** et le rafraîchissement automatique **10s**.
-2. Cliquez sur **Save dashboard** (icône de disquette, ou bouton **Save**), titre : `Croustino Rennes – Rush du matin`, puis **Save**.
+1. En haut à droite, cliquez sur la période (**Last 6 hours** par défaut) et choisissez **Last 15 minutes**. Avec la flèche à droite du bouton **Refresh**, choisissez un rafraîchissement automatique de **10s**.
+2. Cliquez sur le bouton bleu **Save** en haut à droite, titre : `Croustino Rennes – Rush du matin`, puis **Save**.
 3. Relancez le rush (étape 3.1) et regardez le dashboard se remplir.
 
 Explorez aussi un dashboard fourni par la stack : **Dashboards**, recherchez `Compute Resources / Namespace (Pods)`, puis choisissez `croustino` dans la liste **namespace** en haut.
