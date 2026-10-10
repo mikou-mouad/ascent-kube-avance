@@ -257,7 +257,7 @@ Pour chaque panneau : bouton **+** en haut à gauche du dashboard, vignette **Pa
 | `Mémoire par pod` | `sum by (pod) (container_memory_working_set_bytes{namespace="croustino", container!=""})` | Time series | `{{pod}}` | Unit : `bytes(IEC)` |
 | `Redémarrages (1 h)` | `sum(increase(kube_pod_container_status_restarts_total{namespace="croustino"}[1h]))` | Stat | – | Decimals : `0` |
 
-**Trouver une option** (Unit, Decimals…) : cliquez sur la **loupe** en haut du volet de droite et tapez son nom, par exemple `unit`. L'unité « Percent (0-100) » est dans la catégorie **Misc**, « bytes(IEC) » dans **Data**.
+**Trouver une option** (Unit, Decimals…) : cliquez sur la **loupe** en haut du volet de droite et tapez son nom, par exemple `unit`. Pour l'unité, ne parcourez pas les catégories : tapez directement dans le champ **Unit** (`percent` ou `bytes`), puis choisissez **Percent (0-100)** ou **bytes(IEC)** dans la liste filtrée.
 
 **Contrôle :** « Taux de rejet » et « Redémarrages (1 h) » doivent afficher **une seule valeur**. Une case par pod veut dire que la requête n'est pas la bonne : il manque le `sum(…)` qui additionne tout.
 
