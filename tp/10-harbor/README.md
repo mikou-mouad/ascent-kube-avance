@@ -127,7 +127,19 @@ kubectl create secret docker-registry harbor-croustino -n croustino \
   --docker-server=10.10.0.10:30002 --docker-username="$ROBOT" --docker-password="$SECRET"
 ```
 
-Modifiez `helm/croustino/values-rennes.yaml` pour utiliser le registre Harbor (`imageRegistry`) et le secret (`imagePullSecrets`), puis :
+Ajoutez à la fin de `helm/croustino/values-rennes.yaml` :
+
+```yaml
+# Images tirées depuis Harbor, avec le compte robot du projet croustino
+imageRegistry: 10.10.0.10:30002/croustino
+imagePullSecrets:
+  - name: harbor-croustino
+```
+
+- `imageRegistry` remplace `ghcr.io/mikou-mouad` : le chart construit l'image `10.10.0.10:30002/croustino/croustino-back:1.0` ;
+- `imagePullSecrets` donne aux pods le Secret créé juste avant, pour s'authentifier auprès de Harbor.
+
+Puis :
 
 ```bash
 helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-rennes.yaml
