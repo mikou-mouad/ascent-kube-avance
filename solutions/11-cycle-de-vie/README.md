@@ -1,5 +1,11 @@
 # Correction du TP 11 – Architecture avancée et cycle de vie
 
+## YAML prêts à l'emploi
+
+Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
+
+- `etcd-restauration.yaml` : extrait de `/etc/kubernetes/manifests/etcd.yaml` après la restauration (seul le `hostPath` de `etcd-data` change)
+
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
 - `helm/croustino/templates/pdb.yaml`
