@@ -136,5 +136,26 @@ Donnez à PostgreSQL la classe QoS **Guaranteed**. Vérifiez avec `kubectl get p
 
 ## Bonus
 
-- Ajoutez un `HorizontalPodAutoscaler` sur le back (CPU 70 %, 2 à 5 réplicas) et chargez-le avec une boucle `curl`.
-- Créez une `PriorityClass` haute pour le back et PostgreSQL : que se passe-t-il quand le cluster est plein ?
+Ces deux notions ne sont pas présentées dans le cours : appuyez-vous sur la documentation officielle (en anglais).
+
+### Bonus 1 – Adapter le nombre de back à la charge (HorizontalPodAutoscaler)
+
+Un HPA ajoute ou retire des réplicas d'un Deployment selon une métrique, ici le CPU mesuré par metrics-server (installé à l'étape 2). Il compare la consommation aux **requests** : sans requests CPU sur le back (étape 6), il ne peut rien calculer.
+
+Ajoutez un HPA sur le back : CPU cible 70 %, entre 2 et 5 réplicas. Chargez-le avec une boucle `curl` depuis un pod, et suivez `kubectl get hpa -n croustino -w`.
+
+- Principe et algorithme : https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+- Pas à pas, avec la boucle de charge : https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+- Référence des champs (`autoscaling/v2`) : https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/
+- Raccourci en une commande : `kubectl autoscale deployment back -n croustino --cpu-percent=70 --min=2 --max=5`
+
+### Bonus 2 – Placer Croustino avant les autres (PriorityClass)
+
+Une PriorityClass donne une priorité aux pods. Quand le cluster est plein, le scheduler peut **évincer des pods moins prioritaires** (préemption) pour placer les plus prioritaires. La priorité compte aussi dans l'ordre d'éviction quand un nœud manque de mémoire.
+
+Créez une PriorityClass haute, utilisez-la dans le back et PostgreSQL (`priorityClassName`), puis relancez `promos` : que se passe-t-il ?
+
+- Priorité et préemption : https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+- Éviction quand un nœud manque de ressources (rôle de la QoS et de la priorité) : https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/
+
+La correction des deux bonus est dans `solutions/05-capacite/bonus-hpa-priorite.yaml`.
