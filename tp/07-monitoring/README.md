@@ -78,18 +78,115 @@ Prometheus peut mettre jusqu'à 30 secondes à prendre en compte le ServiceMonit
 
 ### 3. Simuler le rush et écrire du PromQL
 
+#### 3.1 Lancer le rush
+
 ```bash
+kubectl delete job rush-du-matin -n croustino --ignore-not-found
 kubectl apply -f k8s/charge/rush-du-matin.yaml
+kubectl get pods -n croustino -l job-name=rush-du-matin
 ```
 
-Dans **Graph**, écrivez les requêtes suivantes :
+Trois clients passent chacun 600 commandes, une toutes les 0,2 s : le rush dure **environ 2 minutes**. Les quantités vont de 1 à 30 et la fournée est limitée à 24 : environ **20 % des commandes sont rejetées**. Relancez ces commandes chaque fois que vous voulez de nouvelles données.
 
-| Question | Indice |
-|----------|--------|
-| Commandes enregistrées par minute, par produit | `rate(croustino_commandes_total[1m])` |
-| Taux de rejet (en %) | rejets / (rejets + commandes) |
-| Mémoire de chaque pod de `croustino` | `container_memory_working_set_bytes` |
-| Redémarrages des conteneurs de `croustino` | `kube_pod_container_status_restarts_total` |
+#### 3.2 Où écrire les requêtes
+
+Dans le navigateur de ClientWeb, sur Prometheus (`http://10.10.0.11:30090`) :
+
+1. menu **Query** (sur les anciennes versions : **Graph**) ;
+2. écrivez la requête dans le champ de saisie, puis cliquez sur **Execute** ;
+3. onglet **Table** : la valeur actuelle, une ligne par série ;
+4. onglet **Graph** : l'évolution dans le temps. Réglez la durée sur **15m** pour bien voir le rush.
+
+#### 3.3 Requête 1 : commandes enregistrées par minute, par produit
+
+Construisez-la morceau par morceau, en regardant le résultat à chaque fois.
+
+**a.** Le compteur brut, onglet **Table** :
+
+```promql
+croustino_commandes_total
+```
+
+Une ligne par produit **et par pod du back** (regardez les labels `produit` et `pod`). La valeur est le nombre total de commandes depuis le démarrage du pod : un compteur ne fait que monter.
+
+**b.** La vitesse, onglet **Graph** :
+
+```promql
+rate(croustino_commandes_total[1m])
+```
+
+`rate(…[1m])` calcule combien le compteur augmente **par seconde**, en moyenne sur la dernière minute. Le rush apparaît comme une bosse.
+
+**c.** Additionner les deux pods du back, en gardant le produit :
+
+```promql
+sum by (produit) (rate(croustino_commandes_total[1m]))
+```
+
+**d.** Passer en commandes par minute :
+
+```promql
+sum by (produit) (rate(croustino_commandes_total[1m])) * 60
+```
+
+**Résultat attendu pendant le rush :** 4 courbes (une par produit), autour de **180 commandes par minute** chacune.
+
+#### 3.4 Requête 2 : taux de rejet
+
+Les rejets par seconde, puis les commandes enregistrées par seconde :
+
+```promql
+sum(rate(croustino_commandes_rejetees_total[5m]))
+```
+
+```promql
+sum(rate(croustino_commandes_total[5m]))
+```
+
+Le taux de rejet en %, c'est rejets / (rejets + enregistrées) × 100 :
+
+```promql
+sum(rate(croustino_commandes_rejetees_total[5m]))
+/
+(sum(rate(croustino_commandes_rejetees_total[5m])) + sum(rate(croustino_commandes_total[5m])))
+* 100
+```
+
+**Résultat attendu :** environ **20**.
+
+#### 3.5 Requête 3 : mémoire de chaque pod de Croustino
+
+Les métriques des conteneurs viennent du kubelet. On filtre sur le namespace avec `{…}`, et on écarte la ligne de total du pod (`container=""`) :
+
+```promql
+container_memory_working_set_bytes{namespace="croustino", container!=""}
+```
+
+Puis une ligne par pod, en Mio :
+
+```promql
+sum by (pod) (container_memory_working_set_bytes{namespace="croustino", container!=""}) / 1024 / 1024
+```
+
+**Résultat attendu :** de l'ordre de 30 à 50 Mio pour le back et PostgreSQL, quelques Mio pour le front.
+
+#### 3.6 Requête 4 : redémarrages des conteneurs de Croustino
+
+Cette métrique vient de kube-state-metrics, qui expose l'état des objets Kubernetes :
+
+```promql
+kube_pod_container_status_restarts_total{namespace="croustino"}
+```
+
+Une ligne par conteneur : la valeur est le nombre total de redémarrages. Les redémarrages de la dernière heure, par pod :
+
+```promql
+sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace="croustino"}[1h]))
+```
+
+> Si l'incident du TP 05 date de moins d'une heure, vous retrouvez ici ses traces.
+
+**À retenir :** `{…}` filtre sur les labels, `rate()` transforme un compteur en vitesse, `sum by (…)` regroupe. Gardez ces requêtes : elles servent au dashboard de l'étape suivante.
 
 ### 4. Le dashboard « Rush du matin »
 
