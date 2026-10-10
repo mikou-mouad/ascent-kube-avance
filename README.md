@@ -9,8 +9,13 @@ Formation de 3 jours racontée à travers l'histoire de **Croustino**, une entre
 
 ## Les branches des TP
 
-Chaque branche part de la précédente : elle contient l'énoncé du TP et l'état de l'application à la fin des TP précédents.
-La correction d'un TP est la branche suivante.
+Chaque branche part de la précédente. La branche `tp-NN` contient :
+
+- l'application dans l'état attendu au début du TP NN ;
+- l'énoncé du TP (`tp/NN-*/README.md`) ;
+- sa correction (`solutions/NN-*/`), ainsi que celles des TP précédents.
+
+Elle ne contient rien du TP suivant : on peut consulter la correction sans découvrir la suite.
 
 | Branche | TP |
 |---------|----|
@@ -25,7 +30,7 @@ La correction d'un TP est la branche suivante.
 | `tp-09-audit` | Audit du cluster |
 | `tp-10-harbor` | Registre Harbor |
 | `tp-11-cycle-de-vie` | etcd et mise à jour du cluster |
-| `solution-finale` | Correction du TP 11 |
+| `solution-finale` | État final de l'application, toutes corrections appliquées |
 
 Sur le control plane :
 

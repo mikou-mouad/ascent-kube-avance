@@ -1,0 +1,40 @@
+# Valeurs par défaut. Chaque ville surcharge ce qui la concerne (values-<ville>.yaml).
+ville: Rennes
+# Au-delà de cette quantité, la commande est rejetée (taille de la fournée).
+stockMax: 24
+
+# Registre des images Croustino et secrets pour s'y authentifier (TP 10 : Harbor).
+imageRegistry: ghcr.io/mikou-mouad
+imagePullSecrets: []
+#  - name: harbor-croustino
+
+db:
+  nom: croustino
+  utilisateur: croustino
+  motDePasse: croissant-chaud   # à surcharger hors formation
+
+postgres:
+  image: postgres:16
+  stockage: 1Gi
+  resources:
+    requests: { cpu: 500m, memory: 512Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+
+back:
+  replicas: 2
+  image:
+    nom: croustino-back
+    tag: "1.0"
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 256Mi }
+
+front:
+  replicas: 2
+  image:
+    nom: croustino-front
+    tag: "1.1"
+  nodePort: 30080
+  resources:
+    requests: { cpu: 50m, memory: 32Mi }
+    limits: { cpu: 200m, memory: 64Mi }

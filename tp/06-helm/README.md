@@ -1,6 +1,6 @@
 # TP 06 – « On ouvre à Lyon »
 
-**Durée :** 1 h 15 · **Branche :** `tp-06-helm` · **Correction :** branche `tp-07-monitoring` (`helm/croustino/`)
+**Durée :** 1 h 15 · **Branche :** `tp-06-helm` · **Correction :** `solutions/06-helm/`, dans cette branche
 
 ## L'incident
 
@@ -25,7 +25,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-06-helm
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/06-helm/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Étapes
