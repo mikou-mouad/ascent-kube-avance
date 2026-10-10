@@ -91,10 +91,21 @@ kubectl get pods -n croustino-lyon
 
 ### 4. Mettre à jour le cluster en v1.35 (30 min)
 
-Dans un second terminal, surveillez le site pendant toute la mise à jour :
+Surveillez le site pendant toute la mise à jour. On interroge le NodePort du control plane (`10.10.0.10`), qui reste joignable quand les workers sont drainés.
+
+**Depuis ClientWeb (recommandé)** : ouvrez un terminal sur le bureau de ClientWeb. Vous voyez le site comme un client, et le terminal du control plane reste libre :
 
 ```bash
-while true; do echo "$(date +%T) $(curl -s -o /dev/null -w '%{http_code}' http://10.10.0.11:30080/api/version)"; sleep 1; done
+while true; do echo "$(date +%T) $(curl -s -o /dev/null -m 2 -w '%{http_code}' http://10.10.0.10:30080/api/version)"; sleep 1; done
+```
+
+**Ou en arrière-plan sur le control plane**, si vous n'avez qu'un terminal : la boucle écrit dans un fichier pendant que vous travaillez.
+
+```bash
+nohup sh -c 'while true; do echo "$(date +%T) $(curl -s -o /dev/null -m 2 -w "%{http_code}" http://10.10.0.10:30080/api/version)"; sleep 1; done' > ~/surveillance.log 2>&1 &
+tail -5 ~/surveillance.log            # l'état actuel, à relancer après chaque étape
+grep -v " 200$" ~/surveillance.log    # les moments où le site ne répondait pas
+pkill -f "api/version"                # arrêter la surveillance, à la fin
 ```
 
 #### Control plane
