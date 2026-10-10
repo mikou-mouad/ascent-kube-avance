@@ -1,0 +1,8 @@
+Croustino {{ .Values.ville }} est déployé dans le namespace {{ .Release.Namespace }}.
+
+  Site  : http://<IP d'un nœud>:{{ .Values.front.nodePort }}
+  Front : {{ include "croustino.image" (list $ .Values.front.image) }}
+  Back  : {{ include "croustino.image" (list $ .Values.back.image) }} ({{ .Values.back.replicas }} réplicas)
+
+Suivre le démarrage :
+  kubectl get pods -n {{ .Release.Namespace }} -w

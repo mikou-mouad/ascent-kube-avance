@@ -1,0 +1,55 @@
+{{- if .Values.monitoring.enabled }}
+# Prometheus collecte /metrics sur le Service du back.
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: back
+  labels:
+    {{- include "croustino.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: back
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: croustino
+  labels:
+    {{- include "croustino.labels" . | nindent 4 }}
+spec:
+  groups:
+    - name: croustino
+      rules:
+        - alert: CroustinoRejetsEleves
+          expr: sum(increase(croustino_commandes_rejetees_total{namespace="{{ .Release.Namespace }}"}[5m])) > 10
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Croustino {{ .Values.ville }} : trop de commandes rejetées"
+            description: {{`"{{ $value }} commandes rejetées en 5 minutes (fournée insuffisante)."`}}
+        - alert: CroustinoBackRedemarre
+          expr: increase(kube_pod_container_status_restarts_total{namespace="{{ .Release.Namespace }}", container="back"}[10m]) > 2
+          labels:
+            severity: critical
+          annotations:
+            summary: "Croustino {{ .Values.ville }} : le back redémarre en boucle"
+            description: {{`"Le pod {{ $labels.pod }} a redémarré plusieurs fois en 10 minutes."`}}
+---
+# Dashboard chargé automatiquement par le sidecar de Grafana (label grafana_dashboard).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-croustino
+  labels:
+    grafana_dashboard: "1"
+    {{- include "croustino.labels" . | nindent 4 }}
+data:
+  croustino-{{ .Release.Namespace }}.json: |-
+    {{- .Files.Get "dashboards/rush-du-matin.json" | replace "__NAMESPACE__" .Release.Namespace | replace "__VILLE__" .Values.ville | nindent 4 }}
+{{- end }}

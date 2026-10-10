@@ -6,11 +6,13 @@ Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
 
 - `etcd-restauration.yaml` : extrait de `/etc/kubernetes/manifests/etcd.yaml` après la restauration (seul le `hostPath` de `etcd-data` change)
 
-Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+Le **chart complet corrigé** est dans `solutions/11-cycle-de-vie/helm/croustino/`. On peut l'installer tel quel :
 
-- `helm/croustino/templates/pdb.yaml`
+```bash
+helm upgrade croustino solutions/11-cycle-de-vie/helm/croustino -n croustino -f solutions/11-cycle-de-vie/helm/croustino/values-rennes.yaml
+```
 
-Pour les comparer à votre travail : `diff -r solutions/11-cycle-de-vie/helm helm`.
+Pour voir ce qui change par rapport à votre chart : `diff -r solutions/11-cycle-de-vie/helm helm`.
 
 PodDisruptionBudgets : `helm/croustino/templates/pdb.yaml`.
 

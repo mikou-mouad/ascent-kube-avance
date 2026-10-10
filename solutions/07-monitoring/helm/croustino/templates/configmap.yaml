@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: back-config
+  labels:
+    {{- include "croustino.labels" . | nindent 4 }}
+data:
+  DB_HOST: postgres
+  DB_NAME: {{ .Values.db.nom | quote }}
+  VILLE: {{ .Values.ville | quote }}
+  STOCK_MAX: {{ .Values.stockMax | quote }}
