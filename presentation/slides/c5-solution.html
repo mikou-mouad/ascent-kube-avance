@@ -8,10 +8,10 @@
 <div style="display:flex;gap:18px">
 <div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">back</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 100m / 128Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 256Mi</p></div>
 <div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">postgres</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 500m / 512Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 512Mi</p></div>
-<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">promos</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">défaut 256Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">→ OOMKilled, seul</p></div>
+<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">promos</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">demande 7 Gi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">→ refusé (max 1Gi)</p></div>
 </div>
 <p style="font-size:26px;color:#5A4636"><span style="color:#2B1D14"><b>CONTENEUR</b></span> · requests (réservé) et limits (plafond)</p>
 </div>
 </div>
-<aside>Avec la limite, promos est tué tout seul (OOMKilled) au lieu d'emporter le nœud. Le quota empêche une équipe de consommer tout le cluster, même avec des pods raisonnables.</aside>
+<aside>Avec le LimitRange, promos est refusé dès la création : aucun conteneur ne peut dépasser 1Gi. En déclarant leurs ressources, back et PostgreSQL deviennent Burstable et Guaranteed : ils ne sont plus les premiers sacrifiés. Le quota empêche une équipe de réserver tout le cluster, même avec des pods raisonnables.</aside>
 </section>
