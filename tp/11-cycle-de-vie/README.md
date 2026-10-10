@@ -15,6 +15,20 @@
 - Mettre à jour un cluster kubeadm d'une version mineure, nœud par nœud.
 - Identifier les points faibles de l'architecture (single points of failure).
 
+## Avant de commencer : passer sur la branche du TP
+
+Sur le **control plane** :
+
+```bash
+cd ~/croustino
+git fetch
+git stash -u          # met de côté vos fichiers du TP précédent
+git checkout tp-11-cycle-de-vie
+```
+
+La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
+
 ## Étapes
 
 ### 1. PodDisruptionBudgets (10 min)
