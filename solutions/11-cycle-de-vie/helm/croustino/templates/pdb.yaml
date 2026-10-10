@@ -1,0 +1,17 @@
+{{- /* Un PDB n'a de sens qu'avec plusieurs réplicas : avec un seul, il bloquerait tout drain. */}}
+{{- range $composant := list "back" "front" }}
+{{- if gt (int (index $.Values $composant).replicas) 1 }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $composant }}
+  labels:
+    {{- include "croustino.labels" $ | nindent 4 }}
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: {{ $composant }}
+{{- end }}
+{{- end }}

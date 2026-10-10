@@ -1,6 +1,6 @@
 # TP 11 – « Le control plane est tombé la veille de l'Épiphanie »
 
-**Durée :** 1 h 05 · **Branche :** `tp-11-cycle-de-vie` · **Correction :** branche `solution-finale` (`helm/croustino/templates/pdb.yaml`, `solutions/11-cycle-de-vie.md`)
+**Durée :** 1 h 05 · **Branche :** `tp-11-cycle-de-vie` · **Correction :** `solutions/11-cycle-de-vie/`, dans cette branche
 
 ## L'incident
 
@@ -26,7 +26,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-11-cycle-de-vie
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/11-cycle-de-vie/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Étapes
