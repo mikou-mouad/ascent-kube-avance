@@ -27,6 +27,7 @@ spec:
           for: 1m
           labels:
             severity: warning
+            namespace: {{ .Release.Namespace }}   # pour le regroupement dans Alertmanager
           annotations:
             summary: "Croustino : plus de 10 commandes rejetées en 5 minutes"
         # Bonus : le back redémarre en boucle
@@ -34,6 +35,7 @@ spec:
           expr: increase(kube_pod_container_status_restarts_total{namespace="{{ .Release.Namespace }}", container="back"}[10m]) > 2
           labels:
             severity: critical
+            namespace: {{ .Release.Namespace }}
           annotations:
             summary: "Croustino : le back redémarre en boucle"
 ---
