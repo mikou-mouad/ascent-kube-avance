@@ -2,8 +2,6 @@
 
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
-- `README.md`
-- `programme-3-jours.md`
 
 Pour les comparer à votre travail : `diff -r solutions/08-logs/k8s k8s` (ou `helm`).
 
