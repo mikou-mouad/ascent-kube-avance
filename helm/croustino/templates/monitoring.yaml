@@ -1,26 +1,23 @@
 {{- if .Values.monitoring.enabled }}
-# Prometheus collecte /metrics sur le Service du back.
+# Étape 2 : Prometheus collecte /metrics sur le Service du back.
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: back
-  labels:
-    {{- include "croustino.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: back
+      app: back          # le label du Service back
   endpoints:
-    - port: http
+    - port: http         # le NOM du port du Service, pas son numéro
       path: /metrics
       interval: 15s
 ---
+# Étape 5 : l'alerte
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: croustino
-  labels:
-    {{- include "croustino.labels" . | nindent 4 }}
 spec:
   groups:
     - name: croustino
@@ -31,25 +28,23 @@ spec:
           labels:
             severity: warning
           annotations:
-            summary: "Croustino {{ .Values.ville }} : trop de commandes rejetées"
-            description: {{`"{{ $value }} commandes rejetées en 5 minutes (fournée insuffisante)."`}}
+            summary: "Croustino : plus de 10 commandes rejetées en 5 minutes"
+        # Bonus : le back redémarre en boucle
         - alert: CroustinoBackRedemarre
           expr: increase(kube_pod_container_status_restarts_total{namespace="{{ .Release.Namespace }}", container="back"}[10m]) > 2
           labels:
             severity: critical
           annotations:
-            summary: "Croustino {{ .Values.ville }} : le back redémarre en boucle"
-            description: {{`"Le pod {{ $labels.pod }} a redémarré plusieurs fois en 10 minutes."`}}
+            summary: "Croustino : le back redémarre en boucle"
 ---
-# Dashboard chargé automatiquement par le sidecar de Grafana (label grafana_dashboard).
+# Étape 4.5 : dashboard chargé automatiquement par Grafana (label grafana_dashboard)
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: dashboard-croustino
   labels:
     grafana_dashboard: "1"
-    {{- include "croustino.labels" . | nindent 4 }}
 data:
-  croustino-{{ .Release.Namespace }}.json: |-
-    {{- .Files.Get "dashboards/rush-du-matin.json" | replace "__NAMESPACE__" .Release.Namespace | replace "__VILLE__" .Values.ville | nindent 4 }}
+  rush-du-matin.json: |-
+{{ .Files.Get "dashboards/rush-du-matin.json" | indent 4 }}
 {{- end }}
