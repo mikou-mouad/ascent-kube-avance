@@ -26,6 +26,19 @@ Regardez `app/docker-compose.yml` : c'est l'application telle qu'elle tourne sur
 
 Routes utiles du back : `/healthz` (vivant), `/readyz` (base joignable), `/api/produits`, `/api/commandes`, `/api/version`.
 
+## Avant de commencer : récupérer les fichiers
+
+Sur le **control plane**, installez git et clonez le dépôt de la formation :
+
+```bash
+sudo apt-get install -y git
+git clone https://github.com/mikou-mouad/ascent-kube-avance.git ~/croustino
+cd ~/croustino
+git checkout tp-02-deploiement
+```
+
+Toutes les commandes des TP se lancent ensuite depuis `~/croustino`.
+
 ## Étapes
 
 Toutes les commandes se lancent sur le control plane, depuis le dossier du dépôt (`~/croustino`).
