@@ -4,7 +4,7 @@
 
 Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
 
-- `etcd-restauration.md` : la seule ligne à changer dans `/etc/kubernetes/manifests/etcd.yaml` (ne remplacez jamais ce fichier)
+- `etcd-restauration.md` : remettre etcd sur les données restaurées sans modifier `etcd.yaml`, pourquoi, et comment réparer si le `hostPath` a été changé
 
 Le **chart complet corrigé** est dans `solutions/11-cycle-de-vie/helm/croustino/`. On peut l'installer tel quel :
 
