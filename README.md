@@ -35,8 +35,8 @@ Elle ne contient rien du TP suivant : on peut consulter la correction sans déco
 Sur le control plane :
 
 ```bash
-git clone https://github.com/mikou-mouad/ascent-kube-avance.git
-cd ascent-kube-avance
+git clone https://github.com/mikou-mouad/ascent-kube-avance.git ~/croustino
+cd ~/croustino
 git checkout tp-02-deploiement
 ```
 
