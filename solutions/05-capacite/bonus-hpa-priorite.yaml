@@ -1,0 +1,35 @@
+# Bonus 1 : le back passe de 2 à 5 réplicas quand son CPU dépasse 70 % de ses requests.
+# Charge de test :
+#   kubectl run charge -n croustino --image=curlimages/curl --restart=Never -- \
+#     sh -c 'while true; do curl -s -o /dev/null http://back:8080/api/produits; done'
+#   kubectl get hpa -n croustino -w
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: back
+  namespace: croustino
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: back
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+---
+# Bonus 2 : une priorité haute pour le back et PostgreSQL.
+# À utiliser avec priorityClassName: croustino-critique dans leurs templates de pod.
+# Cluster plein : le scheduler évince des pods moins prioritaires pour les placer.
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: croustino-critique
+value: 100000
+globalDefault: false
+description: "Back et base de Croustino : à placer avant les autres"

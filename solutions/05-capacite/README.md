@@ -1,5 +1,11 @@
 # Correction du TP 05 – Gestion de la capacité
 
+## YAML prêts à l'emploi
+
+Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
+
+- `bonus-hpa-priorite.yaml` : le HorizontalPodAutoscaler du back et la PriorityClass des bonus
+
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
 - `k8s/10-postgres.yaml`

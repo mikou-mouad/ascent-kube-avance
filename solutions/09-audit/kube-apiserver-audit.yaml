@@ -1,0 +1,37 @@
+# Extrait de /etc/kubernetes/manifests/kube-apiserver.yaml après l'étape 2.
+# Seules les lignes marquées « AJOUT » sont nouvelles : le reste du fichier
+# (image, autres options, autres volumes) est celui généré par kubeadm, à ne pas toucher.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-apiserver
+  namespace: kube-system
+spec:
+  containers:
+    - name: kube-apiserver
+      command:
+        - kube-apiserver
+        - --advertise-address=10.10.0.10
+        # … options existantes …
+        - --audit-policy-file=/etc/kubernetes/audit/policy.yaml          # AJOUT
+        - --audit-log-path=/var/log/kubernetes/audit/audit.log           # AJOUT
+        - --audit-log-maxage=7                                           # AJOUT
+        - --audit-log-maxbackup=3                                        # AJOUT
+        - --audit-log-maxsize=50                                         # AJOUT
+      volumeMounts:
+        # … montages existants (ca-certs, k8s-certs, …) …
+        - name: audit-policy                                             # AJOUT
+          mountPath: /etc/kubernetes/audit                               # AJOUT
+          readOnly: true                                                 # AJOUT
+        - name: audit-log                                                # AJOUT
+          mountPath: /var/log/kubernetes/audit                           # AJOUT
+  volumes:
+    # … volumes existants …
+    - name: audit-policy                                                 # AJOUT
+      hostPath:                                                          # AJOUT
+        path: /etc/kubernetes/audit                                      # AJOUT
+        type: DirectoryOrCreate                                          # AJOUT
+    - name: audit-log                                                    # AJOUT
+      hostPath:                                                          # AJOUT
+        path: /var/log/kubernetes/audit                                  # AJOUT
+        type: DirectoryOrCreate                                          # AJOUT
