@@ -1,33 +1,39 @@
-# Faire pointer etcd vers les données restaurées
+# Remettre etcd sur les données restaurées
 
-> **Ne remplacez pas** `/etc/kubernetes/manifests/etcd.yaml` : on ne change **qu'une ligne**.
-
-Sauvegarde d'abord, **hors** du dossier `manifests` :
+Après `etcdutl snapshot restore … --data-dir /var/lib/etcd/restauration`, les données restaurées sont dans un dossier à part. On les met à la place des données actuelles, **sans modifier** `etcd.yaml` :
 
 ```bash
-sudo cp /etc/kubernetes/manifests/etcd.yaml ~/etcd.yaml.bak
-sudo vi /etc/kubernetes/manifests/etcd.yaml
+sudo mv /etc/kubernetes/manifests/etcd.yaml /root/etcd.yaml        # etcd s'arrête
+sudo crictl ps --name etcd -q                                      # attendre que plus rien ne s'affiche
+
+sudo mv /var/lib/etcd/restauration /var/lib/etcd-restauration
+sudo mv /var/lib/etcd /var/lib/etcd-avant-restauration             # l'ancien est gardé, par sécurité
+sudo mv /var/lib/etcd-restauration /var/lib/etcd
+
+sudo mv /root/etcd.yaml /etc/kubernetes/manifests/etcd.yaml        # etcd redémarre
 ```
 
-Tout en bas du fichier, dans la liste `volumes:`, repérez le volume `etcd-data` et changez son `path` :
+## Pourquoi ne pas changer le hostPath dans etcd.yaml ?
 
-```yaml
-  - hostPath:
-      path: /var/lib/etcd/restauration    # AVANT : /var/lib/etcd
-      type: DirectoryOrCreate
-    name: etcd-data
-```
+Ça fonctionne… jusqu'à la mise à jour. kubeadm garde sa configuration dans la ConfigMap `kubeadm-config`, où les données d'etcd sont dans `/var/lib/etcd`. `kubeadm upgrade apply` régénère `etcd.yaml` à partir d'elle : etcd repart sur les données **d'avant** la restauration, le control plane ne se stabilise pas, et kubeadm annule la mise à jour (`Failed to upgrade etcd … context deadline exceeded`).
 
-Ne touchez pas à `--data-dir=/var/lib/etcd` dans `command` : c'est le chemin **dans** le conteneur, qui reste le même.
+## Si le hostPath a déjà été changé
 
-Vérifiez qu'une seule ligne a changé :
+Même procédure, en remettant le chemin d'origine dans le manifest avant de le replacer :
 
 ```bash
-sudo diff ~/etcd.yaml.bak /etc/kubernetes/manifests/etcd.yaml
+sudo mv /etc/kubernetes/manifests/etcd.yaml /root/etcd.yaml
+sudo crictl ps --name etcd -q                                      # attendre que plus rien ne s'affiche
+sudo mv /var/lib/etcd/restauration /var/lib/etcd-restauration
+sudo mv /var/lib/etcd /var/lib/etcd-avant-restauration
+sudo mv /var/lib/etcd-restauration /var/lib/etcd
+sudo sed -i 's|path: /var/lib/etcd/restauration$|path: /var/lib/etcd|' /root/etcd.yaml
+sudo mv /root/etcd.yaml /etc/kubernetes/manifests/etcd.yaml
 ```
 
-Equivalent en une commande :
+Si un `kubeadm upgrade apply` a échoué entre-temps, supprimez les Jobs `upgrade-health-check-…` restés dans `kube-system` avant de le relancer :
 
 ```bash
-sudo sed -i 's|path: /var/lib/etcd$|path: /var/lib/etcd/restauration|' /etc/kubernetes/manifests/etcd.yaml
+kubectl -n kube-system get jobs
+kubectl -n kube-system delete job <nom-du-job>
 ```

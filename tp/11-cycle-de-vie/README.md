@@ -65,7 +65,7 @@ kubectl delete namespace croustino-lyon
 kubectl get ns
 ```
 
-Restaurez la sauvegarde dans un nouveau dossier. Les valeurs `--name` et les URLs sont celles de `/etc/kubernetes/manifests/etcd.yaml` :
+**a. Restaurer la sauvegarde dans un dossier à part.** Les valeurs `--name` et les URLs sont celles de `/etc/kubernetes/manifests/etcd.yaml` :
 
 ```bash
 kubectl -n kube-system exec etcd-controlplane -- etcdutl snapshot restore /var/lib/etcd/sauvegarde-tp11.db \
@@ -75,11 +75,24 @@ kubectl -n kube-system exec etcd-controlplane -- etcdutl snapshot restore /var/l
   --initial-advertise-peer-urls https://10.10.0.10:2380
 ```
 
-Faites pointer etcd vers les données restaurées : dans `/etc/kubernetes/manifests/etcd.yaml`, changez le `hostPath` du volume `etcd-data` de `/var/lib/etcd` en `/var/lib/etcd/restauration`.
+**b. Remplacer les données d'etcd par les données restaurées.** On arrête etcd en sortant son manifest du dossier des static pods, on échange les dossiers, puis on remet le manifest. Le manifest n'est pas modifié : etcd redémarre au même endroit, `/var/lib/etcd`, mais sur les données restaurées.
 
 ```bash
-sudo cp /etc/kubernetes/manifests/etcd.yaml ~/etcd.yaml.bak
-sudo vi /etc/kubernetes/manifests/etcd.yaml
+sudo mv /etc/kubernetes/manifests/etcd.yaml /root/etcd.yaml        # etcd s'arrête
+sudo crictl ps --name etcd -q                                      # attendre que plus rien ne s'affiche
+
+sudo mv /var/lib/etcd/restauration /var/lib/etcd-restauration
+sudo mv /var/lib/etcd /var/lib/etcd-avant-restauration             # on garde l'ancien, par sécurité
+sudo mv /var/lib/etcd-restauration /var/lib/etcd
+
+sudo mv /root/etcd.yaml /etc/kubernetes/manifests/etcd.yaml        # etcd redémarre
+```
+
+> **Pourquoi ne pas simplement changer le `hostPath` dans `etcd.yaml` ?** kubeadm garde sa propre configuration (ConfigMap `kubeadm-config`), où les données d'etcd sont dans `/var/lib/etcd`. À la mise à jour de l'étape 4, il régénère `etcd.yaml` à partir de cette configuration : etcd repartirait sur les anciennes données, et la mise à jour échouerait.
+
+**c. Vérifier.** L'API server revient en 1 à 2 minutes :
+
+```bash
 watch -n 2 'sudo crictl ps --name "etcd|kube-apiserver"'
 kubectl get ns                       # croustino-lyon est de retour
 kubectl get pods -n croustino-lyon
