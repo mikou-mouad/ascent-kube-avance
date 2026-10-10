@@ -1,0 +1,8 @@
+# Étape 5 : /etc/containerd/certs.d/10.10.0.10:30002/hosts.toml, sur les 3 nœuds.
+# Prérequis dans /etc/containerd/config.toml : config_path = "/etc/containerd/certs.d"
+# Puis : sudo systemctl restart containerd
+server = "http://10.10.0.10:30002"
+
+[host."http://10.10.0.10:30002"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = true

@@ -1,5 +1,11 @@
 # Correction du TP 10 – Harbor
 
+## YAML prêts à l'emploi
+
+Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
+
+- `hosts.toml` : la configuration containerd de l'étape 5, à copier dans `/etc/containerd/certs.d/10.10.0.10:30002/` sur les 3 nœuds
+
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
 - `helm/croustino/values-rennes.yaml`

@@ -1,0 +1,19 @@
+# Étape 3 : le pod qui consomme test-pvc (équivalent du kubectl run --overrides de l'énoncé).
+# Tant que ce pod n'existe pas, le PVC reste Pending (WaitForFirstConsumer).
+apiVersion: v1
+kind: Pod
+metadata:
+  name: conso
+  namespace: croustino
+spec:
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: test-pvc
+  containers:
+    - name: conso
+      image: busybox
+      command: ["sleep", "3600"]
+      volumeMounts:
+        - name: data
+          mountPath: /data
