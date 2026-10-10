@@ -75,20 +75,25 @@ kubectl -n kube-system exec etcd-controlplane -- etcdutl snapshot restore /var/l
   --initial-advertise-peer-urls https://10.10.0.10:2380
 ```
 
-**b. Remplacer les données d'etcd par les données restaurées.** On arrête etcd en sortant son manifest du dossier des static pods, on échange les dossiers, puis on remet le manifest. Le manifest n'est pas modifié : etcd redémarre au même endroit, `/var/lib/etcd`, mais sur les données restaurées.
+**b. Remplacer les données d'etcd par les données restaurées.** On arrête **tout le control plane** (etcd, API server, controller-manager, scheduler) en sortant leurs manifests du dossier des static pods, on échange les dossiers, puis on remet les manifests. Les manifests ne sont pas modifiés : etcd redémarre au même endroit, `/var/lib/etcd`, mais sur les données restaurées.
 
 ```bash
-sudo mv /etc/kubernetes/manifests/etcd.yaml /root/etcd.yaml        # etcd s'arrête
-sudo crictl ps --name etcd -q                                      # attendre que plus rien ne s'affiche
+sudo mkdir -p /root/manifests-arretes
+sudo mv /etc/kubernetes/manifests/*.yaml /root/manifests-arretes/   # le control plane s'arrête
+sudo crictl ps --name "etcd|kube-apiserver|kube-controller-manager|kube-scheduler" -q
+# relancer la commande précédente jusqu'à ce qu'elle n'affiche plus rien
 
 sudo mv /var/lib/etcd/restauration /var/lib/etcd-restauration
 sudo mv /var/lib/etcd /var/lib/etcd-avant-restauration             # on garde l'ancien, par sécurité
 sudo mv /var/lib/etcd-restauration /var/lib/etcd
 
-sudo mv /root/etcd.yaml /etc/kubernetes/manifests/etcd.yaml        # etcd redémarre
+sudo mv /root/manifests-arretes/*.yaml /etc/kubernetes/manifests/   # le control plane redémarre
+sudo systemctl restart kubelet
 ```
 
-> **Pourquoi ne pas simplement changer le `hostPath` dans `etcd.yaml` ?** kubeadm garde sa propre configuration (ConfigMap `kubeadm-config`), où les données d'etcd sont dans `/var/lib/etcd`. À la mise à jour de l'étape 4, il régénère `etcd.yaml` à partir de cette configuration : etcd repartirait sur les anciennes données, et la mise à jour échouerait.
+> **Pourquoi arrêter aussi l'API server ?** Il garde en mémoire un cache de tous les objets. S'il continue de tourner pendant la restauration, son cache ne correspond plus à etcd (`Cache consistency check failed` dans ses logs), et les composants qui passent par lui, dont la future mise à jour, se bloquent. La documentation de Kubernetes demande d'arrêter les API servers pendant une restauration, puis de redémarrer l'API server, le controller-manager, le scheduler et le kubelet.
+>
+> **Pourquoi ne pas simplement changer le `hostPath` dans `etcd.yaml` ?** kubeadm garde sa propre configuration (ConfigMap `kubeadm-config`), où les données d'etcd sont dans `/var/lib/etcd`. À la mise à jour de l'étape 4, il régénère `etcd.yaml` à partir de cette configuration : etcd repartirait sur les anciennes données.
 
 **c. Vérifier.** L'API server revient en 1 à 2 minutes :
 
