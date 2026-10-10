@@ -5,6 +5,7 @@
 Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
 
 - `kube-apiserver-audit.md` : les trois blocs à **ajouter** dans `/etc/kubernetes/manifests/kube-apiserver.yaml`, et où (ne remplacez jamais ce fichier)
+- `activer-audit.sh` : fait ces ajouts automatiquement dans le vrai fichier, avec une sauvegarde dans `/root/kube-apiserver.yaml.bak` : `sudo solutions/09-audit/activer-audit.sh` (depuis `~/croustino`)
 - la politique d'audit elle-même : `k8s/audit/audit-policy.yaml`
 
 Politique : `k8s/audit/audit-policy.yaml`. Modifications du static pod : voir l'énoncé.
