@@ -121,16 +121,24 @@ Supprimez un pod du back (`kubectl delete pod <nom>`) et observez ce que fait le
 
 ### 7. Rolling update sans coupure
 
-Malik livre la version 1.1 du front (bandeau vert).
+Malik livre la version 1.1 du front (bandeau vert). Vérifiez d'abord que le front tourne en **1.0** (bandeau marron) :
+
+```bash
+kubectl get deployment front -o jsonpath='{.spec.template.spec.containers[0].image}'; echo
+```
+
+Puis passez en 1.1 :
 
 ```bash
 kubectl set image deployment/front front=ghcr.io/mikou-mouad/croustino-front:1.1
 kubectl rollout status deployment/front
-kubectl rollout history deployment/front
+kubectl rollout history deployment/front      # 2 révisions
 ```
 
 Gardez la page ouverte pendant la mise à jour : le site reste disponible.
 Revenez en arrière avec `kubectl rollout undo deployment/front`, puis remettez la 1.1.
+
+> `rollout history` n'affiche qu'une révision et `undo` répond « no rollout history found » ? L'image était déjà en 1.1 : `set image` n'a rien changé. Repassez en 1.0 avec `kubectl set image`, puis recommencez cette étape.
 
 ## Questions de fin
 
