@@ -69,6 +69,13 @@ kubectl logs -n logging -l app.kubernetes.io/name=fluent-bit --tail=20
 
 Vous n'installez Fluent Bit qu'une fois : c'est un **DaemonSet**, Kubernetes crée automatiquement un pod sur chaque worker.
 
+Vérifiez que les logs arrivent dans Elasticsearch : un index `kube-<date>` doit apparaître et grossir.
+
+```bash
+ES_PASSWORD=$(kubectl get secret logs-es-elastic-user -n logging -o go-template='{{.data.elastic | base64decode}}')
+kubectl exec -n logging logs-es-default-0 -c elasticsearch --   curl -s -k -u "elastic:$ES_PASSWORD" "https://localhost:9200/_cat/indices/kube-*?v"
+```
+
 **Question :** pourquoi un DaemonSet ? Pourquoi n'y a-t-il pas de pod Fluent Bit sur le control plane ?
 
 ### 4. Rejouer l'incident
