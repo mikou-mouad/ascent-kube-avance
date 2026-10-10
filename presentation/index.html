@@ -183,15 +183,15 @@
 </div>
 <div style="display:flex;gap:40px">
 <div style="flex:1;display:flex;flex-direction:column;gap:20px">
-<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Branche tp-NN</b></span> = l'énoncé du TP NN + l'application dans l'état attendu au début du TP.</p>
-<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>La correction</b></span> d'un TP, c'est la branche suivante.</p>
-<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Bloqué ?</b></span> On repart de la bonne branche, sans perdre la suite.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Branche tp-NN</b></span> = l'application au début du TP NN, son énoncé et sa correction.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>La correction</b></span> est dans solutions/, sans rien du TP suivant.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Bloqué ?</b></span> On consulte la correction, ou on repart de la branche suivante.</p>
 </div>
 <div style="flex:1;background:#1E1814;border-radius:16px;padding:32px 36px;display:flex;flex-direction:column">
 <p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.6;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># TP 02, sur le control plane</span><br>git clone https://github.com/<br>&#160;&#160;mikou-mouad/ascent-kube-avance.git<br>&#160;&#160;~/croustino<br><br><span style="color:#A89580"># début de chaque TP suivant</span><br>cd ~/croustino &amp;&amp; git fetch<br>git stash -u<br>git checkout <span style="color:#E9A23B">tp-03-stockage</span></p>
 </div>
 </div>
-<aside>Montrer le dépôt sur GitHub. Les dossiers : app/ (le code), k8s/ (les manifests), helm/ (à partir du TP 06), tp/ (les énoncés), solutions/ (les réponses aux questions).</aside>
+<aside>Montrer le dépôt sur GitHub. Les dossiers : app/ (le code), k8s/ (les manifests), helm/ (à partir du TP 06), tp/ (les énoncés), solutions/NN-*/ (la correction de chaque TP : fichiers corrigés et réponses aux questions). La correction est volontairement accessible : chacun avance à son rythme.</aside>
 </section>
 <section id="c0-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 0 · L'incident</p>
@@ -372,7 +372,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">snapshot des 3 VM pris</p></div>
 </div>
 </div>
-<aside>Pendant les temps d'attente (apt, pull des images), poser les questions de l'énoncé : swap, br_netfilter, driver cgroup, apt-mark hold. Correction : solutions/01-installation.md dans la branche tp-02.</aside>
+<aside>Pendant les temps d'attente (apt, pull des images), poser les questions de l'énoncé : swap, br_netfilter, driver cgroup, apt-mark hold. Correction : solutions/01-installation/, dans la branche du TP.</aside>
 </section>
 <section id="c2-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 2 · L'incident</p>
@@ -502,7 +502,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous savez revenir à la 1.0</p></div>
 </div>
 </div>
-<aside>Correction : branche tp-03-stockage, dossier k8s/. Question de fin à garder pour la suite : que se passe-t-il si le pod PostgreSQL redémarre ?</aside>
+<aside>Correction : solutions/02-deploiement/, dans la branche du TP. Question de fin à garder pour la suite : que se passe-t-il si le pod PostgreSQL redémarre ?</aside>
 </section>
 <section id="c3-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 3 · L'incident</p>
@@ -616,7 +616,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">… et les commandes sont toujours là</p></div>
 </div>
 </div>
-<aside>Correction : branche tp-04-rbac (k8s/10-postgres.yaml) et solutions/03-stockage.md. Le Service doit être supprimé puis recréé en headless : un Service existant ne peut pas changer de clusterIP.</aside>
+<aside>Correction : solutions/03-stockage/, dans la branche du TP. Le Service doit être supprimé puis recréé en headless : un Service existant ne peut pas changer de clusterIP.</aside>
 </section>
 <section id="c4-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 4 · L'incident</p>
@@ -763,7 +763,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">la CI change l'image, et rien d'autre</p></div>
 </div>
 </div>
-<aside>Partie 1 (40 min) avant la pause : identités. Partie 2 (1 h 25) après : RBAC et ServiceAccounts. Correction : branche tp-05-capacite, dossier k8s/rbac/.</aside>
+<aside>Partie 1 (40 min) avant la pause : identités. Partie 2 (1 h 25) après : RBAC et ServiceAccounts. Correction : solutions/04-rbac/, dans la branche du TP.</aside>
 </section>
 <section id="c5-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 5 · L'incident</p>
@@ -876,7 +876,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">postgres est en QoS Guaranteed</p></div>
 </div>
 </div>
-<aside>Supprimer promos après l'étape 3 pour ne pas gêner les TP suivants. Correction : branche tp-06-helm (k8s/capacite/ et ressources dans k8s/).</aside>
+<aside>Supprimer promos après l'étape 3 pour ne pas gêner les TP suivants. Correction : solutions/05-capacite/, dans la branche du TP.</aside>
 </section>
 <section id="c6-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 6 · L'incident</p>
@@ -996,7 +996,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">helm list -A montre deux releases</p></div>
 </div>
 </div>
-<aside>Prévoir imageRegistry et imagePullSecrets dans les values dès maintenant : ils serviront au TP 10. Correction : branche tp-07-monitoring, dossier helm/croustino/.</aside>
+<aside>Prévoir imageRegistry et imagePullSecrets dans les values dès maintenant : ils serviront au TP 10. Correction : solutions/06-helm/, dans la branche du TP.</aside>
 </section>
 <section id="c7-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 7 · L'incident</p>
@@ -1091,7 +1091,7 @@
 <p style="font-size:28px;line-height:1.4;color:#5A4636"><span style="color:#2B1D14"><b>rate()</b></span> : un compteur ne fait que monter et repart à zéro quand le pod redémarre. On regarde sa pente.</p>
 </div>
 </div>
-<aside>Le chart Croustino livre aussi une PrometheusRule (alertes) et le dashboard en ConfigMap avec le label grafana_dashboard : tout est versionné avec l'application. Correction dans helm/croustino/templates/monitoring.yaml.</aside>
+<aside>Le chart Croustino livre aussi une PrometheusRule (alertes) et le dashboard en ConfigMap avec le label grafana_dashboard : tout est versionné avec l'application. Correction dans solutions/07-monitoring/.</aside>
 </section>
 <section id="c7-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
 <div style="display:flex;flex-direction:column;gap:24px">
@@ -1119,7 +1119,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">l'alerte passe en Firing</p></div>
 </div>
 </div>
-<aside>Jour 2 à 16h50 : on lance juste l'installation (les pods mettent quelques minutes). Jour 3 au matin : exploitation. Prometheus :30090, Grafana :30300 (admin / croustino), Alertmanager :30093. Correction : branche tp-08-logs.</aside>
+<aside>Jour 2 à 16h50 : on lance juste l'installation (les pods mettent quelques minutes). Jour 3 au matin : exploitation. Prometheus :30090, Grafana :30300 (admin / croustino), Alertmanager :30093. Correction : solutions/07-monitoring/, dans la branche du TP.</aside>
 </section>
 <section id="c8-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 8 · L'incident</p>
@@ -1251,7 +1251,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">… et la raison du rejet</p></div>
 </div>
 </div>
-<aside>Ordre important : installer la chaîne de logs AVANT de rejouer la commande, car Fluent Bit ne lit que les nouvelles lignes. Kibana : https sur le port 30561, utilisateur elastic. Correction : solutions/08-logs.md dans tp-09-audit.</aside>
+<aside>Ordre important : installer la chaîne de logs AVANT de rejouer la commande, car Fluent Bit ne lit que les nouvelles lignes. Kibana : https sur le port 30561, utilisateur elastic. Correction : solutions/08-logs/, dans la branche du TP.</aside>
 </section>
 <section id="c9-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 9 · L'incident</p>
@@ -1354,7 +1354,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous listez les tentatives refusées</p></div>
 </div>
 </div>
-<aside>Point de vigilance : une faute de YAML dans kube-apiserver.yaml et l'API ne revient pas. Diagnostic : sudo crictl ps -a --name kube-apiserver puis crictl logs. Correction : solutions/09-audit.md dans tp-10-harbor.</aside>
+<aside>Point de vigilance : une faute de YAML dans kube-apiserver.yaml et l'API ne revient pas. Diagnostic : sudo crictl ps -a --name kube-apiserver puis crictl logs. Correction : solutions/09-audit/, dans la branche du TP.</aside>
 </section>
 <section id="c10-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 10 · L'incident</p>
@@ -1449,7 +1449,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">nginx:1.19 est bloquée par la politique</p></div>
 </div>
 </div>
-<aside>Harbor : http://10.10.0.10:30002, admin / Harbor12345. Le nom du robot contient un $ : toujours entre guillemets simples. Correction : branche tp-11-cycle-de-vie (values-rennes.yaml, solutions/10-harbor.md).</aside>
+<aside>Harbor : http://10.10.0.10:30002, admin / Harbor12345. Le nom du robot contient un $ : toujours entre guillemets simples. Correction : solutions/10-harbor/, dans la branche du TP.</aside>
 </section>
 <section id="c11-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 11 · L'incident</p>
@@ -1596,7 +1596,7 @@
 <div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous expliquez chaque coupure vue</p></div>
 </div>
 </div>
-<aside>Toujours copier etcd.yaml hors du dossier manifests avant de le modifier. Si l'API ne revient pas après la restauration : sudo systemctl restart kubelet. Correction : branche solution-finale.</aside>
+<aside>Toujours copier etcd.yaml hors du dossier manifests avant de le modifier. Si l'API ne revient pas après la restauration : sudo systemctl restart kubelet. Correction : solutions/11-cycle-de-vie/, dans la branche du TP.</aside>
 </section>
 <section id="epilogue" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Épilogue</p>
