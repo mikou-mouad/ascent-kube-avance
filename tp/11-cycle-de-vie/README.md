@@ -174,6 +174,10 @@ Pendant le drain de chaque worker, observez :
 - le PDB qui ralentit le drain (`kubectl get pdb -n croustino`) ;
 - **PostgreSQL** : où part-il ? Que voit le site ?
 
+> **Le drain du worker de PostgreSQL tourne en boucle sur `Cannot evict pod … back-… disruption budget` ?** C'est un interblocage : `postgres-0` a été évincé et reste `Pending` (son volume local est sur ce nœud, fermé), donc le back n'est plus prêt, donc son PDB interdit d'évincer le second pod du back, donc le drain attend… indéfiniment. Vérifiez avec `kubectl get pods -n croustino -o wide` et `kubectl get pdb -n croustino` (`ALLOWED DISRUPTIONS` à 0).
+>
+> Pour débloquer : **Ctrl+C**, puis terminez la mise à jour de ce worker (kubelet, kubectl, redémarrage du kubelet) et faites `kubectl uncordon` : PostgreSQL revient, le back aussi. Solution « en force », à connaître : `kubectl drain … --disable-eviction`, qui supprime les pods sans tenir compte des PDB.
+
 ## Questions de fin
 
 1. Pourquoi le site a-t-il renvoyé des erreurs pendant le drain d'un des workers ? Que faudrait-il changer ?
