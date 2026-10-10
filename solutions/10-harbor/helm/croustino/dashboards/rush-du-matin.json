@@ -1,75 +1,66 @@
 {
-  "title": "Croustino __VILLE__ – Rush du matin",
-  "uid": "croustino-__NAMESPACE__",
+  "uid": "croustino-chart",
+  "title": "Croustino Rennes (livré par le chart)",
   "tags": ["croustino"],
   "timezone": "browser",
   "refresh": "10s",
-  "time": { "from": "now-30m", "to": "now" },
+  "time": { "from": "now-15m", "to": "now" },
   "schemaVersion": 39,
   "panels": [
     {
+      "id": 1,
       "type": "timeseries",
-      "title": "Commandes enregistrées par minute",
+      "title": "Commandes par minute",
       "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (produit) (rate(croustino_commandes_total{namespace=\"__NAMESPACE__\"}[1m])) * 60",
+          "expr": "sum by (produit) (rate(croustino_commandes_total[1m])) * 60",
           "legendFormat": "{{produit}}"
         }
       ]
     },
     {
+      "id": 2,
       "type": "stat",
-      "title": "Taux de rejet (5 min)",
-      "gridPos": { "x": 12, "y": 0, "w": 6, "h": 8 },
+      "title": "Taux de rejet",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "fieldConfig": { "defaults": { "unit": "percentunit" } },
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum(rate(croustino_commandes_rejetees_total{namespace=\"__NAMESPACE__\"}[5m])) / (sum(rate(croustino_commandes_rejetees_total{namespace=\"__NAMESPACE__\"}[5m])) + sum(rate(croustino_commandes_total{namespace=\"__NAMESPACE__\"}[5m])))"
+          "expr": "sum(rate(croustino_commandes_rejetees_total[5m])) / (sum(rate(croustino_commandes_rejetees_total[5m])) + sum(rate(croustino_commandes_total[5m]))) * 100"
         }
       ]
     },
     {
-      "type": "stat",
-      "title": "Redémarrages (1 h)",
-      "gridPos": { "x": 18, "y": 0, "w": 6, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "targets": [
-        {
-          "refId": "A",
-          "expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"__NAMESPACE__\"}[1h]))"
-        }
-      ]
-    },
-    {
+      "id": 3,
       "type": "timeseries",
       "title": "Mémoire par pod",
       "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "fieldConfig": { "defaults": { "unit": "bytes" } },
+      "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"__NAMESPACE__\", container!=\"\"})",
+          "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"croustino\", container!=\"\"})",
           "legendFormat": "{{pod}}"
         }
       ]
     },
     {
-      "type": "timeseries",
-      "title": "CPU par pod",
+      "id": 4,
+      "type": "stat",
+      "title": "Redémarrages (1 h)",
       "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "fieldConfig": { "defaults": { "unit": "cores" } },
+      "fieldConfig": { "defaults": { "decimals": 0 }, "overrides": [] },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"__NAMESPACE__\", container!=\"\"}[1m]))",
-          "legendFormat": "{{pod}}"
+          "expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"croustino\"}[1h]))"
         }
       ]
     }
