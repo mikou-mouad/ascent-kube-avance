@@ -40,6 +40,10 @@ Lisez `k8s/audit/audit-policy.yaml`.
 ### 2. Activer l'audit (control plane)
 
 ```bash
+# crictl, pour voir les conteneurs même quand l'API server est arrêté
+sudo apt-get install -y cri-tools
+sudo crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock
+
 sudo mkdir -p /etc/kubernetes/audit /var/log/kubernetes/audit
 sudo cp k8s/audit/audit-policy.yaml /etc/kubernetes/audit/policy.yaml
 # Sauvegarde HORS du dossier manifests (sinon le kubelet lancerait deux API servers)
@@ -82,7 +86,20 @@ watch -n 2 'sudo crictl ps --name kube-apiserver; kubectl get nodes'
 sudo tail -f /var/log/kubernetes/audit/audit.log | head -3
 ```
 
-> L'API server ne revient pas ? `sudo crictl ps -a --name kube-apiserver`, puis `sudo crictl logs <id>`. En dernier recours, restaurez la sauvegarde.
+> **L'API server ne revient pas au bout de 2 minutes ?** `kubectl` répond alors « connection refused ». Cherchez la cause :
+>
+> ```bash
+> sudo journalctl -u kubelet --since "5 min ago" --no-pager | grep -i -E "apiserver|manifest|error" | tail -20
+> sudo sh -c 'tail -n 20 /var/log/pods/kube-system_kube-apiserver-*/kube-apiserver/*.log'
+> ```
+>
+> | Message | Cause |
+> |---------|-------|
+> | `could not process manifest file`, `yaml: line …` | indentation cassée dans `kube-apiserver.yaml` |
+> | `open /etc/kubernetes/audit/policy.yaml: no such file` | politique non copiée, ou volume `audit-policy` non monté |
+> | `audit.log` : `no such file` ou `permission denied` | volume `audit-log` manquant |
+>
+> Comparez avec `solutions/09-audit/kube-apiserver-audit.yaml`. En dernier recours, restaurez la sauvegarde : `sudo cp ~/kube-apiserver.yaml.bak /etc/kubernetes/manifests/kube-apiserver.yaml`.
 
 ### 3. Rejouer la nuit de vendredi
 
