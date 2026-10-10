@@ -1,0 +1,13 @@
+# Étape 2 : la demande de signature du certificat de Malik.
+# Le champ request contient malik.csr encodé en base64 sur une seule ligne :
+#   sed "s|<MALIK_CSR_BASE64>|$(base64 -w0 < malik.csr)|" csr-malik.yaml | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: malik
+spec:
+  request: <MALIK_CSR_BASE64>
+  signerName: kubernetes.io/kube-apiserver-client
+  expirationSeconds: 604800   # 7 jours
+  usages:
+    - client auth

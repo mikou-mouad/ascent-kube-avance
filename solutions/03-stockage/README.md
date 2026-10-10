@@ -1,5 +1,13 @@
 # Correction du TP 03 – Stockage
 
+## YAML prêts à l'emploi
+
+Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
+
+- `test-pvc.yaml` : le PVC de test de l'étape 3
+- `conso-pod.yaml` : le pod qui l'utilise (équivalent du `kubectl run --overrides`) : `kubectl apply -f solutions/03-stockage/conso-pod.yaml`
+- `bonus-storageclass-retain.yaml` : la StorageClass du bonus
+
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
 - `k8s/10-postgres.yaml`
