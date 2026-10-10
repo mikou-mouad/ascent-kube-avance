@@ -1,0 +1,23 @@
+<section id="c9-jq" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 9 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Mener l'enquête avec jq</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Un événement d'audit (simplifié)</p>
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">{<br>&#160;&#160;"verb": "<span style="color:#E9A23B">delete</span>",<br>&#160;&#160;"user": {<br>&#160;&#160;&#160;&#160;"username": "<span style="color:#E9A23B">malik</span>",<br>&#160;&#160;&#160;&#160;"groups": ["dev", …]},<br>&#160;&#160;"sourceIPs": ["10.10.0.10"],<br>&#160;&#160;"userAgent": "kubectl/v1.34…",<br>&#160;&#160;"objectRef": {<br>&#160;&#160;&#160;&#160;"resource": "deployments",<br>&#160;&#160;&#160;&#160;"namespace": "croustino",<br>&#160;&#160;&#160;&#160;"name": "back"},<br>&#160;&#160;"responseStatus": {"code": 200},<br>&#160;&#160;"requestReceivedTimestamp": "…T03:02:11Z"<br>}</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">La requête qui trouve le coupable</p>
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">sudo jq -c '<br>&#160;&#160;select(.verb == "delete"<br>&#160;&#160;&#160;&#160;and .objectRef.name == "back")<br>&#160;&#160;| {t: .requestReceivedTimestamp,<br>&#160;&#160;&#160;&#160;&#160;qui: .user.username,<br>&#160;&#160;&#160;&#160;&#160;outil: .userAgent}' \<br>&#160;&#160;/var/log/kubernetes/audit/audit.log</p>
+</div>
+<p style="font-size:28px;color:#5A4636">Et les refus ?</p>
+<div style="background:#F3E9DA;border-radius:16px;padding:20px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#2B1D14;white-space:nowrap">select(.responseStatus.code == 403)</p>
+</div>
+</div>
+</div>
+<aside>Dans le TP, Théo essaie d'abord (403), puis Malik réussit (200). En production, l'audit part vers un système externe (SIEM, Elasticsearch) : un administrateur malveillant pourrait effacer le fichier local.</aside>
+</section>

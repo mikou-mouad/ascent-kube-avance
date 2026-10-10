@@ -1,0 +1,23 @@
+<section id="c3-sts" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1">StatefulSet : un nom et un volume par pod</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<table style="font-size:28px;color:#2B1D14">
+<tr><th style="width:34%"></th><th style="width:33%">Deployment</th><th style="width:33%">StatefulSet</th></tr>
+<tr><td>Nom des pods</td><td>back-7d9f-x2k</td><td>postgres-0</td></tr>
+<tr><td>Volume</td><td>partagé ou aucun</td><td>un PVC par pod</td></tr>
+<tr><td>Ordre</td><td>aucun</td><td>0, puis 1, puis 2</td></tr>
+<tr><td>Pour</td><td>front, back</td><td>bases, files</td></tr>
+</table>
+<div style="background:#F3E9DA;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:6px">
+<p style="font-size:26px;font-weight:700;color:#B5651D">DNS STABLE (Service headless)</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px">postgres-0.postgres.croustino.svc</p>
+</div>
+</div>
+<div style="width:760px;background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: StatefulSet<br>metadata: {name: postgres}<br>spec:<br>&#160;&#160;serviceName: postgres <span style="color:#A89580"># headless</span><br>&#160;&#160;template:<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;containers:<br>&#160;&#160;&#160;&#160;&#160;&#160;- name: postgres<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;volumeMounts:<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;- name: <span style="color:#E9A23B">data</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;mountPath: /var/lib/postgresql/data<br>&#160;&#160;<span style="color:#E9A23B">volumeClaimTemplates:</span><br>&#160;&#160;- metadata: {name: <span style="color:#E9A23B">data</span>}<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;resources: {requests: {storage: 1Gi}}</p>
+</div>
+</div>
+<aside>Le PVC créé s'appelle data-postgres-0 : nom du template, nom du StatefulSet, numéro du pod. Attention : 2 réplicas = 2 bases indépendantes, pas de réplication. Pour ça, il faut un opérateur (CloudNativePG).</aside>
+</section>

@@ -1,0 +1,18 @@
+<section id="c0-boucle" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 0 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">kubectl apply : ce qui se passe vraiment</h2>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">1</p><p style="font-size:30px">kubectl envoie le YAML à l'<b>API server</b></p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">2</p><p style="font-size:30px">L'état voulu est écrit dans <b>etcd</b></p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">3</p><p style="font-size:30px">Le <b>controller-manager</b> crée 3 pods</p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">4</p><p style="font-size:30px">Le <b>scheduler</b> choisit un nœud pour chacun</p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">5</p><p style="font-size:30px">Le <b>kubelet</b> du nœud lance les conteneurs</p></div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636;background:#F3E9DA;padding:20px 24px;border-radius:14px">Un pod meurt ? L'état réel (2) ≠ l'état voulu (3) : le contrôleur en recrée un. C'est la <span style="color:#2B1D14"><b>boucle de réconciliation</b></span>.</p>
+</div>
+<div style="width:640px;background:#1E1814;border-radius:16px;padding:32px 36px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># back.yaml : l'état voulu</span><br>apiVersion: apps/v1<br>kind: Deployment<br>metadata:<br>&#160;&#160;name: back<br>spec:<br>&#160;&#160;<span style="color:#E9A23B">replicas: 3</span><br>&#160;&#160;template:<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;containers:<br>&#160;&#160;&#160;&#160;&#160;&#160;- name: back<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;image: croustino-back:1.0<br><br><span style="color:#A89580">$ kubectl apply -f back.yaml</span></p>
+</div>
+</div>
+<aside>Démonstration possible au TP 02 : supprimer un pod et regarder le Deployment en recréer un. Le YAML est simplifié ici (pas de selector ni de labels) : on le complète au chapitre 2.</aside>
+</section>

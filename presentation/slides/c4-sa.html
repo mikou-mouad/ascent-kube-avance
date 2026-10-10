@@ -1,0 +1,27 @@
+<section id="c4-sa" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">ServiceAccounts : l'identité des pods</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;align-items:center;gap:16px">
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#B5651D">POD</p><p style="font-size:26px">son compte</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">TOKEN</p><p style="font-size:26px;color:#FBF6EE">court, monté dans le pod</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#1F4F82;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">API</p><p style="font-size:26px;color:#FBF6EE">vérifie, puis RBAC</p></div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Par défaut, chaque pod reçoit un token dans <span style="color:#2B1D14">/var/run/secrets/…</span></p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Le back n'appelle jamais l'API : ce token ne sert qu'à un attaquant. <span style="color:#2B1D14"><b>On le retire.</b></span></p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">La CI reçoit un token de 10 minutes, limité à <span style="color:#2B1D14">get, patch deployments</span>.</p>
+</div>
+<div style="width:700px;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">kind: ServiceAccount<br>metadata:<br>&#160;&#160;name: back<br><span style="color:#E9A23B">automountServiceAccountToken: false</span><br>---<br><span style="color:#A89580"># dans le Deployment du back</span><br>spec:<br>&#160;&#160;serviceAccountName: back</p>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># un token court pour la CI</span><br>kubectl create token ci-deployer \<br>&#160;&#160;-n croustino --duration=10m</p>
+</div>
+</div>
+</div>
+<aside>Les tokens sont projetés : liés au pod, à durée de vie limitée, renouvelés automatiquement. Bonus du TP : décoder le JWT pour voir l'audience et l'expiration.</aside>
+</section>

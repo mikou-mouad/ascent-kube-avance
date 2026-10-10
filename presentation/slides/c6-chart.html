@@ -1,0 +1,24 @@
+<section id="c6-chart" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 6 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un template + des values = du YAML</h2>
+<div style="display:flex;gap:28px">
+<div style="width:440px;background:#F3E9DA;border-radius:16px;padding:26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#2B1D14;white-space:nowrap">helm/croustino/<br>├─ Chart.yaml<br>├─ <span style="color:#B5651D">values.yaml</span><br>├─ values-rennes.yaml<br>├─ values-lyon.yaml<br>└─ templates/<br>&#160;&#160;&#160;├─ _helpers.tpl<br>&#160;&#160;&#160;├─ configmap.yaml<br>&#160;&#160;&#160;├─ postgres.yaml<br>&#160;&#160;&#160;├─ <span style="color:#2F6FB0">back.yaml</span><br>&#160;&#160;&#160;└─ front.yaml</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># templates/back.yaml</span><br>kind: Deployment<br>metadata: {name: back}<br>spec:<br>&#160;&#160;replicas: <span style="color:#E9A23B">{{ .Values.back.replicas }}</span><br>&#160;&#160;&#160;&#160;image: <span style="color:#E9A23B">{{ .Values.imageRegistry }}</span>/…</p>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># values-lyon.yaml</span><br>ville: Lyon<br>stockMax: 12<br>back:<br>&#160;&#160;replicas: <span style="color:#E9A23B">1</span><br>front:<br>&#160;&#160;nodePort: 30081</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;justify-content:center">
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Tester le rendu sans rien installer :</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#2B1D14;background:#F3E9DA;padding:16px 20px;border-radius:12px">helm template croustino \<br>&#160;&#160;helm/croustino \<br>&#160;&#160;-f values-lyon.yaml</p>
+</div>
+</div>
+</div>
+</div>
+<aside>values.yaml contient les valeurs par défaut, chaque fichier de ville ne surcharge que ce qui change. Le namespace n'est jamais écrit en dur : {{ .Release.Namespace }}. helm lint détecte les erreurs de syntaxe.</aside>
+</section>

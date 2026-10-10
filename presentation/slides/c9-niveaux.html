@@ -1,0 +1,17 @@
+<section id="c9-niveaux" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 9 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Une politique : la première règle gagne</h2>
+<div style="display:flex;gap:36px">
+<div style="width:640px;display:flex;flex-direction:column;gap:10px">
+<div style="background:#F3E9DA;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700">None</p><p style="font-size:24px;color:#5A4636">rien : les sondes, les events, le bruit</p></div>
+<div style="background:#D6E4F2;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700">Metadata</p><p style="font-size:24px;color:#2B1D14">qui, quoi, quand, sans le contenu</p></div>
+<div style="background:#8FB4DB;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700">Request</p><p style="font-size:24px;color:#2B1D14">+ le corps de la requête</p></div>
+<div style="background:#2F6FB0;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700;color:#FBF6EE">RequestResponse</p><p style="font-size:24px;color:#FBF6EE">+ la réponse : tout, mais volumineux</p></div>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">Les Secrets : jamais au-delà de <span style="color:#2B1D14"><b>Metadata</b></span>, sinon les mots de passe finissent dans le journal.</p>
+</div>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">apiVersion: audit.k8s.io/v1<br>kind: Policy<br>rules:<br><span style="color:#A89580"># 1. le bruit</span><br>- level: None<br>&#160;&#160;resources: [{resources: [events]}]<br><span style="color:#A89580"># 2. secrets : qui, jamais quoi</span><br>- level: <span style="color:#E9A23B">Metadata</span><br>&#160;&#160;resources: [{resources: [secrets]}]<br><span style="color:#A89580"># 3. les lectures</span><br>- level: None<br>&#160;&#160;verbs: [get, list, watch]<br><span style="color:#A89580"># 4. modifs dans croustino</span><br>- level: <span style="color:#E9A23B">RequestResponse</span><br>&#160;&#160;namespaces: [croustino]<br>- level: Metadata</p>
+</div>
+</div>
+<aside>L'ordre compte : la règle des Secrets est avant celle des lectures, sinon la lecture d'un Secret ne serait jamais tracée. La politique complète est dans k8s/audit/audit-policy.yaml.</aside>
+</section>

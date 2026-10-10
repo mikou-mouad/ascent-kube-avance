@@ -1,0 +1,31 @@
+<section id="c8-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 8 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Garder les logs hors des pods</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBF6EE;border-radius:20px;padding:34px">
+<p style="font-size:28px;font-weight:700;color:#B5651D">AUJOURD'HUI</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px">kubectl logs</p>
+<ul style="font-size:28px;line-height:1.5;color:#5A4636">
+<li>un pod à la fois</li>
+<li>disparaît avec le pod</li>
+<li>pas de recherche, pas d'historique</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBF6EE;border-radius:20px;padding:34px">
+<p style="font-size:28px;font-weight:700;color:#2F6FB0">AVEC UNE PILE DE LOGS</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px">Kibana / Grafana</p>
+<ul style="font-size:28px;line-height:1.5;color:#5A4636">
+<li>tous les pods, tous les nœuds</li>
+<li>conservés des jours après</li>
+<li>recherche par champ : client, commande</li>
+</ul>
+</div>
+</div>
+<table style="font-size:26px;color:#2B1D14">
+<tr><th style="width:22%">Pile</th><th style="width:39%">Composants</th><th style="width:39%">Points forts</th></tr>
+<tr><td>EFK</td><td>Elasticsearch, Fluent Bit, Kibana</td><td>recherche plein texte puissante</td></tr>
+<tr><td>Loki</td><td>Loki, Promtail / Alloy, Grafana</td><td>léger, même outil que les métriques</td></tr>
+<tr><td>Cloud</td><td>CloudWatch, Cloud Logging…</td><td>rien à opérer</td></tr>
+</table>
+<aside>On utilise EFK, au programme officiel. Loki est un bon choix quand on a déjà Grafana : c'est un bonus de discussion en fin de TP.</aside>
+</section>

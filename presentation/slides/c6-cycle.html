@@ -1,0 +1,22 @@
+<section id="c6-cycle" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 6 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">La vie d'une release</h2>
+<div style="display:flex;align-items:center;gap:18px">
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;font-weight:700;color:#FBF6EE">révision 1</p><p style="font-size:24px;color:#EAF1F8">install · front 1.1</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;font-weight:700;color:#FBF6EE">révision 2</p><p style="font-size:24px;color:#EAF1F8">upgrade · front 1.0</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;font-weight:700;color:#FBF6EE">révision 3</p><p style="font-size:24px;color:#FBF6EE">rollback vers la 1</p></div>
+</div>
+<div style="display:flex;gap:36px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#F3E9DC;white-space:nowrap">helm install croustino-lyon helm/croustino \<br>&#160;&#160;-n croustino-lyon -f values-lyon.yaml<br><br>helm upgrade croustino-lyon … <span style="color:#E9A23B">--set front.image.tag=1.0</span><br>helm history croustino-lyon -n croustino-lyon<br>helm rollback croustino-lyon 1 -n croustino-lyon<br>helm list -A</p>
+</div>
+<div style="width:600px;display:flex;flex-direction:column;gap:14px;background:#F3E9DA;border-radius:16px;padding:28px">
+<h3 style="font-size:32px;font-weight:700">Reprendre Rennes sans rien perdre</h3>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">Helm refuse les objets qu'il n'a pas créés. On les supprime tous… <span style="color:#2B1D14"><b>sauf le PVC</b></span>.</p>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">Le chart recrée <span style="color:#2B1D14"><b>postgres-0</b></span>, qui retrouve <span style="color:#2B1D14"><b>data-postgres-0</b></span> : les commandes sont là.</p>
+</div>
+</div>
+<aside>L'historique est stocké dans des Secrets du namespace (sh.helm.release.v1.*). Un rollback crée une nouvelle révision, il ne revient pas en arrière dans l'historique.</aside>
+</section>

@@ -1,0 +1,31 @@
+<section id="c11-ha" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 11 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">D'un cluster fragile à un cluster HA</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#F3E9DA;border-radius:20px;padding:28px">
+<p style="font-size:26px;font-weight:700;color:#B5651D">AUJOURD'HUI</p>
+<div style="background:#B5651D;border-radius:14px;padding:18px"><p style="font-size:28px;font-weight:700;color:#FBF6EE">1 control plane</p><p style="font-size:24px;color:#FBF6EE">s'il tombe, plus rien ne se pilote</p></div>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:16px"><p style="font-size:26px">worker1</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:16px"><p style="font-size:26px">worker2</p></div>
+</div>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">PostgreSQL sur un disque local, Harbor sans réplique, NodePort sur une IP.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#EAF1F8;border-radius:20px;padding:28px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">CIBLE</p>
+<div style="background:#2B1D14;border-radius:12px;padding:14px;display:flex;justify-content:center"><p style="font-size:26px;color:#E9A23B">load balancer · api.croustino:6443</p></div>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#2F6FB0;border-radius:12px;padding:14px"><p style="font-size:24px;font-weight:700;color:#FBF6EE">cp1</p><p style="font-size:24px;color:#EAF1F8">API + etcd</p></div>
+<div style="flex:1;background:#2F6FB0;border-radius:12px;padding:14px"><p style="font-size:24px;font-weight:700;color:#FBF6EE">cp2</p><p style="font-size:24px;color:#EAF1F8">API + etcd</p></div>
+<div style="flex:1;background:#2F6FB0;border-radius:12px;padding:14px"><p style="font-size:24px;font-weight:700;color:#FBF6EE">cp3</p><p style="font-size:24px;color:#EAF1F8">API + etcd</p></div>
+</div>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:14px"><p style="font-size:24px">worker × N</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:14px"><p style="font-size:24px">stockage répliqué</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:14px"><p style="font-size:24px">Ingress + IP virtuelle</p></div>
+</div>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">etcd vote à la majorité : 3 membres tolèrent 1 panne, 5 en tolèrent 2.</p>
+</div>
+</div>
+<aside>Topologie « etcd empilé » (stacked) : etcd sur les control planes, la plus simple. Topologie « etcd externe » : etcd sur ses propres machines, plus robuste mais plus de VM. Best practices : nombre impair de membres etcd, sauvegardes externalisées, nœuds répartis sur plusieurs zones.</aside>
+</section>

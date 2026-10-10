@@ -1,0 +1,26 @@
+<section id="c7-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 7 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Mesurer, montrer, prévenir</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon name="Activity" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<p style="font-size:30px;font-style:italic;color:#5A4636">« Combien ? »</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-weight:600">Prometheus</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">collecte les métriques toutes les 15 s et les garde</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon name="Chart" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<p style="font-size:30px;font-style:italic;color:#5A4636">« Depuis quand ? »</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-weight:600">Grafana</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">les tableaux de bord : le rush du matin en un coup d'œil</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon name="Warning" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<p style="font-size:30px;font-style:italic;color:#5A4636">« Qui prévenir ? »</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-weight:600">Alertmanager</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">envoie l'alerte à Inès avant que le client ne tweete</p>
+</div>
+</div>
+<p style="font-size:30px;color:#5A4636">Les trois sont installés d'un coup avec le chart <span style="color:#2B1D14"><b>kube-prometheus-stack</b></span>.</p>
+<aside>Le chart installe aussi le Prometheus Operator, node-exporter (métriques des nœuds) et kube-state-metrics (état des objets Kubernetes), avec des dashboards et des alertes prêts à l'emploi.</aside>
+</section>

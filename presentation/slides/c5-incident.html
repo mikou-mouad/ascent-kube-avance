@@ -1,0 +1,15 @@
+<section id="c5-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 5 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Le service promos a mangé toute la RAM »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon name="Clock" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Vendredi<br>7h02</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Un prestataire a déployé le service « promos » dans <span style="color:#FBF6EE"><b>croustino</b></span>. Il consomme 1,5 Go par pod, sans aucune limite. Les nœuds saturent, le noyau tue des processus au hasard : <span style="color:#FBF6EE"><b>le back redémarre en boucle en plein rush.</b></span></p>
+<p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« Un seul service mal écrit, et c'est tout Croustino qui tombe ? » — Sophie</p>
+</div>
+</div>
+<aside>Le cluster est partagé : sans limites, le voisin le plus gourmand gagne. Sur la VM, c'était pareil, mais au moins on voyait le coupable avec top.</aside>
+</section>

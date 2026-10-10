@@ -1,0 +1,33 @@
+<section id="c2-objets" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 2 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Deployment, Pods, Service : qui fait quoi</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:300px;display:flex;flex-direction:column;gap:8px;background:#2F6FB0;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px;font-weight:700;color:#FBF6EE">Service back</p>
+<p style="font-size:24px;color:#EAF1F8">adresse stable<br>back:8080</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBE3BC">app=back ?</p>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border:3px dashed #B5651D;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">PODS · éphémères</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:12px 18px;border-radius:10px">back-7d9f-x2k  <span style="color:#B5651D">app=back</span></p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:12px 18px;border-radius:10px">back-7d9f-p8q  <span style="color:#B5651D">app=back</span></p>
+</div>
+<x-shape kind="arrow-left" style="background:#5A4636;width:70px;height:34px"></x-shape>
+<div style="width:260px;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px;font-weight:700">ReplicaSet</p>
+<p style="font-size:24px;color:#5A4636">garde 2 pods en vie</p>
+</div>
+<x-shape kind="arrow-left" style="background:#5A4636;width:70px;height:34px"></x-shape>
+<div style="width:260px;display:flex;flex-direction:column;gap:8px;background:#2B1D14;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px;font-weight:700;color:#E9A23B">Deployment</p>
+<p style="font-size:24px;color:#E8D9C4">gère les versions</p>
+</div>
+</div>
+<div style="display:flex;gap:28px">
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:28px"><h3 style="font-size:32px;font-weight:700">Pod</h3><p style="font-size:28px;line-height:1.4;color:#5A4636">Un ou plusieurs conteneurs. Il peut mourir à tout moment : son IP change.</p></div>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:28px"><h3 style="font-size:32px;font-weight:700">Deployment</h3><p style="font-size:28px;line-height:1.4;color:#5A4636">Décrit combien de pods, avec quelle image. Remplace les pods au changement de version.</p></div>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:28px"><h3 style="font-size:32px;font-weight:700">Service</h3><p style="font-size:28px;line-height:1.4;color:#5A4636">Un nom DNS fixe. Il choisit ses pods par <span style="color:#2B1D14"><b>label</b></span>, pas par nom.</p></div>
+</div>
+<aside>Le lien entre Service et pods, ce sont uniquement les labels. Une faute de frappe dans un label = un Service sans endpoint. C'est l'erreur la plus fréquente du TP.</aside>
+</section>

@@ -1,0 +1,17 @@
+<section id="c5-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 5 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Des limites à trois niveaux</h2>
+<div style="display:flex;flex-direction:column;gap:18px;background:#5A4636;border-radius:22px;padding:30px">
+<p style="font-size:28px;color:#FBF6EE"><span style="color:#FBE3BC"><b>NŒUD</b></span> · allocatable : ce que le scheduler peut distribuer</p>
+<div style="display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:18px;padding:28px">
+<p style="font-size:28px"><span style="color:#2F6FB0"><b>NAMESPACE croustino</b></span> · LimitRange (valeurs par défaut, maximum) + ResourceQuota (plafond total)</p>
+<div style="display:flex;gap:18px">
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">back</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 100m / 128Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 256Mi</p></div>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">postgres</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 500m / 512Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 512Mi</p></div>
+<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">promos</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">défaut 256Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">→ OOMKilled, seul</p></div>
+</div>
+<p style="font-size:26px;color:#5A4636"><span style="color:#2B1D14"><b>CONTENEUR</b></span> · requests (réservé) et limits (plafond)</p>
+</div>
+</div>
+<aside>Avec la limite, promos est tué tout seul (OOMKilled) au lieu d'emporter le nœud. Le quota empêche une équipe de consommer tout le cluster, même avec des pods raisonnables.</aside>
+</section>

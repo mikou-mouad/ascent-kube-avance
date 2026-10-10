@@ -1,0 +1,27 @@
+<section id="c4-rbac" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">RBAC : un rôle, un binding, des sujets</h2>
+<div style="display:flex;align-items:center;gap:18px">
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#B5651D">QUI · subjects</p><p style="font-family:'JetBrains Mono', monospace;font-size:26px">Group dev</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">LE LIEN · RoleBinding</p><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE">dev-developpeur</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#B5651D">QUOI · Role</p><p style="font-family:'JetBrains Mono', monospace;font-size:26px">developpeur</p></div>
+</div>
+<div style="display:flex;gap:36px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Role<br>metadata:<br>&#160;&#160;name: developpeur<br>&#160;&#160;namespace: croustino<br>rules:<br>- apiGroups: ["apps"]<br>&#160;&#160;resources: ["deployments"]<br>&#160;&#160;verbs: ["get","list","update",…]<br>- apiGroups: [""]<br>&#160;&#160;resources: ["pods/log"]<br>&#160;&#160;verbs: ["get"]<br><span style="color:#A89580"># pas de "secrets" : refusé</span></p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: RoleBinding<br>subjects:<br>- kind: <span style="color:#8FC1F0">Group</span><br>&#160;&#160;name: <span style="color:#8FC1F0">dev</span><br>roleRef:<br>&#160;&#160;kind: Role<br>&#160;&#160;name: <span style="color:#E9A23B">developpeur</span></p>
+</div>
+<table style="font-size:24px;color:#2B1D14">
+<tr><th style="width:30%">Portée</th><th style="width:35%">Le quoi</th><th style="width:35%">Le lien</th></tr>
+<tr><td>namespace</td><td>Role</td><td>RoleBinding</td></tr>
+<tr><td>cluster</td><td>ClusterRole</td><td>ClusterRoleBinding</td></tr>
+</table>
+</div>
+</div>
+<aside>Tout est refusé par défaut, les règles ne font qu'ajouter des droits. Astuce : un RoleBinding peut pointer vers un ClusterRole (par exemple view) pour réutiliser sa définition dans un seul namespace. Vérifier avec kubectl auth can-i --list --as malik --as-group dev -n croustino.</aside>
+</section>

@@ -1,0 +1,27 @@
+<section id="c3-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 3 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Les données vivent hors du pod, sur un volume qui lui survit</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FBF6EE;border-radius:20px;padding:36px">
+<p style="font-size:28px;font-weight:700;color:#B5651D">AVANT</p>
+<div style="display:flex;flex-direction:column;gap:8px;border:2px solid #E3D3BC;border-radius:14px;padding:20px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px">pod postgres</p>
+<p style="font-size:26px;color:#5A4636;background:#F3E9DA;padding:10px 16px;border-radius:10px">données dans le conteneur</p>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Pod supprimé = <span style="color:#2B1D14"><b>données supprimées</b></span></p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FBF6EE;border-radius:20px;padding:36px">
+<p style="font-size:28px;font-weight:700;color:#2F6FB0">APRÈS</p>
+<div style="display:flex;align-items:center;gap:16px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;border:2px solid #E3D3BC;border-radius:14px;padding:14px">postgres-0</p>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:48px;height:24px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE;background:#2F6FB0;border-radius:14px;padding:14px">PVC</p>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:48px;height:24px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE;background:#1F4F82;border-radius:14px;padding:14px">disque</p>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Le nouveau <span style="color:#2B1D14"><b>postgres-0</b></span> retrouve le même volume</p>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Deux briques : une <span style="color:#2B1D14"><b>StorageClass</b></span> qui crée les volumes à la demande, un <span style="color:#2B1D14"><b>StatefulSet</b></span> qui donne à chaque pod une identité et son volume.</p>
+<aside>Le pod garde le même nom et le même PVC : c'est ce qui rend la migration vers Helm possible au chapitre 6 sans perdre les commandes.</aside>
+</section>

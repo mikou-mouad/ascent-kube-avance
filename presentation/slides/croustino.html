@@ -1,0 +1,29 @@
+<section id="croustino" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Il était une fois</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Croustino livre des croissants chauds au petit-déjeuner</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;padding:32px;border-radius:16px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:700;color:#B5651D">6h30 – 9h</p>
+<p style="font-size:30px;color:#5A4636">le rush : tout se joue là</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;padding:32px;border-radius:16px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:700;color:#B5651D">80 %</p>
+<p style="font-size:30px;color:#5A4636">des commandes de la journée</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;padding:32px;border-radius:16px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:700;color:#B5651D">1 VM</p>
+<p style="font-size:30px;color:#5A4636">pour toute l'application</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;border:3px dashed #B5651D;border-radius:20px;padding:32px 40px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">VM « prod-croustino »</p>
+<div style="display:flex;align-items:center;gap:28px">
+<div style="flex:1;background:#FFFDF8;border:2px solid #E3D3BC;border-radius:14px;padding:22px"><p style="font-size:32px;font-weight:700;text-align:center">front</p><p style="font-size:26px;color:#5A4636;text-align:center">nginx + page web</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:70px;height:36px"></x-shape>
+<div style="flex:1;background:#FFFDF8;border:2px solid #E3D3BC;border-radius:14px;padding:22px"><p style="font-size:32px;font-weight:700;text-align:center">back</p><p style="font-size:26px;color:#5A4636;text-align:center">API des commandes</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:70px;height:36px"></x-shape>
+<div style="flex:1;background:#FFFDF8;border:2px solid #E3D3BC;border-radius:14px;padding:22px"><p style="font-size:32px;font-weight:700;text-align:center">PostgreSQL</p><p style="font-size:26px;color:#5A4636;text-align:center">les commandes</p></div>
+</div>
+</div>
+<aside>Le code est dans app/ du dépôt. docker compose up dans app/ montre l'application telle qu'elle tourne sur la VM.</aside>
+</section>

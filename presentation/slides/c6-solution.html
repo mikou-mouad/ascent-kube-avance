@@ -1,0 +1,27 @@
+<section id="c6-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 6 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un chart, des values, autant de releases que de villes</h2>
+<div style="display:flex;align-items:center;gap:28px">
+<div style="width:380px;display:flex;flex-direction:column;gap:10px;background:#2B1D14;border-radius:20px;padding:30px">
+<x-icon name="Book" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700;color:#FBF6EE">helm/croustino</p>
+<p style="font-size:26px;color:#E8D9C4">les templates, écrits une fois</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;align-items:center;gap:20px">
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<p style="width:330px;font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">values-rennes.yaml</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE">release croustino</p><p style="font-size:24px;color:#EAF1F8">ns croustino · port 30080</p></div>
+</div>
+<div style="display:flex;align-items:center;gap:20px">
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<p style="width:330px;font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">values-lyon.yaml</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE">release croustino-lyon</p><p style="font-size:24px;color:#EAF1F8">ns croustino-lyon · port 30081</p></div>
+</div>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Un correctif ? On modifie le chart une fois, puis <span style="color:#2B1D14"><b>helm upgrade</b></span> pour chaque ville. Helm garde l'historique de chaque release.</p>
+<aside>Helm est aussi le moyen standard d'installer des logiciels tiers : Prometheus, Fluent Bit, Harbor seront installés avec Helm dans les chapitres suivants.</aside>
+</section>

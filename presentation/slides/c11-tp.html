@@ -1,0 +1,28 @@
+<section id="c11-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon name="Wrench" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 11</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Sauver l'Épiphanie</p>
+<p style="font-size:30px;color:#D6E4F2">1 h 05</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-11-cycle-de-vie</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>ajouter des PodDisruptionBudgets au chart</li>
+<li>sauvegarder etcd, supprimer Lyon, restaurer</li>
+<li>passer le cluster en v1.35, nœud par nœud</li>
+<li>surveiller le site pendant toute l'opération</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon name="CheckCircle" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">croustino-lyon est revenu</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon name="CheckCircle" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">les 3 nœuds sont en v1.35</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon name="CheckCircle" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous expliquez chaque coupure vue</p></div>
+</div>
+</div>
+<aside>Toujours copier etcd.yaml hors du dossier manifests avant de le modifier. Si l'API ne revient pas après la restauration : sudo systemctl restart kubelet. Correction : branche solution-finale.</aside>
+</section>

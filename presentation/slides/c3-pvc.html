@@ -1,0 +1,22 @@
+<section id="c3-pvc" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Le provisionnement dynamique</h2>
+<div style="display:flex;align-items:center;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#F3E9DA;border-radius:16px;padding:22px"><p style="font-size:24px;font-weight:700;color:#B5651D">POD</p><p style="font-size:26px">« je monte le volume data »</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:56px;height:28px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#2F6FB0;border-radius:16px;padding:22px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">PVC · la demande</p><p style="font-size:26px;color:#FBF6EE">« 1 Gi, en RWO »</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:56px;height:28px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#1F4F82;border-radius:16px;padding:22px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">PV · le volume réel</p><p style="font-size:26px;color:#FBF6EE">un dossier sur worker1</p></div>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px">
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Personne ne crée le PV à la main : la <span style="color:#2B1D14"><b>StorageClass</b></span> le fabrique quand un PVC le demande.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>WaitForFirstConsumer</b></span> : le volume n'est créé qu'une fois le pod placé, sur le nœud du pod.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>reclaimPolicy: Delete</b></span> : supprimer le PVC efface les données.</p>
+</div>
+<div style="width:720px;background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">kind: StorageClass<br>metadata:<br>&#160;&#160;name: local-path<br>&#160;&#160;annotations:<br>&#160;&#160;&#160;&#160;<span style="color:#A89580"># StorageClass par défaut</span><br>&#160;&#160;&#160;&#160;storageclass.kubernetes.io/<br>&#160;&#160;&#160;&#160;&#160;&#160;is-default-class: "true"<br>provisioner: rancher.io/local-path<br>reclaimPolicy: <span style="color:#E9A23B">Delete</span><br>volumeBindingMode: <span style="color:#E9A23B">WaitForFirstConsumer</span></p>
+</div>
+</div>
+<aside>local-path est parfait pour la formation mais lie le volume à un nœud. En production : un stockage réseau ou distribué (Longhorn, Ceph, CSI du cloud). On le reverra au chapitre 11 pendant le drain des nœuds.</aside>
+</section>
