@@ -1,0 +1,6 @@
+ville: Lyon
+stockMax: 12
+back:
+  replicas: 1
+front:
+  nodePort: 30081
