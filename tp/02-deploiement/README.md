@@ -104,10 +104,30 @@ kubectl run test --rm -it --image=curlimages/curl --restart=Never -- \
 
 ### 5. Le front
 
-Complétez les `TODO` de `k8s/30-front.yaml`, appliquez-le, puis ouvrez `http://<IP d'un nœud>:30080`.
-Passez une commande.
+Complétez les `TODO` de `k8s/30-front.yaml` et appliquez-le.
 
-> Si vous n'accédez pas directement aux VM : `kubectl port-forward svc/front 8000:80 --address 0.0.0.0` ou un tunnel SSH.
+Le Service est de type **NodePort** : le site répond sur le port `30080` de **chaque nœud** du cluster. Pour trouver l'adresse des nœuds :
+
+```bash
+kubectl get nodes -o wide      # colonne INTERNAL-IP
+```
+
+| Nœud | INTERNAL-IP |
+|------|-------------|
+| controlplane | 10.10.0.10 |
+| worker1 | 10.10.0.11 |
+| worker2 | 10.10.0.12 |
+
+Pour voir le site, utilisez la machine **ClientWeb** (`10.10.0.50`), sur le même réseau que les nœuds :
+
+1. Dans votre environnement de TP, cliquez sur **Ouvrir la console** de ClientWeb.
+2. Ouvrez un navigateur web sur ce bureau.
+3. Allez sur `http://10.10.0.11:30080` (l'adresse de n'importe quel nœud fonctionne).
+4. Passez une commande.
+
+C'est aussi depuis ClientWeb que vous ouvrirez Grafana, Kibana et Harbor dans les TP suivants : partout où un énoncé écrit `<IP d'un nœud>`, utilisez l'une de ces adresses.
+
+**Question :** pourquoi le site répond-il aussi sur `10.10.0.10`, alors qu'aucun pod du front ne tourne sur le control plane ?
 
 ### 6. Scaling et auto-réparation
 
