@@ -1,13 +1,12 @@
 # Correction du TP 07 – Monitoring
 
-Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+Le **chart complet corrigé** est dans `solutions/07-monitoring/helm/croustino/`. On peut l'installer tel quel :
 
-- `helm/croustino/dashboards/rush-du-matin.json`
-- `helm/croustino/templates/monitoring.yaml`
-- `helm/croustino/values-rennes.yaml`
-- `helm/croustino/values.yaml`
+```bash
+helm upgrade croustino solutions/07-monitoring/helm/croustino -n croustino -f solutions/07-monitoring/helm/croustino/values-rennes.yaml
+```
 
-Pour les comparer à votre travail : `diff -r solutions/07-monitoring/helm helm`.
+Pour voir ce qui change par rapport à votre chart : `diff -r solutions/07-monitoring/helm helm`.
 
 ServiceMonitor, alertes et dashboard : `helm/croustino/templates/monitoring.yaml` et `helm/croustino/dashboards/rush-du-matin.json`.
 Le monitoring est activé pour Rennes dans `values-rennes.yaml` (`monitoring.enabled: true`).
