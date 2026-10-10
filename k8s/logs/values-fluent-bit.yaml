@@ -27,4 +27,6 @@ config:
         Logstash_Prefix    kube
         Replace_Dots       On
         Suppress_Type_Name On
+        # Taille illimitée pour lire les réponses d'Elasticsearch (évite « cannot increase buffer »)
+        Buffer_Size        False
         Retry_Limit        False
