@@ -1,6 +1,6 @@
 # TP 04 – « Le stagiaire a supprimé la prod »
 
-**Durée :** 2 h 05 (en deux parties) · **Branche :** `tp-04-rbac` · **Correction :** branche `tp-05-capacite` (`k8s/rbac/`)
+**Durée :** 2 h 05 (en deux parties) · **Branche :** `tp-04-rbac` · **Correction :** `solutions/04-rbac/`, dans cette branche
 
 ## L'incident
 
@@ -36,7 +36,7 @@ git stash -u          # met de côté vos fichiers du TP précédent
 git checkout tp-04-rbac
 ```
 
-La branche contient l'état attendu à la fin du TP précédent (c'est aussi sa correction).
+La branche contient l'état attendu à la fin du TP précédent. La correction de ce TP est dans `solutions/04-rbac/`.
 Vos propres fichiers restent récupérables avec `git stash list` et `git stash show -p`.
 
 ## Partie 1 – Authentification (40 min)
