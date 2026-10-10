@@ -53,7 +53,7 @@ kubectl create -f https://download.elastic.co/downloads/eck/2.16.1/crds.yaml
 kubectl apply -f https://download.elastic.co/downloads/eck/2.16.1/operator.yaml
 kubectl create namespace logging
 kubectl apply -f k8s/logs/elasticsearch-kibana.yaml
-kubectl get elasticsearch,kibana -n logging -w      # attendre HEALTH green/yellow
+watch -n 5 kubectl get elasticsearch,kibana -n logging   # attendre HEALTH green (ou yellow), 2 à 4 min ; Ctrl+C pour quitter
 ```
 
 **Questions :** quels objets l'opérateur a-t-il créés (`kubectl get all,secret,pvc -n logging`) ? Où est stocké le mot de passe de `elastic` ?
