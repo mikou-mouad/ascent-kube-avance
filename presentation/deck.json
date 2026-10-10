@@ -1,45 +1,168 @@
 {
   "v": 4,
-  "createdOnFiles": { "v": 1, "at": "2026-10-09T21:30:00Z" },
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-09T21:30:00Z"
+  },
   "lists": "css",
   "title": "Kubernetes – Avancé : l'histoire de Croustino",
   "cover": "cover",
   "order": [
-    "cover", "croustino", "personnages", "principe", "programme", "branches",
-    "c0-incident", "c0-solution", "c0-archi", "c0-boucle",
-    "c1-incident", "c1-solution", "c1-etapes", "c1-tp",
-    "c2-incident", "c2-solution", "c2-objets", "c2-yaml", "c2-probes", "c2-tp",
-    "c3-incident", "c3-solution", "c3-pvc", "c3-pvc-yaml", "c3-sts", "c3-tp",
-    "c4-incident", "c4-solution", "c4-authn", "c4-rbac", "c4-sa", "c4-tp",
-    "c5-incident", "c5-solution", "c5-requests", "c5-quota", "c5-tp",
-    "c6-incident", "c6-solution", "c6-chart", "c6-cycle", "c6-tp",
-    "c7-incident", "c7-solution", "c7-archi", "c7-promql", "c7-tp",
-    "c8-incident", "c8-solution", "c8-efk", "c8-json", "c8-tp",
-    "c9-incident", "c9-solution", "c9-niveaux", "c9-jq", "c9-tp",
-    "c10-incident", "c10-solution", "c10-harbor", "c10-tp",
-    "c11-incident", "c11-solution", "c11-ha", "c11-etcd", "c11-upgrade", "c11-tp",
-    "epilogue", "fin"
+    "cover",
+    "croustino",
+    "personnages",
+    "principe",
+    "programme",
+    "branches",
+    "j1-debut",
+    "c0-incident",
+    "c0-solution",
+    "c0-archi",
+    "c0-boucle",
+    "c1-incident",
+    "c1-solution",
+    "c1-etapes",
+    "c1-tp",
+    "pause-j1-matin",
+    "c2-incident",
+    "c2-solution",
+    "c2-objets",
+    "c2-yaml",
+    "c2-probes",
+    "dej-j1",
+    "c2-tp",
+    "pause-j1-aprem",
+    "c3-incident",
+    "c3-solution",
+    "c3-pvc",
+    "c3-pvc-yaml",
+    "c3-sts",
+    "c3-tp",
+    "fin-j1",
+    "j2-debut",
+    "c4-incident",
+    "c4-solution",
+    "c4-authn",
+    "pause-j2-matin",
+    "c4-rbac",
+    "c4-sa",
+    "c4-tp",
+    "dej-j2",
+    "c5-incident",
+    "c5-solution",
+    "c5-requests",
+    "c5-quota",
+    "c5-tp",
+    "c6-incident",
+    "c6-solution",
+    "c6-chart",
+    "c6-cycle",
+    "c6-tp",
+    "pause-j2-aprem",
+    "c7-incident",
+    "c7-solution",
+    "c7-archi",
+    "c7-promql",
+    "c7-tp",
+    "fin-j2",
+    "j3-debut",
+    "c8-incident",
+    "c8-solution",
+    "c8-efk",
+    "c8-json",
+    "c8-tp",
+    "pause-j3-matin",
+    "c9-incident",
+    "c9-solution",
+    "c9-niveaux",
+    "c9-jq",
+    "c9-tp",
+    "dej-j3",
+    "c10-incident",
+    "c10-solution",
+    "c10-harbor",
+    "c10-tp",
+    "c11-incident",
+    "c11-solution",
+    "c11-ha",
+    "c11-etcd",
+    "c11-upgrade",
+    "pause-j3-aprem",
+    "c11-tp",
+    "epilogue",
+    "fin"
   ],
   "sections": {
-    "intro": { "description": "Croustino, ses personnages et le déroulé de la formation", "start": "cover" },
-    "ch0": { "description": "Chapitre 0 : de la VM à Kubernetes, mise à niveau", "start": "c0-incident" },
-    "ch1": { "description": "Chapitre 1 : construire le cluster avec kubeadm", "start": "c1-incident" },
-    "ch2": { "description": "Chapitre 2 : première migration de l'application", "start": "c2-incident" },
-    "ch3": { "description": "Chapitre 3 : volumes avancés, StorageClass et StatefulSet", "start": "c3-incident" },
-    "ch4": { "description": "Chapitre 4 : authentification et autorisation", "start": "c4-incident" },
-    "ch5": { "description": "Chapitre 5 : gestion de la capacité", "start": "c5-incident" },
-    "ch6": { "description": "Chapitre 6 : Helm et packaging applicatif", "start": "c6-incident" },
-    "ch7": { "description": "Chapitre 7 : monitoring avec Prometheus et Grafana", "start": "c7-incident" },
-    "ch8": { "description": "Chapitre 8 : gestion des logs avec EFK", "start": "c8-incident" },
-    "ch9": { "description": "Chapitre 9 : audit du cluster", "start": "c9-incident" },
-    "ch10": { "description": "Chapitre 10 : Harbor et les registres avancés", "start": "c10-incident" },
-    "ch11": { "description": "Chapitre 11 : architecture avancée et cycle de vie", "start": "c11-incident" },
-    "fin": { "description": "Épilogue et bilan", "start": "epilogue" }
+    "intro": {
+      "description": "Croustino, ses personnages et le déroulé de la formation",
+      "start": "cover"
+    },
+    "ch0": {
+      "description": "Chapitre 0 : de la VM à Kubernetes, mise à niveau",
+      "start": "j1-debut"
+    },
+    "ch1": {
+      "description": "Chapitre 1 : construire le cluster avec kubeadm",
+      "start": "c1-incident"
+    },
+    "ch2": {
+      "description": "Chapitre 2 : première migration de l'application",
+      "start": "c2-incident"
+    },
+    "ch3": {
+      "description": "Chapitre 3 : volumes avancés, StorageClass et StatefulSet",
+      "start": "c3-incident"
+    },
+    "ch4": {
+      "description": "Chapitre 4 : authentification et autorisation",
+      "start": "j2-debut"
+    },
+    "ch5": {
+      "description": "Chapitre 5 : gestion de la capacité",
+      "start": "c5-incident"
+    },
+    "ch6": {
+      "description": "Chapitre 6 : Helm et packaging applicatif",
+      "start": "c6-incident"
+    },
+    "ch7": {
+      "description": "Chapitre 7 : monitoring avec Prometheus et Grafana",
+      "start": "c7-incident"
+    },
+    "ch8": {
+      "description": "Chapitre 8 : gestion des logs avec EFK",
+      "start": "j3-debut"
+    },
+    "ch9": {
+      "description": "Chapitre 9 : audit du cluster",
+      "start": "c9-incident"
+    },
+    "ch10": {
+      "description": "Chapitre 10 : Harbor et les registres avancés",
+      "start": "c10-incident"
+    },
+    "ch11": {
+      "description": "Chapitre 11 : architecture avancée et cycle de vie",
+      "start": "c11-incident"
+    },
+    "fin": {
+      "description": "Épilogue et bilan",
+      "start": "epilogue"
+    }
   },
   "faces": {
-    "fraunces": { "family": "Fraunces", "href": "https://fonts.googleapis.com/css2?family=Fraunces:wght@400..800&display=swap" },
-    "dm-sans": { "family": "DM Sans", "href": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400..700&display=swap" },
-    "jetbrains-mono": { "family": "JetBrains Mono", "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" }
+    "fraunces": {
+      "family": "Fraunces",
+      "href": "https://fonts.googleapis.com/css2?family=Fraunces:wght@400..800&display=swap"
+    },
+    "dm-sans": {
+      "family": "DM Sans",
+      "href": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400..700&display=swap"
+    },
+    "jetbrains-mono": {
+      "family": "JetBrains Mono",
+      "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+    }
   },
   "designSystems": []
 }

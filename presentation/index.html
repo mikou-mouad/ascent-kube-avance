@@ -193,6 +193,27 @@
 </div>
 <aside>Montrer le dépôt sur GitHub. Les dossiers : app/ (le code), k8s/ (les manifests), helm/ (à partir du TP 06), tp/ (les énoncés), solutions/NN-*/ (la correction de chaque TP : fichiers corrigés et réponses aux questions). La correction est volontairement accessible : chacun avance à son rythme.</aside>
 </section>
+<section id="j1-debut" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Jour 1 · 9h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">De la VM au cluster</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#2B1D14;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">OÙ EN EST CROUSTINO</p>
+<p style="font-size:30px;line-height:1.45;color:#F3E9DC">Une seule VM : front, back et PostgreSQL.</p>
+<p style="font-size:30px;line-height:1.45;color:#F3E9DC">Coupée à chaque mise à jour.</p>
+<p style="font-size:30px;line-height:1.45;color:#F3E9DC">Saturée au rush de 7h.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">AUJOURD'HUI</p>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h15</p><p style="font-size:28px">Ch. 0 · Mise à niveau</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h45</p><p style="font-size:28px">Ch. 1 · TP 01 : installer le cluster</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">12h00</p><p style="font-size:28px">Ch. 2 · Première migration</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">13h30</p><p style="font-size:28px">TP 02 : déployer Croustino</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">15h30</p><p style="font-size:28px">Ch. 3 · Stockage et TP 03</p></div>
+</div>
+</div>
+<aside>Annoncer les horaires : 9h00 – 12h30, 13h30 – 17h00, pauses à 10h30 et 15h15. Ce soir, Croustino tourne sur un cluster et ne perd plus ses commandes.</aside>
+</section>
 <section id="c0-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 0 · L'incident</p>
 <h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Le site tombe à chaque mise à jour »</h2>
@@ -374,6 +395,14 @@
 </div>
 <aside>Pendant les temps d'attente (apt, pull des images), poser les questions de l'énoncé : swap, br_netfilter, driver cgroup, apt-mark hold. Correction : solutions/01-installation/, dans la branche du TP.</aside>
 </section>
+<section id="pause-j1-matin" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 1 · 10h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 10h45</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Laissez tourner les installations : on reprend le TP 01 au retour.</p>
+<aside>Pendant la pause, faire le point sur l'avancement de chacun : nœuds préparés ? kubeadm init lancé ?</aside>
+</section>
 <section id="c2-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 2 · L'incident</p>
 <h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Ce soir, Croustino tourne sur le cluster »</h2>
@@ -476,6 +505,14 @@
 </div>
 <aside>/readyz du back teste la base : si PostgreSQL est arrêté, le back sort du Service au lieu de renvoyer des erreurs. Bonus du TP : passer PostgreSQL à 0 réplica et observer les endpoints.</aside>
 </section>
+<section id="dej-j1" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="•" style="color:#E9A23B;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B;text-align:center">Jour 1 · 12h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause déjeuner</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 13h30</p>
+<p style="font-size:30px;color:#D6E4F2;text-align:center">Cet après-midi : Croustino arrive sur le cluster (TP 02).</p>
+<aside>Vérifier avant la pause que les 3 nœuds sont Ready chez tout le monde : le TP 02 commence directement au retour.</aside>
+</section>
 <section id="c2-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
 <div style="display:flex;flex-direction:column;gap:24px">
 <x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
@@ -503,6 +540,14 @@
 </div>
 </div>
 <aside>Correction : solutions/02-deploiement/, dans la branche du TP. Question de fin à garder pour la suite : que se passe-t-il si le pod PostgreSQL redémarre ?</aside>
+</section>
+<section id="pause-j1-aprem" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 1 · 15h15</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 15h30</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : mardi, 8h05… les commandes du matin ont disparu.</p>
+<aside>Le site doit tourner chez tout le monde avant le chapitre 3 : c'est lui qu'on va casser.</aside>
 </section>
 <section id="c3-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 3 · L'incident</p>
@@ -644,6 +689,48 @@
 </div>
 <aside>Correction : solutions/03-stockage/, dans la branche du TP. Le Service doit être supprimé puis recréé en headless : un Service existant ne peut pas changer de clusterIP.</aside>
 </section>
+<section id="fin-j1" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Fin du jour 1 · 17h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#FBF6EE">Croustino a quitté sa VM</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#3A2A1F;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">AUJOURD'HUI</p>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Un cluster kubeadm de 3 nœuds</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Croustino déployé, mis à jour sans coupure</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Les commandes survivent au pod</p></div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1F4F82;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#FBE3BC">DEMAIN, CHEZ CROUSTINO</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Le stagiaire supprime la prod.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Un service mange toute la RAM.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">On ouvre à Lyon.</p>
+</div>
+</div>
+<p style="font-size:30px;color:#E8D9C4">Avant de partir : un tour de table, ce qui était clair et ce qui l'était moins.</p>
+<aside>Laisser les VM allumées : on repart demain du cluster d'aujourd'hui. Les participants en retard peuvent rattraper avec la branche tp-03-stockage.</aside>
+</section>
+<section id="j2-debut" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Jour 2 · 9h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Croustino grandit</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#2B1D14;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">OÙ EN EST CROUSTINO</p>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Cluster de 3 nœuds</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Front, back et base déployés</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Mises à jour sans coupure</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Commandes persistantes</p></div>
+<p style="font-size:28px;line-height:1.4;color:#E9A23B">Mais tout le monde est admin.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">AUJOURD'HUI</p>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h10</p><p style="font-size:28px">Ch. 4 · Authentification et RBAC</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">13h30</p><p style="font-size:28px">Ch. 5 · Capacité</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">14h40</p><p style="font-size:28px">Ch. 6 · Helm : on ouvre à Lyon</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">16h30</p><p style="font-size:28px">Ch. 7 · Monitoring (début)</p></div>
+</div>
+</div>
+<aside>Récapitulatif rapide du jour 1 (10 min). Vérifier que tous les clusters ont redémarré correctement et que le site répond. Un participant en retard repart de la branche tp-04-rbac.</aside>
+</section>
 <section id="c4-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 4 · L'incident</p>
 <h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Le stagiaire a supprimé la prod »</h2>
@@ -708,6 +795,14 @@
 </div>
 </div>
 <aside>Le script tp/04-rbac/creer-utilisateur.sh enchaîne les 4 étapes. Dans le TP, Malik est créé à la main pour comprendre, Théo et Inès avec le script. Un certificat client ne se révoque pas : on préfère des certificats courts et des droits donnés aux groupes.</aside>
+</section>
+<section id="pause-j2-matin" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 2 · 10h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 10h45</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : on donne enfin à chacun les bons droits (RBAC).</p>
+<aside>Avant la pause, la partie 1 du TP 04 doit être faite : Malik, Théo et Inès ont leur kubeconfig.</aside>
 </section>
 <section id="c4-rbac" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
@@ -790,6 +885,14 @@
 </div>
 </div>
 <aside>Partie 1 (40 min) avant la pause : identités. Partie 2 (1 h 25) après : RBAC et ServiceAccounts. Correction : solutions/04-rbac/, dans la branche du TP.</aside>
+</section>
+<section id="dej-j2" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="•" style="color:#E9A23B;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B;text-align:center">Jour 2 · 12h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause déjeuner</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 13h30</p>
+<p style="font-size:30px;color:#D6E4F2;text-align:center">Cet après-midi : un service gourmand, puis l'ouverture à Lyon.</p>
+<aside>Conseiller un snapshot des workers avant le TP 05 : l'incident sature vraiment la mémoire des nœuds.</aside>
 </section>
 <section id="c5-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 5 · L'incident</p>
@@ -1024,6 +1127,14 @@
 </div>
 <aside>Prévoir imageRegistry et imagePullSecrets dans les values dès maintenant : ils serviront au TP 10. Correction : solutions/06-helm/, dans la branche du TP.</aside>
 </section>
+<section id="pause-j2-aprem" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 2 · 15h15</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 15h30</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : Rennes passe sous Helm, sans perdre une commande.</p>
+<aside>Le chart doit être écrit avant la pause (étape 3 du TP 06). Au retour : migration de Rennes et installation de Lyon.</aside>
+</section>
 <section id="c7-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 7 · L'incident</p>
 <h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« On l'a appris sur les réseaux sociaux »</h2>
@@ -1146,6 +1257,50 @@
 </div>
 </div>
 <aside>Jour 2 à 16h50 : on lance juste l'installation (les pods mettent quelques minutes). Jour 3 au matin : exploitation. Prometheus :30090, Grafana :30300 (admin / croustino), Alertmanager :30093. Correction : solutions/07-monitoring/, dans la branche du TP.</aside>
+</section>
+<section id="fin-j2" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Fin du jour 2 · 17h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#FBF6EE">Croustino a grandi, proprement</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#3A2A1F;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">AUJOURD'HUI</p>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Chacun son identité et ses droits</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Des limites et un quota par équipe</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Rennes et Lyon déployés avec Helm</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px">Prometheus et Grafana installés</p></div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1F4F82;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#FBE3BC">DEMAIN, CHEZ CROUSTINO</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Une commande disparaît.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Le back est supprimé à 3h du matin.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">Docker Hub nous bloque.</p>
+<p style="font-size:30px;line-height:1.4;color:#FBF6EE">La veille de l'Épiphanie…</p>
+</div>
+</div>
+<aside>Laisser tourner kube-prometheus-stack cette nuit : demain matin, les graphes auront de l'historique. Participants en retard : branche tp-07-monitoring.</aside>
+</section>
+<section id="j3-debut" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Jour 3 · 9h00</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Exploiter Croustino en production</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#2B1D14;border-radius:20px;padding:32px">
+<p style="font-size:26px;font-weight:700;color:#E9A23B">OÙ EN EST CROUSTINO</p>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Rennes et Lyon sous Helm</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Droits, limites et quotas</p></div>
+<div style="display:flex;gap:14px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:36px;height:36px"></x-icon><p style="font-size:28px;color:#F3E9DC">Prometheus installé</p></div>
+<p style="font-size:28px;line-height:1.4;color:#E9A23B">Mais quand ça casse, on ne voit encore rien.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">AUJOURD'HUI</p>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">9h10</p><p style="font-size:28px">Ch. 7 · Dashboard et alertes</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">10h00</p><p style="font-size:28px">Ch. 8 · Logs avec EFK</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">11h25</p><p style="font-size:28px">Ch. 9 · Audit</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">13h30</p><p style="font-size:28px">Ch. 10 · Harbor</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">14h35</p><p style="font-size:28px">Ch. 11 · Architecture et mises à jour</p></div>
+<div style="display:flex;gap:20px;align-items:center;background:#F3E9DA;border-radius:12px;padding:14px 20px"><p style="width:110px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">16h35</p><p style="font-size:28px">Épilogue et bilan</p></div>
+</div>
+</div>
+<aside>Récapitulatif rapide du jour 2. On reprend directement le TP 07 là où on l'a laissé : Prometheus a tourné toute la nuit. Participants en retard : branche tp-07-monitoring.</aside>
 </section>
 <section id="c8-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 8 · L'incident</p>
@@ -1279,6 +1434,14 @@
 </div>
 <aside>Ordre important : installer la chaîne de logs AVANT de rejouer la commande, car Fluent Bit ne lit que les nouvelles lignes. Kibana : https sur le port 30561, utilisateur elastic. Correction : solutions/08-logs/, dans la branche du TP.</aside>
 </section>
+<section id="pause-j3-matin" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 3 · 10h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 10h45</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Elasticsearch démarre pendant la pause. Au retour : l'enquête Lebrun.</p>
+<aside>Lancer l'installation d'ECK et d'Elasticsearch juste avant la pause : il met 2 à 4 minutes à être prêt.</aside>
+</section>
 <section id="c9-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 9 · L'incident</p>
 <h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Qui a supprimé le back à 3h du matin ? »</h2>
@@ -1381,6 +1544,14 @@
 </div>
 </div>
 <aside>Point de vigilance : une faute de YAML dans kube-apiserver.yaml et l'API ne revient pas. Diagnostic : sudo crictl ps -a --name kube-apiserver puis crictl logs. Correction : solutions/09-audit/, dans la branche du TP.</aside>
+</section>
+<section id="dej-j3" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="•" style="color:#E9A23B;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B;text-align:center">Jour 3 · 12h30</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause déjeuner</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 13h30</p>
+<p style="font-size:30px;color:#D6E4F2;text-align:center">Cet après-midi : nos propres images, puis la mise à jour du cluster.</p>
+<aside>L'API server doit avoir redémarré avec l'audit chez tout le monde avant la pause. Au retour, désinstaller EFK pour libérer la mémoire avant Harbor.</aside>
 </section>
 <section id="c10-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
 <p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 10 · L'incident</p>
@@ -1595,6 +1766,14 @@
 </div>
 </div>
 <aside>Pendant tout le TP, une boucle curl surveille le site : les participants voient en direct ce que protège le PDB, et ce qui casse quand le nœud de PostgreSQL est drainé. Excellente discussion pour la question des single points of failure.</aside>
+</section>
+<section id="pause-j3-aprem" data-transition="fade" style="background:#B5651D;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:36px">
+<x-icon data-g="◷" style="color:#FBF6EE;width:110px;height:110px"></x-icon>
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#FBE3BC;text-align:center">Jour 3 · 15h15</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:150px;font-weight:700;line-height:1.0;color:#FBF6EE;text-align:center">Pause café</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-style:italic;color:#FBF6EE;text-align:center">Reprise à 15h30</p>
+<p style="font-size:30px;color:#FBE3BC;text-align:center">Au retour : sauvegarde d'etcd et mise à jour du cluster, sans couper le site.</p>
+<aside>Conseiller un snapshot des 3 VM pendant la pause : le TP 11 touche à etcd et au control plane.</aside>
 </section>
 <section id="c11-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
 <div style="display:flex;flex-direction:column;gap:24px">
