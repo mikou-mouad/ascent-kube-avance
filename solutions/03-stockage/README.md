@@ -12,7 +12,7 @@ Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dép
 
 - `k8s/10-postgres.yaml`
 
-Pour les comparer à votre travail : `diff -r solutions/03-stockage/k8s k8s` (ou `helm`).
+Pour les comparer à votre travail : `diff -r solutions/03-stockage/k8s k8s`.
 
 Le StatefulSet est dans `k8s/10-postgres.yaml`.
 
