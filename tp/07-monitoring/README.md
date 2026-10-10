@@ -57,14 +57,45 @@ kubectl run test --rm -it --image=curlimages/curl --restart=Never -n croustino -
   curl -s http://back:8080/metrics
 ```
 
-Créez un **ServiceMonitor** dans le chart (`helm/croustino/templates/monitoring.yaml`), activable par la valeur `monitoring.enabled` :
+Un **ServiceMonitor** dit à Prometheus quoi collecter : quel Service (par ses labels), sur quel port, à quel chemin et à quelle fréquence. On l'ajoute au chart, dans un nouveau fichier `helm/croustino/templates/monitoring.yaml`, activable par une value, car Lyon n'aura peut-être pas de monitoring.
 
-- il sélectionne le Service `back` (label `app: back`) ;
-- il collecte le port `http`, chemin `/metrics`, toutes les 15 s.
+1. Dans `helm/croustino/values.yaml`, ajoutez :
 
-```bash
-helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-rennes.yaml --set monitoring.enabled=true
-```
+   ```yaml
+   # ServiceMonitor, alertes et dashboard (nécessite kube-prometheus-stack)
+   monitoring:
+     enabled: false
+   ```
+
+2. Créez `helm/croustino/templates/monitoring.yaml` :
+
+   ```yaml
+   {{- if .Values.monitoring.enabled }}
+   # Prometheus collecte /metrics sur le Service du back.
+   apiVersion: monitoring.coreos.com/v1
+   kind: ServiceMonitor
+   metadata:
+     name: back
+   spec:
+     selector:
+       matchLabels:
+         app: back          # le label du Service back
+     endpoints:
+       - port: http         # le NOM du port du Service, pas son numéro
+         path: /metrics
+         interval: 15s
+   {{- end }}
+   ```
+
+   Tout le fichier est entre `{{- if .Values.monitoring.enabled }}` et `{{- end }}` : sans `monitoring.enabled=true`, Helm ne génère rien. Les étapes 4 et 5 ajouteront d'autres objets **avant** la ligne `{{- end }}`.
+
+3. Vérifiez le rendu, puis déployez :
+
+   ```bash
+   helm template croustino helm/croustino --set monitoring.enabled=true -s templates/monitoring.yaml
+   helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-rennes.yaml --set monitoring.enabled=true
+   kubectl get servicemonitor -n croustino
+   ```
 
 Vérifiez que Prometheus collecte bien le back. Dans le navigateur de ClientWeb, sur `http://10.10.0.11:30090` :
 
@@ -190,15 +221,159 @@ sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace="crous
 
 ### 4. Le dashboard « Rush du matin »
 
-Grafana : `http://<IP d'un nœud>:30300` (admin / croustino).
-Créez un dashboard avec au moins 3 panneaux à partir de vos requêtes. Explorez aussi les dashboards fournis (**Kubernetes / Compute Resources / Namespace (Pods)**).
+Grafana affiche les requêtes de Prometheus sous forme de tableaux de bord. On y construit 4 panneaux à partir des requêtes de l'étape 3.
 
-Exportez votre dashboard en JSON (**Share > Export**) : il sera livré par le chart sous forme de ConfigMap portant le label `grafana_dashboard: "1"`.
+#### 4.1 Se connecter
+
+Dans le navigateur de ClientWeb : `http://10.10.0.11:30300`, utilisateur `admin`, mot de passe `croustino`.
+
+#### 4.2 Créer le dashboard et le premier panneau
+
+1. Menu ☰ (en haut à gauche) > **Dashboards**, puis bouton **New** > **New dashboard**.
+2. Cliquez sur **+ Add visualization**, puis choisissez la source de données **Prometheus**.
+3. Dans l'éditeur de requête (en bas), passez de **Builder** à **Code** (sélecteur à droite de l'éditeur), puis collez :
+
+   ```promql
+   sum by (produit) (rate(croustino_commandes_total[1m])) * 60
+   ```
+
+4. Sous la requête, ouvrez **Options** et mettez `{{produit}}` dans **Legend** (choisir **Custom**) : chaque courbe porte le nom du produit.
+5. Cliquez sur **Run queries**.
+6. Dans le panneau de droite :
+   - **Visualization** : **Time series** (c'est le choix par défaut) ;
+   - **Title** : `Commandes par minute`.
+7. En haut, cliquez sur **Back to dashboard**.
+
+#### 4.3 Les trois autres panneaux
+
+Pour chaque panneau : **Add** > **Visualization** en haut du dashboard, puis requête en mode **Code**, **Run queries**, réglages à droite, **Back to dashboard**.
+
+| Titre | Requête | Visualization | Réglages à droite |
+|-------|---------|---------------|-------------------|
+| `Taux de rejet` | la requête de l'étape 3.4 (avec `* 100`) | **Stat** | **Standard options > Unit** : `Percent (0-100)` |
+| `Mémoire par pod` | `sum by (pod) (container_memory_working_set_bytes{namespace="croustino", container!=""})` | **Time series** | **Legend** de la requête : `{{pod}}` ; **Standard options > Unit** : `bytes(IEC)` |
+| `Redémarrages (1 h)` | `sum(increase(kube_pod_container_status_restarts_total{namespace="croustino"}[1h]))` | **Stat** | **Standard options > Decimals** : `0` |
+
+Vous pouvez déplacer et redimensionner les panneaux à la souris.
+
+#### 4.4 Régler et enregistrer
+
+1. En haut à droite, choisissez la période **Last 15 minutes** et le rafraîchissement automatique **10s**.
+2. Cliquez sur **Save dashboard** (icône de disquette, ou bouton **Save**), titre : `Croustino Rennes – Rush du matin`, puis **Save**.
+3. Relancez le rush (étape 3.1) et regardez le dashboard se remplir.
+
+Explorez aussi un dashboard fourni par la stack : **Dashboards**, recherchez `Compute Resources / Namespace (Pods)`, puis choisissez `croustino` dans la liste **namespace** en haut.
+
+#### 4.5 Livrer le dashboard avec le chart
+
+Un dashboard créé à la main disparaît si Grafana est réinstallé. On le range donc dans le chart, comme le reste de l'application : Grafana charge automatiquement les ConfigMaps qui portent le label `grafana_dashboard: "1"`.
+
+1. Dans l'adresse du dashboard (`…/d/abc123xyz/croustino-rennes…`), relevez son **uid** : la partie entre `/d/` et le `/` suivant.
+2. Sur le control plane, récupérez son JSON avec l'API de Grafana. On remplace l'`id` et l'`uid` pour que la copie livrée par le chart ne remplace pas votre original :
+
+   ```bash
+   sudo apt-get install -y jq
+   UID_DASH=abc123xyz        # votre uid
+   mkdir -p helm/croustino/dashboards
+   curl -s -u admin:croustino http://10.10.0.10:30300/api/dashboards/uid/$UID_DASH \
+     | jq '.dashboard | .id = null | .uid = "croustino-chart" | .title = "Croustino Rennes (livré par le chart)"' \
+     > helm/croustino/dashboards/rush-du-matin.json
+   head -5 helm/croustino/dashboards/rush-du-matin.json
+   ```
+
+3. Ajoutez à la fin de `helm/croustino/templates/monitoring.yaml`, **avant** la dernière ligne `{{- end }}` :
+
+   ```yaml
+   ---
+   # Dashboard chargé automatiquement par Grafana (label grafana_dashboard)
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: dashboard-croustino
+     labels:
+       grafana_dashboard: "1"
+   data:
+     rush-du-matin.json: |-
+   {{ .Files.Get "dashboards/rush-du-matin.json" | indent 4 }}
+   ```
+
+   `.Files.Get` lit un fichier du chart : le JSON est copié dans la ConfigMap au moment du `helm upgrade`.
+
+4. Déployez et vérifiez :
+
+   ```bash
+   helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-rennes.yaml --set monitoring.enabled=true
+   kubectl get configmap dashboard-croustino -n croustino --show-labels
+   ```
+
+5. Dans Grafana, **Dashboards** : le dashboard « Croustino Rennes (livré par le chart) » apparaît en moins d'une minute.
 
 ### 5. L'alerte
 
-Ajoutez au chart une **PrometheusRule** `CroustinoRejetsEleves` : plus de 10 commandes rejetées en 5 minutes, pendant 1 minute.
-Relancez le rush (`kubectl delete job rush-du-matin` puis `kubectl apply …`) et suivez l'alerte dans **Alerts** (Pending → Firing), puis dans Alertmanager (`:30093`).
+Le dashboard montre le problème… à condition que quelqu'un le regarde. Une **alerte** prévient toute seule. Elle est décrite dans un objet **PrometheusRule** :
+
+- `expr` : une requête PromQL ; l'alerte se déclenche quand elle renvoie un résultat ;
+- `for` : combien de temps la condition doit rester vraie avant de déclencher (pour éviter les fausses alertes) ;
+- `labels` : par exemple la gravité (`severity`) ;
+- `annotations` : le texte du message.
+
+#### 5.1 Tester la condition dans Prometheus
+
+Dans Prometheus (menu **Query**), pendant un rush :
+
+```promql
+sum(increase(croustino_commandes_rejetees_total{namespace="croustino"}[5m]))
+```
+
+`increase(…[5m])` donne le nombre de commandes rejetées sur les 5 dernières minutes. Pendant le rush, vous devez voir plusieurs centaines. On alertera **au-delà de 10**.
+
+#### 5.2 Ajouter la règle au chart
+
+Ajoutez à `helm/croustino/templates/monitoring.yaml`, **avant** la dernière ligne `{{- end }}` :
+
+```yaml
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: croustino
+spec:
+  groups:
+    - name: croustino
+      rules:
+        - alert: CroustinoRejetsEleves
+          expr: sum(increase(croustino_commandes_rejetees_total{namespace="{{ .Release.Namespace }}"}[5m])) > 10
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Croustino : plus de 10 commandes rejetées en 5 minutes"
+```
+
+`{{ .Release.Namespace }}` est remplacé par Helm : la même règle fonctionnera pour Lyon.
+
+```bash
+helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-rennes.yaml --set monitoring.enabled=true
+kubectl get prometheusrule -n croustino
+```
+
+Dans Prometheus, menu **Status > Rule health** (anciennes versions : **Status > Rules**) : le groupe `croustino` apparaît, avec la règle `CroustinoRejetsEleves`.
+
+#### 5.3 Déclencher l'alerte
+
+1. Relancez le rush (étape 3.1).
+2. Dans Prometheus, menu **Alerts**, suivez l'état de `CroustinoRejetsEleves`, en rafraîchissant la page :
+
+| État | Signification | Quand |
+|------|---------------|-------|
+| **Inactive** | la condition est fausse | avant le rush |
+| **Pending** | la condition est vraie, Prometheus attend la durée `for` | quelques secondes après le début du rush |
+| **Firing** | la condition est vraie depuis 1 minute : l'alerte est envoyée | environ 1 min 30 après le début du rush |
+
+3. Ouvrez Alertmanager : `http://10.10.0.11:30093`. L'alerte y apparaît avec son label `severity="warning"`. C'est Alertmanager qui enverrait le mail, le message Slack ou le SMS (aucun destinataire n'est configuré ici).
+4. Environ 5 minutes après la fin du rush, `increase(…[5m])` redescend sous 10 : l'alerte repasse en **Inactive** et disparaît d'Alertmanager.
+
+> L'alerte n'apparaît pas dans **Status > Rule health** ? Vérifiez `kubectl get prometheusrule -n croustino`, puis que le `helm upgrade` contient bien `--set monitoring.enabled=true`.
 
 ## Questions de fin
 
