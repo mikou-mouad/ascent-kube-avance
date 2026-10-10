@@ -10,7 +10,7 @@ Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dép
 
 - `helm/croustino/values-rennes.yaml`
 
-Pour les comparer à votre travail : `diff -r solutions/10-harbor/k8s k8s` (ou `helm`).
+Pour les comparer à votre travail : `diff -r solutions/10-harbor/helm helm`.
 
 `helm/croustino/values-rennes.yaml` pointe maintenant vers `10.10.0.10:30002/croustino` avec le secret `harbor-croustino`.
 

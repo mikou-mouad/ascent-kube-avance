@@ -10,7 +10,7 @@ Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dép
 
 - `helm/croustino/templates/pdb.yaml`
 
-Pour les comparer à votre travail : `diff -r solutions/11-cycle-de-vie/k8s k8s` (ou `helm`).
+Pour les comparer à votre travail : `diff -r solutions/11-cycle-de-vie/helm helm`.
 
 PodDisruptionBudgets : `helm/croustino/templates/pdb.yaml`.
 
