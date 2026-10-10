@@ -55,7 +55,9 @@ kubectl get pods -n harbor -w
 
 ### 2. Organiser le registre
 
-Ouvrez `http://10.10.0.10:30002` (admin / Harbor12345).
+Dans le navigateur de ClientWeb, ouvrez **exactement** `http://10.10.0.10:30002` (admin / Harbor12345).
+
+> **Attention :** contrairement aux autres interfaces, Harbor n'accepte la connexion que sur l'adresse déclarée dans `externalURL`. Sur `10.10.0.11:30002`, la page s'affiche mais le bouton **LOG IN** reste bloqué (jeton CSRF refusé ; `kubectl logs -n harbor deploy/harbor-core` affiche `CSRF token invalid`).
 
 1. Créez le projet **croustino**, **privé**.
 2. Dans le projet, créez un **compte robot** `cluster` avec les droits *pull* et *push* sur les dépôts. Notez son nom complet (`robot$croustino+cluster`) et son secret.
