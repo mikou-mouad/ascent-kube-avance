@@ -44,6 +44,8 @@ sudo ls /var/log/pods/
 
 ### 2. Installer Elasticsearch et Kibana (opérateur ECK)
 
+À partir d'ici, toutes les commandes se lancent **sur le control plane, une seule fois** : `kubectl` et `helm` s'adressent à l'API du cluster, et Kubernetes place lui-même les pods sur les workers. Seule l'étape 1 se faisait sur un worker.
+
 Vérifiez d'abord la mémoire disponible (`kubectl top nodes`) : Elasticsearch demande 2 Go.
 
 ```bash
@@ -64,6 +66,8 @@ helm install fluent-bit fluent/fluent-bit -n logging -f k8s/logs/values-fluent-b
 kubectl get pods -n logging -o wide -l app.kubernetes.io/name=fluent-bit
 kubectl logs -n logging -l app.kubernetes.io/name=fluent-bit --tail=20
 ```
+
+Vous n'installez Fluent Bit qu'une fois : c'est un **DaemonSet**, Kubernetes crée automatiquement un pod sur chaque worker.
 
 **Question :** pourquoi un DaemonSet ? Pourquoi n'y a-t-il pas de pod Fluent Bit sur le control plane ?
 
