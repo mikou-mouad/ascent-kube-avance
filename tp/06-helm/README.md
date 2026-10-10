@@ -37,15 +37,37 @@ curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 |
 helm version
 ```
 
-### 2. Découvrir la structure d'un chart
+### 2. Découvrir la structure d'un chart (10 min)
+
+`helm create` génère un chart d'exemple, qui déploie un nginx. On ne s'en servira pas pour Croustino : il sert seulement à voir comment un chart est organisé, avant d'écrire le vôtre à l'étape 3.
 
 ```bash
 helm create /tmp/demo
-tree /tmp/demo
-helm template demo /tmp/demo | less
+find /tmp/demo -type f | sort
 ```
 
-Repérez `Chart.yaml`, `values.yaml`, `templates/`, `_helpers.tpl`, `NOTES.txt`.
+Ouvrez les fichiers suivants (`cat` ou `less`) et répondez aux questions :
+
+| Fichier | À regarder | Question |
+|---------|------------|----------|
+| `Chart.yaml` | `name`, `version`, `appVersion` | Quelle différence entre `version` et `appVersion` ? |
+| `values.yaml` | `replicaCount`, `image`, `service` | À quoi sert ce fichier ? |
+| `templates/deployment.yaml` | les blocs `{{ … }}` | Où et comment `replicaCount` est-il utilisé ? |
+| `templates/_helpers.tpl` | les blocs `define` | À quoi sert `demo.fullname` ? |
+| `templates/NOTES.txt` | tout le fichier | Quand ce texte s'affiche-t-il ? |
+
+Voyez maintenant ce que Helm produit, **sans rien installer** :
+
+```bash
+grep -n replicaCount /tmp/demo/templates/deployment.yaml
+helm template demo /tmp/demo | less                               # le YAML final envoyé au cluster
+helm template demo /tmp/demo --set replicaCount=3 | grep replicas
+helm template lyon /tmp/demo | grep -m 3 "name:"
+```
+
+**Questions :** que fait `--set` ? Pourquoi les objets s'appellent-ils `lyon-demo` avec la release `lyon` ?
+
+Retenez le principe pour l'étape 3 : **templates + values = YAML**. Les templates contiennent la structure, les values ce qui change d'une installation à l'autre.
 
 ### 3. Créer le chart Croustino
 
