@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kubernetes – Avancé : l&#x27;histoire de Croustino</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+<style>
+  html, body { margin: 0; height: 100%; background: #111; overflow: hidden; }
+  #scene { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: center; }
+  /* les slides portent leur propre display en ligne : on masque avec visibility */
+  section { position: absolute; inset: 0; box-sizing: border-box; overflow: hidden; visibility: hidden; }
+  section.active { visibility: visible; }
+  section * { margin: 0; box-sizing: border-box; }
+  section ul, section ol { padding-left: 1.2em; }
+  section table { border-collapse: collapse; width: 100%; }
+  section th, section td { border-bottom: 2px solid rgba(0,0,0,.15); padding: .35em .6em; text-align: left; }
+  section th { font-weight: 700; }
+  section aside { display: none; }
+  x-shape { display: block; flex: none; }
+  x-shape[kind="arrow-right"] { clip-path: polygon(0 30%, 60% 30%, 60% 0, 100% 50%, 60% 100%, 60% 70%, 0 70%); }
+  x-shape[kind="arrow-left"] { clip-path: polygon(100% 30%, 40% 30%, 40% 0, 0 50%, 40% 100%, 40% 70%, 100% 70%); }
+  x-icon { display: inline-flex; align-items: center; justify-content: center; flex: none; font-family: 'DejaVu Sans', 'Segoe UI Symbol', sans-serif; }
+  x-icon::before { content: attr(data-g); font-size: 0.8em; line-height: 1; }
+  #notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 30%; overflow: auto; background: #fbf6ee; color: #2b1d14;
+           font: 18px/1.5 'DM Sans', Arial, sans-serif; padding: 12px 20px; display: none; border-top: 3px solid #b5651d; }
+  #compteur { position: fixed; right: 14px; bottom: 10px; color: #999; font: 14px Arial, sans-serif; }
+</style>
+</head>
+<body>
+<div id="scene">
+<section id="cover" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B">Formation · 3 jours</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:140px;font-weight:700;line-height:1.0;color:#FBF6EE">Kubernetes<br>Avancé</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-style:italic;line-height:1.3;color:#E8D9C4">L'histoire de Croustino :<br>des croissants chauds, d'une VM à un cluster</p>
+<div style="display:flex;gap:24px">
+<p style="font-size:28px;color:#2B1D14;background:#E9A23B;padding:10px 24px;border-radius:40px;font-weight:700">12 chapitres</p>
+<p style="font-size:28px;color:#F3E9DC;border:2px solid #E9A23B;padding:10px 24px;border-radius:40px">11 TP</p>
+<p style="font-size:28px;color:#F3E9DC;border:2px solid #E9A23B;padding:10px 24px;border-radius:40px">69 % de pratique</p>
+</div>
+<aside>Accueil. Présenter le fil rouge : une entreprise fictive, Croustino, qui migre son application vers Kubernetes. Chaque chapitre part d'un incident réel de production.</aside>
+</section>
+<section id="croustino" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Il était une fois</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Croustino livre des croissants chauds au petit-déjeuner</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;padding:32px;border-radius:16px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:700;color:#B5651D">6h30 – 9h</p>
+<p style="font-size:30px;color:#5A4636">le rush : tout se joue là</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;padding:32px;border-radius:16px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:700;color:#B5651D">80 %</p>
+<p style="font-size:30px;color:#5A4636">des commandes de la journée</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;padding:32px;border-radius:16px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:700;color:#B5651D">1 VM</p>
+<p style="font-size:30px;color:#5A4636">pour toute l'application</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;border:3px dashed #B5651D;border-radius:20px;padding:32px 40px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#B5651D">VM « prod-croustino »</p>
+<div style="display:flex;align-items:center;gap:28px">
+<div style="flex:1;background:#FFFDF8;border:2px solid #E3D3BC;border-radius:14px;padding:22px"><p style="font-size:32px;font-weight:700;text-align:center">front</p><p style="font-size:26px;color:#5A4636;text-align:center">nginx + page web</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:70px;height:36px"></x-shape>
+<div style="flex:1;background:#FFFDF8;border:2px solid #E3D3BC;border-radius:14px;padding:22px"><p style="font-size:32px;font-weight:700;text-align:center">back</p><p style="font-size:26px;color:#5A4636;text-align:center">API des commandes</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:70px;height:36px"></x-shape>
+<div style="flex:1;background:#FFFDF8;border:2px solid #E3D3BC;border-radius:14px;padding:22px"><p style="font-size:32px;font-weight:700;text-align:center">PostgreSQL</p><p style="font-size:26px;color:#5A4636;text-align:center">les commandes</p></div>
+</div>
+</div>
+<aside>Le code est dans app/ du dépôt. docker compose up dans app/ montre l'application telle qu'elle tourne sur la VM.</aside>
+</section>
+<section id="personnages" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Les personnages</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Trois personnes, une application, beaucoup de stress</h2>
+<div style="display:flex;gap:32px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#F3E9DA;padding:40px;border-radius:20px">
+<x-icon data-g="★" style="color:#B5651D;width:64px;height:64px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-weight:600">Sophie</h3>
+<p style="font-size:28px;font-weight:700;color:#B5651D">Fondatrice</p>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">« Les croissants doivent arriver chauds, et le site ne doit jamais tomber. »</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#F3E9DA;padding:40px;border-radius:20px">
+<x-icon data-g="&lt;/&gt;" style="color:#B5651D;width:64px;height:64px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-weight:600">Malik</h3>
+<p style="font-size:28px;font-weight:700;color:#B5651D">Développeur back</p>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Il livre du code tous les jours… souvent directement sur la VM.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#F3E9DA;padding:40px;border-radius:20px">
+<x-icon data-g="⚒" style="color:#B5651D;width:64px;height:64px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:52px;font-weight:600">Inès</h3>
+<p style="font-size:28px;font-weight:700;color:#B5651D">Admin système</p>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Elle gère la VM, les sauvegardes, les nuits blanches.</p>
+</div>
+</div>
+<aside>Faire le parallèle avec les rôles des participants : administrateurs, développeurs, architectes. Chacun se reconnaîtra dans un personnage.</aside>
+</section>
+<section id="principe" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:56px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Comment on travaille</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Chaque chapitre suit la même recette</h2>
+<div style="display:flex;align-items:center;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#2B1D14;padding:36px;border-radius:20px">
+<x-icon data-g="⚠" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<h3 style="font-size:40px;font-weight:700;color:#FBF6EE">1. L'incident</h3>
+<p style="font-size:28px;line-height:1.4;color:#E8D9C4">Ce qui arrive à Croustino en production</p>
+</div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:56px;height:30px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBF6EE;padding:36px;border-radius:20px;border:2px solid #E3D3BC">
+<x-icon data-g="✦" style="color:#B5651D;width:56px;height:56px"></x-icon>
+<h3 style="font-size:40px;font-weight:700">2. La solution</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Ce que Kubernetes propose</p>
+</div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:56px;height:30px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBF6EE;padding:36px;border-radius:20px;border:2px solid #E3D3BC">
+<x-icon data-g="&lt;/&gt;" style="color:#2F6FB0;width:56px;height:56px"></x-icon>
+<h3 style="font-size:40px;font-weight:700">3. Le concept</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Schémas et YAML, en 15 à 40 min</p>
+</div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:56px;height:30px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#2F6FB0;padding:36px;border-radius:20px">
+<x-icon data-g="⚒" style="color:#FBF6EE;width:56px;height:56px"></x-icon>
+<h3 style="font-size:40px;font-weight:700;color:#FBF6EE">4. Le TP</h3>
+<p style="font-size:28px;line-height:1.4;color:#EAF1F8">On le fait sur l'application Croustino</p>
+</div>
+</div>
+<p style="font-size:32px;line-height:1.4;color:#5A4636">L'application déployée le premier jour sert jusqu'au dernier TP : <span style="color:#2B1D14"><b>chaque TP repart de l'état laissé par le précédent.</b></span></p>
+<aside>69 % du temps est en TP. La théorie reste courte : on montre le problème, le concept, puis on pratique.</aside>
+</section>
+<section id="programme" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Le programme</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Trois jours, de la VM à la production</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#F3E9DA;padding:36px;border-radius:20px">
+<p style="font-size:28px;font-weight:700;color:#B5651D">JOUR 1</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">De la VM au cluster</h3>
+<ul style="font-size:28px;line-height:1.6;color:#5A4636">
+<li>0. Mise à niveau</li>
+<li>1. Installer le cluster</li>
+<li>2. Déployer Croustino</li>
+<li>3. Stockage</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#F3E9DA;padding:36px;border-radius:20px">
+<p style="font-size:28px;font-weight:700;color:#B5651D">JOUR 2</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">Croustino grandit</h3>
+<ul style="font-size:28px;line-height:1.6;color:#5A4636">
+<li>4. Authentification et RBAC</li>
+<li>5. Capacité</li>
+<li>6. Helm</li>
+<li>7. Monitoring (début)</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#F3E9DA;padding:36px;border-radius:20px">
+<p style="font-size:28px;font-weight:700;color:#B5651D">JOUR 3</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">En production</h3>
+<ul style="font-size:28px;line-height:1.6;color:#5A4636">
+<li>7. Monitoring (suite)</li>
+<li>8. Logs · 9. Audit</li>
+<li>10. Harbor</li>
+<li>11. Architecture et mises à jour</li>
+</ul>
+</div>
+</div>
+<p style="font-size:28px;color:#5A4636">Horaires : 9h00 – 12h30 et 13h30 – 17h00 · pauses à 10h30 et 15h15</p>
+<aside>Le détail minute par minute est dans programme-3-jours.md du dépôt.</aside>
+</section>
+<section id="branches" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Le dépôt des TP</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Une branche par TP, chacune part de la précédente</h2>
+<div style="display:flex;align-items:center;gap:14px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-01</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-02</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-03</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">…</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-11</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:14px 20px;border-radius:12px">solution-finale</p>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Branche tp-NN</b></span> = l'énoncé du TP NN + l'application dans l'état attendu au début du TP.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>La correction</b></span> d'un TP, c'est la branche suivante.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Bloqué ?</b></span> On repart de la bonne branche, sans perdre la suite.</p>
+</div>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:32px 36px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.6;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># TP 02, sur le control plane</span><br>git clone https://github.com/<br>&#160;&#160;mikou-mouad/ascent-kube-avance.git<br>&#160;&#160;~/croustino<br><br><span style="color:#A89580"># début de chaque TP suivant</span><br>cd ~/croustino &amp;&amp; git fetch<br>git stash -u<br>git checkout <span style="color:#E9A23B">tp-03-stockage</span></p>
+</div>
+</div>
+<aside>Montrer le dépôt sur GitHub. Les dossiers : app/ (le code), k8s/ (les manifests), helm/ (à partir du TP 06), tp/ (les énoncés), solutions/ (les réponses aux questions).</aside>
+</section>
+<section id="c0-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 0 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Le site tombe à chaque mise à jour »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Lundi<br>7h12</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">La VM est à 100 % de CPU. Malik redémarre le back pour livrer un correctif : le site est coupé 4 minutes, en plein rush. <span style="color:#FBF6EE"><b>37 commandes perdues.</b></span></p>
+<p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« On passe sur Kubernetes. Inès, il nous faut un cluster. » — Sophie</p>
+</div>
+</div>
+<aside>Demander aux participants : qu'est-ce qui a mal tourné ? Tout sur une machine, mise à jour manuelle qui coupe, aucune capacité à absorber le pic. Noter leurs réponses : on y reviendra à l'épilogue.</aside>
+</section>
+<section id="c0-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 0 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">On décrit l'état voulu, Kubernetes s'en charge</h2>
+<table style="font-size:30px;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif">
+<tr><th style="width:24%">Situation</th><th style="width:38%">Sur la VM</th><th style="width:38%">Avec Kubernetes</th></tr>
+<tr><td>Mise à jour</td><td>On arrête, on remplace, on relance</td><td>Rolling update, sans coupure</td></tr>
+<tr><td>Un processus plante</td><td>Quelqu'un le redémarre à la main</td><td>Redémarrage automatique</td></tr>
+<tr><td>Rush de 7h</td><td>La VM sature</td><td>On ajoute des réplicas, sur plusieurs nœuds</td></tr>
+<tr><td>Configuration</td><td>Des fichiers édités sur la VM</td><td>ConfigMap et Secret, versionnés</td></tr>
+<tr><td>Une machine tombe</td><td>Tout tombe</td><td>Les pods sont replanifiés ailleurs</td></tr>
+</table>
+<aside>Insister sur le modèle déclaratif : on ne dit pas « lance ce conteneur », on dit « je veux 3 copies de ce conteneur ». Des boucles de contrôle rapprochent en permanence l'état réel de l'état voulu.</aside>
+</section>
+<section id="c0-archi" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 0 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">L'architecture d'un cluster</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px;background:#1E1814;padding:24px;border-radius:14px;width:200px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px;color:#E9A23B;text-align:center">kubectl</p>
+<p style="font-size:24px;color:#E8D9C4;text-align:center">Inès, Malik, la CI</p>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:60px;height:30px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#EAF1F8;border:3px solid #2F6FB0;border-radius:18px;padding:24px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">CONTROL PLANE · le cerveau</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+<div style="background:#2F6FB0;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700;color:#FBF6EE">API server</p><p style="font-size:24px;color:#EAF1F8">la seule porte d'entrée</p></div>
+<div style="background:#FFFDF8;border:2px solid #9DBBDB;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">etcd</p><p style="font-size:24px;color:#5A4636">la mémoire du cluster</p></div>
+<div style="background:#FFFDF8;border:2px solid #9DBBDB;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">scheduler</p><p style="font-size:24px;color:#5A4636">choisit le nœud</p></div>
+<div style="background:#FFFDF8;border:2px solid #9DBBDB;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">controller-manager</p><p style="font-size:24px;color:#5A4636">corrige les écarts</p></div>
+</div>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:60px;height:30px"></x-shape>
+<div style="display:flex;flex-direction:column;gap:16px;width:470px">
+<div style="background:#F3E9DA;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:26px;font-weight:700;color:#B5651D">WORKER 1</p>
+<p style="font-size:26px">kubelet · containerd · kube-proxy</p>
+<div style="display:flex;gap:10px"><p style="font-size:24px;background:#B5651D;color:#FBF6EE;padding:6px 14px;border-radius:20px">pod front</p><p style="font-size:24px;background:#B5651D;color:#FBF6EE;padding:6px 14px;border-radius:20px">pod back</p></div>
+</div>
+<div style="background:#F3E9DA;border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px">
+<p style="font-size:26px;font-weight:700;color:#B5651D">WORKER 2</p>
+<p style="font-size:26px">kubelet · containerd · kube-proxy</p>
+<div style="display:flex;gap:10px"><p style="font-size:24px;background:#B5651D;color:#FBF6EE;padding:6px 14px;border-radius:20px">pod back</p><p style="font-size:24px;background:#B5651D;color:#FBF6EE;padding:6px 14px;border-radius:20px">pod postgres</p></div>
+</div>
+</div>
+</div>
+<p style="font-size:30px;color:#5A4636">Le réseau entre les pods de tous les nœuds est fourni par le <span style="color:#2B1D14"><b>CNI</b></span> (chez nous : Calico).</p>
+<aside>Tout passe par l'API server : kubectl, le scheduler, le kubelet. Seul l'API server parle à etcd. Le kubelet est l'agent sur chaque nœud : il demande à containerd de lancer les conteneurs.</aside>
+</section>
+<section id="c0-boucle" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 0 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">kubectl apply : ce qui se passe vraiment</h2>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">1</p><p style="font-size:30px">kubectl envoie le YAML à l'<b>API server</b></p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">2</p><p style="font-size:30px">L'état voulu est écrit dans <b>etcd</b></p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">3</p><p style="font-size:30px">Le <b>controller-manager</b> crée 3 pods</p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">4</p><p style="font-size:30px">Le <b>scheduler</b> choisit un nœud pour chacun</p></div>
+<div style="display:flex;gap:20px;align-items:center"><p style="font-size:30px;font-weight:700;color:#FBF6EE;background:#2F6FB0;padding:6px 18px;border-radius:30px">5</p><p style="font-size:30px">Le <b>kubelet</b> du nœud lance les conteneurs</p></div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636;background:#F3E9DA;padding:20px 24px;border-radius:14px">Un pod meurt ? L'état réel (2) ≠ l'état voulu (3) : le contrôleur en recrée un. C'est la <span style="color:#2B1D14"><b>boucle de réconciliation</b></span>.</p>
+</div>
+<div style="width:640px;background:#1E1814;border-radius:16px;padding:32px 36px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># back.yaml : l'état voulu</span><br>apiVersion: apps/v1<br>kind: Deployment<br>metadata:<br>&#160;&#160;name: back<br>spec:<br>&#160;&#160;<span style="color:#E9A23B">replicas: 3</span><br>&#160;&#160;template:<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;containers:<br>&#160;&#160;&#160;&#160;&#160;&#160;- name: back<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;image: croustino-back:1.0<br><br><span style="color:#A89580">$ kubectl apply -f back.yaml</span></p>
+</div>
+</div>
+<aside>Démonstration possible au TP 02 : supprimer un pod et regarder le Deployment en recréer un. Le YAML est simplifié ici (pas de selector ni de labels) : on le complète au chapitre 2.</aside>
+</section>
+<section id="c1-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 1 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Il nous faut un vrai cluster »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Lundi<br>9h00</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Inès reçoit 3 VM Ubuntu. Elle n'a jamais monté de cluster. Les offres « clé en main » ne la rassurent pas : <span style="color:#FBF6EE"><b>elle veut comprendre chaque pièce.</b></span></p>
+<p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« Si je ne sais pas comment c'est monté, je ne saurai pas le réparer à 7h du matin. » — Inès</p>
+</div>
+</div>
+<aside>En production, beaucoup d'équipes utilisent un service managé (EKS, AKS, GKE…). Monter le cluster soi-même permet de comprendre ce que ces services cachent, et c'est indispensable pour les TP d'audit et de mise à jour.</aside>
+</section>
+<section id="c1-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 1 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un cluster kubeadm sur 3 VM</h2>
+<div style="display:flex;gap:28px">
+<div style="flex:1;background:#2F6FB0;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700;color:#FBF6EE">controlplane</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#EAF1F8">10.10.0.10</p>
+<p style="font-size:28px;color:#FBF6EE">API server, etcd, scheduler, controller-manager</p>
+</div>
+<div style="flex:1;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700">worker1</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">10.10.0.11</p>
+<p style="font-size:28px;color:#5A4636">Les pods de Croustino</p>
+</div>
+<div style="flex:1;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700">worker2</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">10.10.0.12</p>
+<p style="font-size:28px;color:#5A4636">Les pods de Croustino</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:0px">
+<div style="display:flex;background:#2B1D14;border-radius:14px 14px 0 0;padding:18px 28px"><p style="font-size:28px;color:#FBF6EE"><span style="color:#E9A23B"><b>CNI · Calico v3.31</b></span>  le réseau des pods et les NetworkPolicies</p></div>
+<div style="display:flex;background:#5A4636;padding:18px 28px"><p style="font-size:28px;color:#FBF6EE"><span style="color:#E9A23B"><b>kubeadm · kubelet · kubectl v1.34</b></span>  installer, faire tourner, piloter</p></div>
+<div style="display:flex;background:#8A6E55;padding:18px 28px"><p style="font-size:28px;color:#FBF6EE"><span style="color:#FBE3BC"><b>containerd</b></span>  le runtime qui lance les conteneurs</p></div>
+<div style="display:flex;background:#C9B49A;border-radius:0 0 14px 14px;padding:18px 28px"><p style="font-size:28px;color:#2B1D14"><b>Ubuntu 22.04 / 24.04</b>  swap coupé, modules et sysctl réseau</p></div>
+</div>
+<aside>La pile se lit de bas en haut : c'est aussi l'ordre de l'installation. Le CIDR des pods (192.168.0.0/16) ne doit pas chevaucher le réseau des VM.</aside>
+</section>
+<section id="c1-etapes" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 1 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Monter le cluster en 6 étapes</h2>
+<div style="display:flex;gap:16px;align-items:stretch">
+<div style="flex:3;display:flex;flex-direction:column;gap:12px;background:#F3E9DA;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">SUR LES 3 NŒUDS</p>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">1. Préparer</p><p style="font-size:24px;color:#5A4636">swap, modules, sysctl</p></div>
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">2. containerd</p><p style="font-size:24px;color:#5A4636">SystemdCgroup</p></div>
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">3. Paquets</p><p style="font-size:24px;color:#5A4636">bloqués (hold)</p></div>
+</div>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:12px;background:#EAF1F8;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#2F6FB0">CONTROL PLANE</p>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">4. init</p><p style="font-size:24px;color:#5A4636">kubeadm init</p></div>
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">5. CNI</p><p style="font-size:24px;color:#5A4636">Calico</p></div>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F3E9DA;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">WORKERS</p>
+<div style="background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">6. join</p><p style="font-size:24px;color:#5A4636">kubeadm join</p></div>
+</div>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:28px 36px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># 4. sur controlplane</span><br>sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=10.10.0.10<br><span style="color:#A89580"># 5. le réseau des pods</span><br>kubectl create -f $BASE/tigera-operator.yaml &amp;&amp; kubectl create -f $BASE/custom-resources.yaml<br><span style="color:#A89580"># 6. sur worker1 et worker2 (commande affichée par init)</span><br>sudo kubeadm join 10.10.0.10:6443 --token <span style="color:#E9A23B">&lt;token&gt;</span> --discovery-token-ca-cert-hash sha256:<span style="color:#E9A23B">&lt;hash&gt;</span></p>
+</div>
+<aside>Étapes détaillées dans guide-installation-cluster.md. Faire remarquer que kubeadm init crée les static pods dans /etc/kubernetes/manifests et les certificats dans /etc/kubernetes/pki : on s'en resservira aux chapitres 9 et 11.</aside>
+</section>
+<section id="c1-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 01</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Installer le cluster</p>
+<p style="font-size:30px;color:#D6E4F2">2 h · guide d'installation, sections 2 à 7</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-01-installation</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>préparer les 3 nœuds et comprendre chaque réglage</li>
+<li>initialiser le control plane, installer Calico</li>
+<li>joindre les workers et tester le réseau</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">3 nœuds Ready</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">la page nginx répond depuis un pod busybox</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">HTTP 200 sur le NodePort des 3 nœuds</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">snapshot des 3 VM pris</p></div>
+</div>
+</div>
+<aside>Pendant les temps d'attente (apt, pull des images), poser les questions de l'énoncé : swap, br_netfilter, driver cgroup, apt-mark hold. Correction : solutions/01-installation.md dans la branche tp-02.</aside>
+</section>
+<section id="c2-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 2 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Ce soir, Croustino tourne sur le cluster »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Lundi<br>13h30</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Le cluster est prêt. Sophie veut voir l'application dessus avant la fin de la journée. Problème : <span style="color:#FBF6EE"><b>Malik n'a jamais écrit une ligne de YAML Kubernetes.</b></span></p>
+<p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« On migre pièce par pièce : la base, puis l'API, puis le front. » — Inès</p>
+</div>
+</div>
+<aside>Ce chapitre sert aussi de mise à niveau pratique. Les participants les plus à l'aise peuvent faire les bonus de l'énoncé.</aside>
+</section>
+<section id="c2-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 2 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Chaque morceau de la VM devient un objet</h2>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:28px"><p style="width:620px;font-size:30px;background:#FBF6EE;padding:16px 24px;border-radius:12px">Le processus PostgreSQL</p><x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape><p style="flex:1;font-family:'JetBrains Mono', monospace;font-size:28px;color:#FBF6EE;background:#2F6FB0;padding:16px 24px;border-radius:12px">Deployment + Service postgres</p></div>
+<div style="display:flex;align-items:center;gap:28px"><p style="width:620px;font-size:30px;background:#FBF6EE;padding:16px 24px;border-radius:12px">L'API lancée à la main</p><x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape><p style="flex:1;font-family:'JetBrains Mono', monospace;font-size:28px;color:#FBF6EE;background:#2F6FB0;padding:16px 24px;border-radius:12px">Deployment back (×2) + Service</p></div>
+<div style="display:flex;align-items:center;gap:28px"><p style="width:620px;font-size:30px;background:#FBF6EE;padding:16px 24px;border-radius:12px">nginx sur le port 80</p><x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape><p style="flex:1;font-family:'JetBrains Mono', monospace;font-size:28px;color:#FBF6EE;background:#2F6FB0;padding:16px 24px;border-radius:12px">Deployment front + Service NodePort</p></div>
+<div style="display:flex;align-items:center;gap:28px"><p style="width:620px;font-size:30px;background:#FBF6EE;padding:16px 24px;border-radius:12px">Les variables d'environnement</p><x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape><p style="flex:1;font-family:'JetBrains Mono', monospace;font-size:28px;color:#FBF6EE;background:#2F6FB0;padding:16px 24px;border-radius:12px">ConfigMap back-config</p></div>
+<div style="display:flex;align-items:center;gap:28px"><p style="width:620px;font-size:30px;background:#FBF6EE;padding:16px 24px;border-radius:12px">Le mot de passe de la base</p><x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape><p style="flex:1;font-family:'JetBrains Mono', monospace;font-size:28px;color:#FBF6EE;background:#2F6FB0;padding:16px 24px;border-radius:12px">Secret croustino-db</p></div>
+<div style="display:flex;align-items:center;gap:28px"><p style="width:620px;font-size:30px;background:#FBF6EE;padding:16px 24px;border-radius:12px">La VM elle-même</p><x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape><p style="flex:1;font-family:'JetBrains Mono', monospace;font-size:28px;color:#FBF6EE;background:#2F6FB0;padding:16px 24px;border-radius:12px">Namespace croustino</p></div>
+</div>
+<aside>Tout est rangé dans un namespace : une frontière logique pour les droits (chapitre 4) et les quotas (chapitre 5).</aside>
+</section>
+<section id="c2-objets" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 2 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Deployment, Pods, Service : qui fait quoi</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:300px;display:flex;flex-direction:column;gap:8px;background:#2F6FB0;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px;font-weight:700;color:#FBF6EE">Service back</p>
+<p style="font-size:24px;color:#EAF1F8">adresse stable<br>back:8080</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBE3BC">app=back ?</p>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;border:3px dashed #B5651D;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">PODS · éphémères</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:12px 18px;border-radius:10px">back-7d9f-x2k  <span style="color:#B5651D">app=back</span></p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:12px 18px;border-radius:10px">back-7d9f-p8q  <span style="color:#B5651D">app=back</span></p>
+</div>
+<x-shape kind="arrow-left" style="background:#5A4636;width:70px;height:34px"></x-shape>
+<div style="width:260px;display:flex;flex-direction:column;gap:8px;background:#F3E9DA;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px;font-weight:700">ReplicaSet</p>
+<p style="font-size:24px;color:#5A4636">garde 2 pods en vie</p>
+</div>
+<x-shape kind="arrow-left" style="background:#5A4636;width:70px;height:34px"></x-shape>
+<div style="width:260px;display:flex;flex-direction:column;gap:8px;background:#2B1D14;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px;font-weight:700;color:#E9A23B">Deployment</p>
+<p style="font-size:24px;color:#E8D9C4">gère les versions</p>
+</div>
+</div>
+<div style="display:flex;gap:28px">
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:28px"><h3 style="font-size:32px;font-weight:700">Pod</h3><p style="font-size:28px;line-height:1.4;color:#5A4636">Un ou plusieurs conteneurs. Il peut mourir à tout moment : son IP change.</p></div>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:28px"><h3 style="font-size:32px;font-weight:700">Deployment</h3><p style="font-size:28px;line-height:1.4;color:#5A4636">Décrit combien de pods, avec quelle image. Remplace les pods au changement de version.</p></div>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:28px"><h3 style="font-size:32px;font-weight:700">Service</h3><p style="font-size:28px;line-height:1.4;color:#5A4636">Un nom DNS fixe. Il choisit ses pods par <span style="color:#2B1D14"><b>label</b></span>, pas par nom.</p></div>
+</div>
+<aside>Le lien entre Service et pods, ce sont uniquement les labels. Une faute de frappe dans un label = un Service sans endpoint. C'est l'erreur la plus fréquente du TP.</aside>
+</section>
+<section id="c2-yaml" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 2 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1">Le back en YAML : les labels font le lien</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Deployment<br>metadata: {name: back}<br>spec:<br>&#160;&#160;replicas: 2<br>&#160;&#160;selector:<br>&#160;&#160;&#160;&#160;matchLabels: {<span style="color:#E9A23B">app: back</span>}<br>&#160;&#160;template:<br>&#160;&#160;&#160;&#160;metadata:<br>&#160;&#160;&#160;&#160;&#160;&#160;labels: {<span style="color:#E9A23B">app: back</span>}<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;containers:<br>&#160;&#160;&#160;&#160;&#160;&#160;- name: back<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;image: …/croustino-back:1.0<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;envFrom:<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;- configMapRef: {name: <span style="color:#8FC1F0">back-config</span>}</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Service<br>metadata: {name: back}<br>spec:<br>&#160;&#160;selector: {<span style="color:#E9A23B">app: back</span>}<br>&#160;&#160;ports:<br>&#160;&#160;- port: 8080<br>&#160;&#160;&#160;&#160;targetPort: http</p>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: ConfigMap<br>metadata: {name: <span style="color:#8FC1F0">back-config</span>}<br>data:<br>&#160;&#160;DB_HOST: postgres<br>&#160;&#160;STOCK_MAX: "24"</p>
+</div>
+</div>
+</div>
+<aside>Le selector du Deployment doit correspondre aux labels du template. Le Service utilise les mêmes labels. DB_HOST vaut « postgres » : c'est le nom du Service de la base, résolu par le DNS du cluster.</aside>
+</section>
+<section id="c2-probes" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 2 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Mettre à jour sans couper le site</h2>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<h3 style="font-size:34px;font-weight:700">Rolling update de 1.0 vers 1.1</h3>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t0</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p></div>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t1</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;border:2px dashed #2F6FB0;color:#2F6FB0;padding:8px 16px;border-radius:24px">1.1 pas prêt</p></div>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t2</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.1</p></div>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t3</p><p style="font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.1</p><p style="font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.1</p></div>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Un ancien pod ne s'arrête que quand un nouveau est <span style="color:#2B1D14"><b>prêt</b></span>. Qui décide qu'il est prêt ? La readinessProbe.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># vivant ? sinon : redémarrage</span><br>livenessProbe:<br>&#160;&#160;httpGet: {path: /healthz, port: http}<br><span style="color:#A89580"># prêt ? sinon : retiré du Service</span><br>readinessProbe:<br>&#160;&#160;httpGet: {path: /readyz, port: http}</p>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">kubectl set image deploy/front \<br>&#160;&#160;front=…/croustino-front:<span style="color:#E9A23B">1.1</span><br>kubectl rollout status deploy/front<br>kubectl rollout undo deploy/front</p>
+</div>
+</div>
+</div>
+<aside>/readyz du back teste la base : si PostgreSQL est arrêté, le back sort du Service au lieu de renvoyer des erreurs. Bonus du TP : passer PostgreSQL à 0 réplica et observer les endpoints.</aside>
+</section>
+<section id="c2-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 02</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Première migration</p>
+<p style="font-size:30px;color:#D6E4F2">1 h 45 · manifests à compléter</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-02-deploiement</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>générer le Secret et la ConfigMap avec kubectl</li>
+<li>compléter les TODO du back et du front</li>
+<li>passer une commande sur le port 30080</li>
+<li>scaler, supprimer un pod, livrer la 1.1</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">une commande apparaît dans la liste</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">le bandeau passe au vert sans coupure</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous savez revenir à la 1.0</p></div>
+</div>
+</div>
+<aside>Correction : branche tp-03-stockage, dossier k8s/. Question de fin à garder pour la suite : que se passe-t-il si le pod PostgreSQL redémarre ?</aside>
+</section>
+<section id="c3-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 3 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Les commandes du matin ont disparu »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Mardi<br>8h05</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Le nœud qui héberge PostgreSQL redémarre après une mise à jour de sécurité. Kubernetes recrée le pod ailleurs en quelques secondes. Bravo… sauf que <span style="color:#FBF6EE"><b>la base est vide : 212 commandes envolées.</b></span></p>
+<p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« Les livreurs sont partis sans savoir où aller. » — Sophie</p>
+</div>
+</div>
+<aside>Faire le lien avec la question de fin du TP 02. Kubernetes a fait exactement ce qu'on lui a demandé : recréer le pod. Personne ne lui a demandé de garder les données.</aside>
+</section>
+<section id="c3-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 3 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Les données vivent hors du pod, sur un volume qui lui survit</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FBF6EE;border-radius:20px;padding:36px">
+<p style="font-size:28px;font-weight:700;color:#B5651D">AVANT</p>
+<div style="display:flex;flex-direction:column;gap:8px;border:2px solid #E3D3BC;border-radius:14px;padding:20px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px">pod postgres</p>
+<p style="font-size:26px;color:#5A4636;background:#F3E9DA;padding:10px 16px;border-radius:10px">données dans le conteneur</p>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Pod supprimé = <span style="color:#2B1D14"><b>données supprimées</b></span></p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FBF6EE;border-radius:20px;padding:36px">
+<p style="font-size:28px;font-weight:700;color:#2F6FB0">APRÈS</p>
+<div style="display:flex;align-items:center;gap:16px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;border:2px solid #E3D3BC;border-radius:14px;padding:14px">postgres-0</p>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:48px;height:24px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE;background:#2F6FB0;border-radius:14px;padding:14px">PVC</p>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:48px;height:24px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE;background:#1F4F82;border-radius:14px;padding:14px">disque</p>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Le nouveau <span style="color:#2B1D14"><b>postgres-0</b></span> retrouve le même volume</p>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#5A4636">Deux briques : une <span style="color:#2B1D14"><b>StorageClass</b></span> qui crée les volumes à la demande, un <span style="color:#2B1D14"><b>StatefulSet</b></span> qui donne à chaque pod une identité et son volume.</p>
+<aside>Le pod garde le même nom et le même PVC : c'est ce qui rend la migration vers Helm possible au chapitre 6 sans perdre les commandes.</aside>
+</section>
+<section id="c3-pvc" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Le provisionnement dynamique</h2>
+<div style="display:flex;align-items:center;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#F3E9DA;border-radius:16px;padding:22px"><p style="font-size:24px;font-weight:700;color:#B5651D">POD</p><p style="font-size:26px">« je monte le volume data »</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:56px;height:28px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#2F6FB0;border-radius:16px;padding:22px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">PVC · la demande</p><p style="font-size:26px;color:#FBF6EE">« 1 Gi, en RWO »</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:56px;height:28px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#1F4F82;border-radius:16px;padding:22px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">PV · le volume réel</p><p style="font-size:26px;color:#FBF6EE">un dossier sur worker1</p></div>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px">
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Personne ne crée le PV à la main : la <span style="color:#2B1D14"><b>StorageClass</b></span> le fabrique quand un PVC le demande.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>WaitForFirstConsumer</b></span> : le volume n'est créé qu'une fois le pod placé, sur le nœud du pod.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>reclaimPolicy: Delete</b></span> : supprimer le PVC efface les données.</p>
+</div>
+<div style="width:720px;background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">kind: StorageClass<br>metadata:<br>&#160;&#160;name: local-path<br>&#160;&#160;annotations:<br>&#160;&#160;&#160;&#160;<span style="color:#A89580"># StorageClass par défaut</span><br>&#160;&#160;&#160;&#160;storageclass.kubernetes.io/<br>&#160;&#160;&#160;&#160;&#160;&#160;is-default-class: "true"<br>provisioner: rancher.io/local-path<br>reclaimPolicy: <span style="color:#E9A23B">Delete</span><br>volumeBindingMode: <span style="color:#E9A23B">WaitForFirstConsumer</span></p>
+</div>
+</div>
+<aside>local-path est parfait pour la formation mais lie le volume à un nœud. En production : un stockage réseau ou distribué (Longhorn, Ceph, CSI du cloud). On le reverra au chapitre 11 pendant le drain des nœuds.</aside>
+</section>
+<section id="c3-sts" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 3 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1">StatefulSet : un nom et un volume par pod</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<table style="font-size:28px;color:#2B1D14">
+<tr><th style="width:34%"></th><th style="width:33%">Deployment</th><th style="width:33%">StatefulSet</th></tr>
+<tr><td>Nom des pods</td><td>back-7d9f-x2k</td><td>postgres-0</td></tr>
+<tr><td>Volume</td><td>partagé ou aucun</td><td>un PVC par pod</td></tr>
+<tr><td>Ordre</td><td>aucun</td><td>0, puis 1, puis 2</td></tr>
+<tr><td>Pour</td><td>front, back</td><td>bases, files</td></tr>
+</table>
+<div style="background:#F3E9DA;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:6px">
+<p style="font-size:26px;font-weight:700;color:#B5651D">DNS STABLE (Service headless)</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px">postgres-0.postgres.croustino.svc</p>
+</div>
+</div>
+<div style="width:760px;background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: StatefulSet<br>metadata: {name: postgres}<br>spec:<br>&#160;&#160;serviceName: postgres <span style="color:#A89580"># headless</span><br>&#160;&#160;template:<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;containers:<br>&#160;&#160;&#160;&#160;&#160;&#160;- name: postgres<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;volumeMounts:<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;- name: <span style="color:#E9A23B">data</span><br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;mountPath: /var/lib/postgresql/data<br>&#160;&#160;<span style="color:#E9A23B">volumeClaimTemplates:</span><br>&#160;&#160;- metadata: {name: <span style="color:#E9A23B">data</span>}<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;resources: {requests: {storage: 1Gi}}</p>
+</div>
+</div>
+<aside>Le PVC créé s'appelle data-postgres-0 : nom du template, nom du StatefulSet, numéro du pod. Attention : 2 réplicas = 2 bases indépendantes, pas de réplication. Pour ça, il faut un opérateur (CloudNativePG).</aside>
+</section>
+<section id="c3-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 03</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Sauver les commandes</p>
+<p style="font-size:30px;color:#D6E4F2">55 min</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-03-stockage</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>reproduire la perte des commandes</li>
+<li>installer local-path-provisioner par défaut</li>
+<li>observer un PVC Pending puis Bound</li>
+<li>réécrire PostgreSQL en StatefulSet</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">postgres-0 est supprimé…</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">… et les commandes sont toujours là</p></div>
+</div>
+</div>
+<aside>Correction : branche tp-04-rbac (k8s/10-postgres.yaml) et solutions/03-stockage.md. Le Service doit être supprimé puis recréé en headless : un Service existant ne peut pas changer de clusterIP.</aside>
+</section>
+<section id="c4-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 4 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Le stagiaire a supprimé la prod »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Jeudi<br>6h50</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Pour aller vite, Inès a donné une copie de <span style="color:#FBF6EE"><b>admin.conf</b></span> à tout le monde. Théo, le stagiaire, nettoie son namespace de test… avec le mauvais contexte.</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:32px;color:#FBF6EE;background:#1E1814;padding:20px 28px;border-radius:12px">$ kubectl delete deployment --all<br><span style="color:#E9A23B">deployment.apps "back" deleted<br>deployment.apps "front" deleted</span></p>
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Qui a fait ça ? Impossible à dire : <span style="color:#FBF6EE"><b>tout le monde s'appelle kubernetes-admin.</b></span></p>
+</div>
+</div>
+<aside>Deux problèmes distincts : personne n'a d'identité propre (authentification), et tout le monde a tous les droits (autorisation). Le troisième, « qui a fait quoi », sera traité au chapitre 9.</aside>
+</section>
+<section id="c4-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 4 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Chaque requête passe trois contrôles</h2>
+<div style="display:flex;align-items:center;gap:18px">
+<div style="width:180px;background:#1E1814;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#E9A23B;text-align:center">kubectl</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:50px;height:26px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#2F6FB0;border-radius:16px;padding:22px"><p style="font-size:26px;font-weight:700;color:#FBE3BC">1 · AUTHENTIFICATION</p><p style="font-size:28px;color:#FBF6EE">Qui es-tu ?</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:50px;height:26px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#1F4F82;border-radius:16px;padding:22px"><p style="font-size:26px;font-weight:700;color:#FBE3BC">2 · AUTORISATION</p><p style="font-size:28px;color:#FBF6EE">As-tu le droit ? (RBAC)</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:50px;height:26px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:16px;padding:22px"><p style="font-size:26px;font-weight:700;color:#5A4636">3 · ADMISSION</p><p style="font-size:28px">Est-ce conforme ?</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:50px;height:26px"></x-shape>
+<div style="width:140px;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;text-align:center">etcd</p></div>
+</div>
+<table style="font-size:28px;color:#2B1D14">
+<tr><th style="width:30%">Qui</th><th style="width:30%">Identité</th><th style="width:40%">Droits</th></tr>
+<tr><td>Inès</td><td>ines, groupe ops</td><td>administratrice du cluster</td></tr>
+<tr><td>Malik</td><td>malik, groupe dev</td><td>gérer l'appli dans croustino, pas les Secrets</td></tr>
+<tr><td>Théo</td><td>theo, groupe stagiaires</td><td>lecture seule dans croustino</td></tr>
+<tr><td>Le back / la CI</td><td>ServiceAccounts</td><td>rien / changer l'image, c'est tout</td></tr>
+</table>
+<aside>Kubernetes n'a pas d'objet « utilisateur » : il fait confiance à ce que présente la requête (certificat, token, OIDC). Les droits, eux, sont des objets Kubernetes : Role et RoleBinding.</aside>
+</section>
+<section id="c4-authn" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un certificat comme carte d'identité</h2>
+<div style="display:flex;align-items:center;gap:16px">
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700">1. Clé + demande</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">openssl</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:44px;height:24px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700">2. Envoi à l'API</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">CSR</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:44px;height:24px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700">3. Approbation</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">signé par la CA</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:44px;height:24px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">4. Kubeconfig</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">malik.kubeconfig</p></div>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">openssl req -new -key malik.key \<br>&#160;&#160;-subj "/<span style="color:#E9A23B">CN=malik</span>/<span style="color:#8FC1F0">O=dev</span>"</p>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#B5651D"><b>CN</b></span> = le nom d'utilisateur<br><span style="color:#2F6FB0"><b>O</b></span> = le groupe (on donne les droits au groupe)</p>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">En entreprise : <span style="color:#2B1D14"><b>OIDC</b></span> (Keycloak, Entra ID…) avec les groupes de l'annuaire.</p>
+</div>
+<div style="width:760px;background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">apiVersion: certificates.k8s.io/v1<br>kind: CertificateSigningRequest<br>metadata: {name: malik}<br>spec:<br>&#160;&#160;request: LS0tLS1CRUdJTi…<br>&#160;&#160;signerName: kubernetes.io/<br>&#160;&#160;&#160;&#160;kube-apiserver-client<br>&#160;&#160;expirationSeconds: 604800 <span style="color:#A89580"># 7 j</span><br>&#160;&#160;usages: ["client auth"]<br><br><span style="color:#A89580">$ kubectl certificate approve malik</span></p>
+</div>
+</div>
+<aside>Le script tp/04-rbac/creer-utilisateur.sh enchaîne les 4 étapes. Dans le TP, Malik est créé à la main pour comprendre, Théo et Inès avec le script. Un certificat client ne se révoque pas : on préfère des certificats courts et des droits donnés aux groupes.</aside>
+</section>
+<section id="c4-rbac" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">RBAC : un rôle, un binding, des sujets</h2>
+<div style="display:flex;align-items:center;gap:18px">
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#B5651D">QUI · subjects</p><p style="font-family:'JetBrains Mono', monospace;font-size:26px">Group dev</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">LE LIEN · RoleBinding</p><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE">dev-developpeur</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#B5651D">QUOI · Role</p><p style="font-family:'JetBrains Mono', monospace;font-size:26px">developpeur</p></div>
+</div>
+<div style="display:flex;gap:36px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Role<br>metadata:<br>&#160;&#160;name: developpeur<br>&#160;&#160;namespace: croustino<br>rules:<br>- apiGroups: ["apps"]<br>&#160;&#160;resources: ["deployments"]<br>&#160;&#160;verbs: ["get","list","update",…]<br>- apiGroups: [""]<br>&#160;&#160;resources: ["pods/log"]<br>&#160;&#160;verbs: ["get"]<br><span style="color:#A89580"># pas de "secrets" : refusé</span></p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: RoleBinding<br>subjects:<br>- kind: <span style="color:#8FC1F0">Group</span><br>&#160;&#160;name: <span style="color:#8FC1F0">dev</span><br>roleRef:<br>&#160;&#160;kind: Role<br>&#160;&#160;name: <span style="color:#E9A23B">developpeur</span></p>
+</div>
+<table style="font-size:24px;color:#2B1D14">
+<tr><th style="width:30%">Portée</th><th style="width:35%">Le quoi</th><th style="width:35%">Le lien</th></tr>
+<tr><td>namespace</td><td>Role</td><td>RoleBinding</td></tr>
+<tr><td>cluster</td><td>ClusterRole</td><td>ClusterRoleBinding</td></tr>
+</table>
+</div>
+</div>
+<aside>Tout est refusé par défaut, les règles ne font qu'ajouter des droits. Astuce : un RoleBinding peut pointer vers un ClusterRole (par exemple view) pour réutiliser sa définition dans un seul namespace. Vérifier avec kubectl auth can-i --list --as malik --as-group dev -n croustino.</aside>
+</section>
+<section id="c4-sa" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">ServiceAccounts : l'identité des pods</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:22px">
+<div style="display:flex;align-items:center;gap:16px">
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#B5651D">POD</p><p style="font-size:26px">son compte</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">TOKEN</p><p style="font-size:26px;color:#FBF6EE">court, monté dans le pod</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#1F4F82;border-radius:14px;padding:18px"><p style="font-size:24px;font-weight:700;color:#FBE3BC">API</p><p style="font-size:26px;color:#FBF6EE">vérifie, puis RBAC</p></div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Par défaut, chaque pod reçoit un token dans <span style="color:#2B1D14">/var/run/secrets/…</span></p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Le back n'appelle jamais l'API : ce token ne sert qu'à un attaquant. <span style="color:#2B1D14"><b>On le retire.</b></span></p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">La CI reçoit un token de 10 minutes, limité à <span style="color:#2B1D14">get, patch deployments</span>.</p>
+</div>
+<div style="width:700px;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">kind: ServiceAccount<br>metadata:<br>&#160;&#160;name: back<br><span style="color:#E9A23B">automountServiceAccountToken: false</span><br>---<br><span style="color:#A89580"># dans le Deployment du back</span><br>spec:<br>&#160;&#160;serviceAccountName: back</p>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># un token court pour la CI</span><br>kubectl create token ci-deployer \<br>&#160;&#160;-n croustino --duration=10m</p>
+</div>
+</div>
+</div>
+<aside>Les tokens sont projetés : liés au pod, à durée de vie limitée, renouvelés automatiquement. Bonus du TP : décoder le JWT pour voir l'audience et l'expiration.</aside>
+</section>
+<section id="c4-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 04</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Chacun ses clés</p>
+<p style="font-size:30px;color:#D6E4F2">2 h 05 en deux parties</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-04-rbac</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>créer Malik à la main, Théo et Inès au script</li>
+<li>écrire le Role developpeur et les bindings</li>
+<li>retirer le token du back, créer la CI</li>
+<li>rejouer l'incident avec le compte de Théo</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">Théo reçoit « Forbidden »</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">Malik déploie mais ne lit pas les Secrets</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">la CI change l'image, et rien d'autre</p></div>
+</div>
+</div>
+<aside>Partie 1 (40 min) avant la pause : identités. Partie 2 (1 h 25) après : RBAC et ServiceAccounts. Correction : branche tp-05-capacite, dossier k8s/rbac/.</aside>
+</section>
+<section id="c5-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 5 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Le service promos a mangé toute la RAM »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Vendredi<br>7h02</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Un prestataire a déployé le service « promos » dans <span style="color:#FBF6EE"><b>croustino</b></span>. Il consomme 1,5 Go par pod, sans aucune limite. Les nœuds saturent, le noyau tue des processus au hasard : <span style="color:#FBF6EE"><b>le back redémarre en boucle en plein rush.</b></span></p>
+<p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« Un seul service mal écrit, et c'est tout Croustino qui tombe ? » — Sophie</p>
+</div>
+</div>
+<aside>Le cluster est partagé : sans limites, le voisin le plus gourmand gagne. Sur la VM, c'était pareil, mais au moins on voyait le coupable avec top.</aside>
+</section>
+<section id="c5-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 5 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Des limites à trois niveaux</h2>
+<div style="display:flex;flex-direction:column;gap:18px;background:#5A4636;border-radius:22px;padding:30px">
+<p style="font-size:28px;color:#FBF6EE"><span style="color:#FBE3BC"><b>NŒUD</b></span> · allocatable : ce que le scheduler peut distribuer</p>
+<div style="display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:18px;padding:28px">
+<p style="font-size:28px"><span style="color:#2F6FB0"><b>NAMESPACE croustino</b></span> · LimitRange (valeurs par défaut, maximum) + ResourceQuota (plafond total)</p>
+<div style="display:flex;gap:18px">
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">back</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 100m / 128Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 256Mi</p></div>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">postgres</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">req 500m / 512Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">lim 500m / 512Mi</p></div>
+<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">promos</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">défaut 256Mi</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBF6EE">→ OOMKilled, seul</p></div>
+</div>
+<p style="font-size:26px;color:#5A4636"><span style="color:#2B1D14"><b>CONTENEUR</b></span> · requests (réservé) et limits (plafond)</p>
+</div>
+</div>
+<aside>Avec la limite, promos est tué tout seul (OOMKilled) au lieu d'emporter le nœud. Le quota empêche une équipe de consommer tout le cluster, même avec des pods raisonnables.</aside>
+</section>
+<section id="c5-requests" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 5 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Requests pour placer, limits pour protéger</h2>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:26px;color:#5A4636">Mémoire allocatable de worker1 (3,5 Gi) : le scheduler additionne les <span style="color:#2B1D14"><b>requests</b></span></p>
+<div style="display:flex;height:72px;border:2px solid #5A4636;border-radius:12px;overflow:hidden">
+<div style="width:15%;background:#2F6FB0;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#FBF6EE">postgres</p></div>
+<div style="width:7%;background:#1F4F82;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#FBF6EE">back</p></div>
+<div style="width:20%;background:#5A4636;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#FBF6EE">système</p></div>
+<div style="flex:1;background:#F3E9DA;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#5A4636">libre pour de nouveaux pods</p></div>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F3E9DA;border-radius:16px;padding:26px">
+<h3 style="font-size:32px;font-weight:700">Dépasser sa limite CPU</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Le conteneur est <span style="color:#2B1D14"><b>ralenti</b></span> (throttling). Il survit.</p>
+<h3 style="font-size:32px;font-weight:700">Dépasser sa limite mémoire</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Le conteneur est <span style="color:#2B1D14"><b>tué</b></span> : OOMKilled.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<table style="font-size:26px;color:#2B1D14">
+<tr><th style="width:30%">Classe QoS</th><th style="width:40%">Quand</th><th style="width:30%">Évincé</th></tr>
+<tr><td>BestEffort</td><td>rien de déclaré</td><td>en premier</td></tr>
+<tr><td>Burstable</td><td>requests &lt; limits</td><td>ensuite</td></tr>
+<tr><td>Guaranteed</td><td>requests = limits</td><td>en dernier</td></tr>
+</table>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">PostgreSQL passe en <span style="color:#2B1D14"><b>Guaranteed</b></span> : c'est lui qu'on protège.</p>
+</div>
+</div>
+<aside>Le scheduler ne regarde jamais la consommation réelle, seulement les requests. Un pod sans requests peut atterrir sur un nœud déjà plein. kubectl top (metrics-server) montre la consommation réelle, utile pour choisir les valeurs.</aside>
+</section>
+<section id="c5-quota" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 5 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">LimitRange et ResourceQuota</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>LimitRange</b></span> : règles par conteneur</p>
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: LimitRange<br>metadata:<br>&#160;&#160;name: defauts-conteneurs<br>&#160;&#160;namespace: croustino<br>spec:<br>&#160;&#160;limits:<br>&#160;&#160;- type: Container<br>&#160;&#160;&#160;&#160;defaultRequest: {cpu: 100m, memory: 128Mi}<br>&#160;&#160;&#160;&#160;default: <span style="color:#E9A23B">{cpu: 500m, memory: 256Mi}</span><br>&#160;&#160;&#160;&#160;max: {cpu: "1", memory: 1Gi}</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>ResourceQuota</b></span> : plafond du namespace</p>
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: ResourceQuota<br>metadata:<br>&#160;&#160;name: plafond-croustino<br>spec:<br>&#160;&#160;hard:<br>&#160;&#160;&#160;&#160;requests.cpu: "2"<br>&#160;&#160;&#160;&#160;requests.memory: 2Gi<br>&#160;&#160;&#160;&#160;limits.memory: 4Gi<br>&#160;&#160;&#160;&#160;pods: "15"</p>
+</div>
+</div>
+</div>
+<div style="background:#F3E9DA;border-radius:14px;padding:20px 26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#2B1D14;white-space:nowrap">$ kubectl scale deploy front --replicas=20<br><span style="color:#B5651D">Error creating: pods "front-…" is forbidden: exceeded quota: plafond-croustino</span></p>
+</div>
+<aside>Piège classique : dès qu'un quota CPU/mémoire existe, tout pod doit déclarer ses requests et limits, sinon il est refusé. Le LimitRange fournit les valeurs par défaut. Il ne s'applique qu'aux pods créés après lui : rollout restart.</aside>
+</section>
+<section id="c5-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 05</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Mettre promos au régime</p>
+<p style="font-size:30px;color:#D6E4F2">50 min</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-05-capacite</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>installer metrics-server, lire kubectl top</li>
+<li>déployer promos et regarder les nœuds souffrir</li>
+<li>poser un LimitRange et une ResourceQuota</li>
+<li>donner des ressources explicites à Croustino</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">promos est OOMKilled, seul</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">le scale à 20 est bloqué par le quota</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">postgres est en QoS Guaranteed</p></div>
+</div>
+</div>
+<aside>Supprimer promos après l'étape 3 pour ne pas gêner les TP suivants. Correction : branche tp-06-helm (k8s/capacite/ et ressources dans k8s/).</aside>
+</section>
+<section id="c6-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 6 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« On ouvre à Lyon »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">J+15</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Pour l'ouverture de Lyon, Malik a copié <span style="color:#FBF6EE"><b>k8s/</b></span> en <span style="color:#FBF6EE"><b>k8s-lyon/</b></span> et remplacé « Rennes » à la main. Deux semaines plus tard :</p>
+<ul style="font-size:34px;line-height:1.6;color:#E8D9C4">
+<li>un correctif appliqué à Rennes, oublié à Lyon</li>
+<li>deux Services sur le même NodePort</li>
+<li>personne ne sait quelle version tourne où</li>
+</ul>
+</div>
+</div>
+<aside>Demander : combien de villes avant que ça devienne ingérable ? Et pour la préproduction, la recette, la démo commerciale ? Le copier-coller ne passe pas à l'échelle.</aside>
+</section>
+<section id="c6-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 6 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un chart, des values, autant de releases que de villes</h2>
+<div style="display:flex;align-items:center;gap:28px">
+<div style="width:380px;display:flex;flex-direction:column;gap:10px;background:#2B1D14;border-radius:20px;padding:30px">
+<x-icon data-g="▤" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700;color:#FBF6EE">helm/croustino</p>
+<p style="font-size:26px;color:#E8D9C4">les templates, écrits une fois</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;align-items:center;gap:20px">
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<p style="width:330px;font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">values-rennes.yaml</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE">release croustino</p><p style="font-size:24px;color:#EAF1F8">ns croustino · port 30080</p></div>
+</div>
+<div style="display:flex;align-items:center;gap:20px">
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<p style="width:330px;font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">values-lyon.yaml</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE">release croustino-lyon</p><p style="font-size:24px;color:#EAF1F8">ns croustino-lyon · port 30081</p></div>
+</div>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Un correctif ? On modifie le chart une fois, puis <span style="color:#2B1D14"><b>helm upgrade</b></span> pour chaque ville. Helm garde l'historique de chaque release.</p>
+<aside>Helm est aussi le moyen standard d'installer des logiciels tiers : Prometheus, Fluent Bit, Harbor seront installés avec Helm dans les chapitres suivants.</aside>
+</section>
+<section id="c6-chart" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 6 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un template + des values = du YAML</h2>
+<div style="display:flex;gap:28px">
+<div style="width:440px;background:#F3E9DA;border-radius:16px;padding:26px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#2B1D14;white-space:nowrap">helm/croustino/<br>├─ Chart.yaml<br>├─ <span style="color:#B5651D">values.yaml</span><br>├─ values-rennes.yaml<br>├─ values-lyon.yaml<br>└─ templates/<br>&#160;&#160;&#160;├─ _helpers.tpl<br>&#160;&#160;&#160;├─ configmap.yaml<br>&#160;&#160;&#160;├─ postgres.yaml<br>&#160;&#160;&#160;├─ <span style="color:#2F6FB0">back.yaml</span><br>&#160;&#160;&#160;└─ front.yaml</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># templates/back.yaml</span><br>kind: Deployment<br>metadata: {name: back}<br>spec:<br>&#160;&#160;replicas: <span style="color:#E9A23B">{{ .Values.back.replicas }}</span><br>&#160;&#160;&#160;&#160;image: <span style="color:#E9A23B">{{ .Values.imageRegistry }}</span>/…</p>
+</div>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># values-lyon.yaml</span><br>ville: Lyon<br>stockMax: 12<br>back:<br>&#160;&#160;replicas: <span style="color:#E9A23B">1</span><br>front:<br>&#160;&#160;nodePort: 30081</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;justify-content:center">
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Tester le rendu sans rien installer :</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#2B1D14;background:#F3E9DA;padding:16px 20px;border-radius:12px">helm template croustino \<br>&#160;&#160;helm/croustino \<br>&#160;&#160;-f values-lyon.yaml</p>
+</div>
+</div>
+</div>
+</div>
+<aside>values.yaml contient les valeurs par défaut, chaque fichier de ville ne surcharge que ce qui change. Le namespace n'est jamais écrit en dur : {{ .Release.Namespace }}. helm lint détecte les erreurs de syntaxe.</aside>
+</section>
+<section id="c6-cycle" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 6 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">La vie d'une release</h2>
+<div style="display:flex;align-items:center;gap:18px">
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;font-weight:700;color:#FBF6EE">révision 1</p><p style="font-size:24px;color:#EAF1F8">install · front 1.1</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;font-weight:700;color:#FBF6EE">révision 2</p><p style="font-size:24px;color:#EAF1F8">upgrade · front 1.0</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:50px;height:26px"></x-shape>
+<div style="flex:1;background:#B5651D;border-radius:14px;padding:20px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;font-weight:700;color:#FBF6EE">révision 3</p><p style="font-size:24px;color:#FBF6EE">rollback vers la 1</p></div>
+</div>
+<div style="display:flex;gap:36px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#F3E9DC;white-space:nowrap">helm install croustino-lyon helm/croustino \<br>&#160;&#160;-n croustino-lyon -f values-lyon.yaml<br><br>helm upgrade croustino-lyon … <span style="color:#E9A23B">--set front.image.tag=1.0</span><br>helm history croustino-lyon -n croustino-lyon<br>helm rollback croustino-lyon 1 -n croustino-lyon<br>helm list -A</p>
+</div>
+<div style="width:600px;display:flex;flex-direction:column;gap:14px;background:#F3E9DA;border-radius:16px;padding:28px">
+<h3 style="font-size:32px;font-weight:700">Reprendre Rennes sans rien perdre</h3>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">Helm refuse les objets qu'il n'a pas créés. On les supprime tous… <span style="color:#2B1D14"><b>sauf le PVC</b></span>.</p>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">Le chart recrée <span style="color:#2B1D14"><b>postgres-0</b></span>, qui retrouve <span style="color:#2B1D14"><b>data-postgres-0</b></span> : les commandes sont là.</p>
+</div>
+</div>
+<aside>L'historique est stocké dans des Secrets du namespace (sh.helm.release.v1.*). Un rollback crée une nouvelle révision, il ne revient pas en arrière dans l'historique.</aside>
+</section>
+<section id="c6-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 06</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Croustino en chart</p>
+<p style="font-size:30px;color:#D6E4F2">1 h 15</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-06-helm</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>écrire le chart à partir des fichiers de k8s/</li>
+<li>reprendre Rennes dans Helm, en gardant le PVC</li>
+<li>ouvrir Lyon sur le port 30081</li>
+<li>faire un upgrade puis un rollback</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">Rennes a gardé ses commandes</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">le bandeau de Lyon affiche « Lyon »</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">helm list -A montre deux releases</p></div>
+</div>
+</div>
+<aside>Prévoir imageRegistry et imagePullSecrets dans les values dès maintenant : ils serviront au TP 10. Correction : branche tp-07-monitoring, dossier helm/croustino/.</aside>
+</section>
+<section id="c7-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 7 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« On l'a appris sur les réseaux sociaux »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Lundi<br>7h40</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#FBF6EE;background:#3A2A1F;border-radius:16px;padding:24px 30px">« @Croustino 3 commandes refusées ce matin, vous êtes sérieux ? »</p>
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Le back rejetait des commandes depuis 40 minutes. Inès l'apprend en lisant le message. <span style="color:#FBF6EE"><b>Combien ? Depuis quand ? Personne n'a de chiffres.</b></span></p>
+</div>
+</div>
+<aside>La question à poser : comment Croustino aurait-il pu le savoir avant le client ? Il faut des chiffres en continu et quelqu'un (ou quelque chose) qui les surveille.</aside>
+</section>
+<section id="c7-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 7 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Mesurer, montrer, prévenir</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon data-g="∿" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<p style="font-size:30px;font-style:italic;color:#5A4636">« Combien ? »</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-weight:600">Prometheus</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">collecte les métriques toutes les 15 s et les garde</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon data-g="▥" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<p style="font-size:30px;font-style:italic;color:#5A4636">« Depuis quand ? »</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-weight:600">Grafana</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">les tableaux de bord : le rush du matin en un coup d'œil</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon data-g="⚠" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<p style="font-size:30px;font-style:italic;color:#5A4636">« Qui prévenir ? »</p>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-weight:600">Alertmanager</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">envoie l'alerte à Inès avant que le client ne tweete</p>
+</div>
+</div>
+<p style="font-size:30px;color:#5A4636">Les trois sont installés d'un coup avec le chart <span style="color:#2B1D14"><b>kube-prometheus-stack</b></span>.</p>
+<aside>Le chart installe aussi le Prometheus Operator, node-exporter (métriques des nœuds) et kube-state-metrics (état des objets Kubernetes), avec des dashboards et des alertes prêts à l'emploi.</aside>
+</section>
+<section id="c7-archi" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 7 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Prometheus va chercher les métriques</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:440px;display:flex;flex-direction:column;gap:14px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#B5651D;color:#FBF6EE;padding:16px 20px;border-radius:12px">back:8080/metrics</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:16px 20px;border-radius:12px">kube-state-metrics</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:16px 20px;border-radius:12px">node-exporter</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:16px 20px;border-radius:12px">kubelet / cAdvisor</p>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<x-shape kind="arrow-left" style="background:#2F6FB0;width:110px;height:40px"></x-shape>
+<p style="font-size:24px;color:#2F6FB0;text-align:center">scrape<br>15 s</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<div style="background:#EAF1F8;border:2px dashed #2F6FB0;border-radius:14px;padding:16px 20px"><p style="font-size:26px;color:#2F6FB0"><b>ServiceMonitor</b> : dit quoi collecter</p></div>
+<div style="background:#2F6FB0;border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600;color:#FBF6EE">Prometheus</p>
+<p style="font-size:26px;color:#EAF1F8">stocke les séries, évalue les règles d'alerte</p>
+</div>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="width:340px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#2B1D14;border-radius:14px;padding:22px"><p style="font-size:30px;font-weight:700;color:#E9A23B">Grafana</p><p style="font-size:24px;color:#E8D9C4">requêtes PromQL</p></div>
+<div style="background:#2B1D14;border-radius:14px;padding:22px"><p style="font-size:30px;font-weight:700;color:#E9A23B">Alertmanager</p><p style="font-size:24px;color:#E8D9C4">mail, Slack, SMS…</p></div>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Modèle <span style="color:#2B1D14"><b>pull</b></span> : l'application expose ses chiffres, Prometheus découvre les cibles via l'API Kubernetes. Une cible muette, c'est <span style="color:#2B1D14"><b>up == 0</b></span> : une alerte de plus.</p>
+<aside>Dans un cluster kubeadm, etcd, scheduler et controller-manager écoutent sur 127.0.0.1 : leurs cibles apparaissent DOWN. C'est une question du TP.</aside>
+</section>
+<section id="c7-promql" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 7 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Des compteurs aux réponses</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:28px;color:#5A4636">1. Le back expose des <span style="color:#2B1D14"><b>compteurs</b></span></p>
+<div style="background:#1E1814;border-radius:16px;padding:24px 28px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580">$ curl back:8080/metrics</span><br>croustino_commandes_total{produit=<br>&#160;&#160;"croissant"} <span style="color:#E9A23B">1287</span><br>croustino_commandes_rejetees_total <span style="color:#E9A23B">42</span></p>
+</div>
+<p style="font-size:28px;color:#5A4636">2. Un <span style="color:#2B1D14"><b>ServiceMonitor</b></span> dans le chart</p>
+<div style="background:#1E1814;border-radius:16px;padding:24px 28px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: ServiceMonitor<br>spec:<br>&#160;&#160;selector:<br>&#160;&#160;&#160;&#160;matchLabels: {app: back}<br>&#160;&#160;endpoints:<br>&#160;&#160;- port: http<br>&#160;&#160;&#160;&#160;interval: 15s</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:28px;color:#5A4636">3. <span style="color:#2B1D14"><b>PromQL</b></span> transforme les compteurs en vitesses</p>
+<div style="background:#1E1814;border-radius:16px;padding:24px 28px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># commandes par minute, par produit</span><br>sum by (produit) (<br>&#160;&#160;<span style="color:#E9A23B">rate</span>(croustino_commandes_total[1m])<br>) * 60<br><br><span style="color:#A89580"># l'alerte du TP</span><br>sum(<span style="color:#E9A23B">increase</span>(<br>&#160;&#160;croustino_commandes_rejetees_total[5m]<br>)) &gt; 10</p>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#5A4636"><span style="color:#2B1D14"><b>rate()</b></span> : un compteur ne fait que monter et repart à zéro quand le pod redémarre. On regarde sa pente.</p>
+</div>
+</div>
+<aside>Le chart Croustino livre aussi une PrometheusRule (alertes) et le dashboard en ConfigMap avec le label grafana_dashboard : tout est versionné avec l'application. Correction dans helm/croustino/templates/monitoring.yaml.</aside>
+</section>
+<section id="c7-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 07</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Le dashboard du rush</p>
+<p style="font-size:30px;color:#D6E4F2">10 min le jour 2 · 50 min le jour 3</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-07-monitoring</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>installer kube-prometheus-stack avec Helm</li>
+<li>ajouter un ServiceMonitor au chart</li>
+<li>simuler le rush et écrire du PromQL</li>
+<li>construire le dashboard et l'alerte</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">la cible croustino/back est UP</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">le dashboard montre le rush</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">l'alerte passe en Firing</p></div>
+</div>
+</div>
+<aside>Jour 2 à 16h50 : on lance juste l'installation (les pods mettent quelques minutes). Jour 3 au matin : exploitation. Prometheus :30090, Grafana :30300 (admin / croustino), Alertmanager :30093. Correction : branche tp-08-logs.</aside>
+</section>
+<section id="c8-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 8 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« La commande perdue de Mme Lebrun »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Mercredi<br>9h30</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Mme Lebrun a commandé des croissants pour sa réunion de 8h. Rien n'est arrivé. Malik veut lire les logs du back… mais les pods ont été remplacés par le déploiement de 8h15.</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;color:#FBF6EE;background:#1E1814;padding:20px 28px;border-radius:12px">$ kubectl logs deploy/back | grep Lebrun<br><span style="color:#A89580">(rien)</span></p>
+<p style="font-size:34px;line-height:1.5;color:#FBF6EE"><b>Les logs vivent et meurent avec les pods.</b></p>
+</div>
+</div>
+<aside>Le TP rejoue exactement ce scénario : une commande rejetée, un rollout restart, puis l'enquête dans Kibana.</aside>
+</section>
+<section id="c8-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 8 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Garder les logs hors des pods</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBF6EE;border-radius:20px;padding:34px">
+<p style="font-size:28px;font-weight:700;color:#B5651D">AUJOURD'HUI</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px">kubectl logs</p>
+<ul style="font-size:28px;line-height:1.5;color:#5A4636">
+<li>un pod à la fois</li>
+<li>disparaît avec le pod</li>
+<li>pas de recherche, pas d'historique</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBF6EE;border-radius:20px;padding:34px">
+<p style="font-size:28px;font-weight:700;color:#2F6FB0">AVEC UNE PILE DE LOGS</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:28px">Kibana / Grafana</p>
+<ul style="font-size:28px;line-height:1.5;color:#5A4636">
+<li>tous les pods, tous les nœuds</li>
+<li>conservés des jours après</li>
+<li>recherche par champ : client, commande</li>
+</ul>
+</div>
+</div>
+<table style="font-size:26px;color:#2B1D14">
+<tr><th style="width:22%">Pile</th><th style="width:39%">Composants</th><th style="width:39%">Points forts</th></tr>
+<tr><td>EFK</td><td>Elasticsearch, Fluent Bit, Kibana</td><td>recherche plein texte puissante</td></tr>
+<tr><td>Loki</td><td>Loki, Promtail / Alloy, Grafana</td><td>léger, même outil que les métriques</td></tr>
+<tr><td>Cloud</td><td>CloudWatch, Cloud Logging…</td><td>rien à opérer</td></tr>
+</table>
+<aside>On utilise EFK, au programme officiel. Loki est un bon choix quand on a déjà Grafana : c'est un bonus de discussion en fin de TP.</aside>
+</section>
+<section id="c8-efk" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 8 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Le chemin d'une ligne de log</h2>
+<div style="display:flex;align-items:center;gap:20px">
+<div style="width:620px;display:flex;flex-direction:column;gap:14px;border:3px dashed #B5651D;border-radius:18px;padding:22px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">CHAQUE NŒUD</p>
+<div style="display:flex;align-items:center;gap:14px">
+<div style="flex:1;background:#F3E9DA;border-radius:12px;padding:16px"><p style="font-size:26px;font-weight:700">pod back</p><p style="font-size:24px;color:#5A4636">écrit sur stdout</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:12px;padding:16px"><p style="font-family:'JetBrains Mono', monospace;font-size:24px">/var/log/<br>containers/</p></div>
+</div>
+<div style="background:#B5651D;border-radius:12px;padding:16px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">Fluent Bit · DaemonSet</p><p style="font-size:24px;color:#FBF6EE">lit les fichiers, ajoute pod, namespace, labels</p></div>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#2F6FB0;border-radius:18px;padding:26px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:38px;font-weight:600;color:#FBF6EE">Elasticsearch</p>
+<p style="font-size:24px;color:#EAF1F8">un index par jour</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBE3BC">kube-2026.10.09</p>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="width:260px;display:flex;flex-direction:column;gap:8px;background:#2B1D14;border-radius:18px;padding:26px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:38px;font-weight:600;color:#E9A23B">Kibana</p>
+<p style="font-size:24px;color:#E8D9C4">recherche, filtres, visualisations</p>
+</div>
+</div>
+<div style="display:flex;gap:28px">
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:24px"><h3 style="font-size:30px;font-weight:700">Pourquoi un DaemonSet ?</h3><p style="font-size:26px;line-height:1.4;color:#5A4636">Un collecteur par nœud lit les fichiers locaux. Un nœud ajouté = un collecteur de plus, automatiquement.</p></div>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:24px"><h3 style="font-size:30px;font-weight:700">Pourquoi un opérateur (ECK) ?</h3><p style="font-size:26px;line-height:1.4;color:#5A4636">Elasticsearch a besoin de certificats, de mots de passe, de volumes : l'opérateur gère tout ça.</p></div>
+</div>
+<aside>ECK crée le Secret logs-es-elastic-user (mot de passe), les certificats TLS et le PVC. Elasticsearch demande 2 Go : vérifier kubectl top nodes avant l'installation.</aside>
+</section>
+<section id="c8-json" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 8 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Logs JSON : une info, un champ</h2>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Ce que le back écrit sur stdout :</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">{"niveau": "<span style="color:#E9A23B">ERROR</span>", "evenement": "commande_rejetee", "commande_id": "<span style="color:#8FC1F0">1268863b</span>",<br>&#160;"client": "<span style="color:#E9A23B">Mme Lebrun</span>", "quantite": 30, "raison": "fournée insuffisante (max 24)"}</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Ce que Fluent Bit ajoute :</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">"kubernetes": {<br>&#160;&#160;"namespace_name": "croustino",<br>&#160;&#160;"pod_name": "back-7d9f-x2k",<br>&#160;&#160;"node": "worker2" … }</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Ce qu'on tape dans Kibana (KQL) :</p>
+<div style="background:#F3E9DA;border-radius:16px;padding:22px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#2B1D14;white-space:nowrap">kubernetes.namespace_name : "croustino"<br>and client : "Mme Lebrun"<br>and niveau : "ERROR"</p>
+</div>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Réponse en 2 secondes : commande <span style="color:#2B1D14"><b>1268863b</b></span>, 30 croissants, rejetée car la fournée est limitée à 24. Le pod n'existe plus, la trace oui.</p>
+<aside>Avec du texte libre, il faudrait des expressions régulières fragiles. En JSON, le filtre kubernetes de Fluent Bit (Merge_Log On) transforme chaque clé en champ interrogeable.</aside>
+</section>
+<section id="c8-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 08</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">L'enquête Lebrun</p>
+<p style="font-size:30px;color:#D6E4F2">55 min</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-08-logs</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>installer ECK, Elasticsearch et Kibana</li>
+<li>déployer Fluent Bit avec Helm</li>
+<li>rejouer la commande puis remplacer les pods</li>
+<li>retrouver la commande dans Kibana</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous donnez le n° de commande</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">… le pod qui l'a traitée</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">… et la raison du rejet</p></div>
+</div>
+</div>
+<aside>Ordre important : installer la chaîne de logs AVANT de rejouer la commande, car Fluent Bit ne lit que les nouvelles lignes. Kibana : https sur le port 30561, utilisateur elastic. Correction : solutions/08-logs.md dans tp-09-audit.</aside>
+</section>
+<section id="c9-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 9 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Qui a supprimé le back à 3h du matin ? »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Samedi<br>6h30</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Les premiers livreurs ne voient aucune commande : le Deployment <span style="color:#FBF6EE"><b>back</b></span> a disparu. Depuis le TP 04, chacun a son identité… <span style="color:#FBF6EE"><b>mais rien n'enregistre qui fait quoi.</b></span></p>
+<p style="font-family:'Fraunces', Georgia, serif;font-style:italic;font-size:38px;line-height:1.4;color:#FBF6EE;border-left:4px solid #E9A23B;padding:0 0 0 28px">« Je veux un nom. » — Sophie<br>« Je veux surtout que ça ne recommence pas. » — Inès</p>
+</div>
+</div>
+<aside>Les logs de l'API server parlent de son fonctionnement, pas des actions des utilisateurs. Pour ça, il faut l'audit, désactivé par défaut avec kubeadm.</aside>
+</section>
+<section id="c9-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 9 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">L'API server tient un journal de bord</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:300px;background:#1E1814;border-radius:14px;padding:22px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#E9A23B">kubectl delete</p><p style="font-size:24px;color:#E8D9C4">par malik</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:18px;padding:26px"><p style="font-size:34px;font-weight:700;color:#FBF6EE">API server</p><p style="font-size:26px;color:#EAF1F8">consulte la politique d'audit</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:18px;padding:26px"><p style="font-size:30px;font-weight:700">Événement d'audit</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">audit.log ou webhook</p></div>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">QUI</p><p style="font-size:28px">user, groupes</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">QUOI</p><p style="font-size:28px">verbe, ressource</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">QUAND</p><p style="font-size:28px">horodatage</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">D'OÙ</p><p style="font-size:28px">IP, outil</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">RÉSULTAT</p><p style="font-size:28px">201, 403…</p></div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">L'API server est un <span style="color:#2B1D14"><b>static pod</b></span> : on l'active en modifiant <span style="color:#2B1D14"><b>/etc/kubernetes/manifests/kube-apiserver.yaml</b></span>, et le kubelet le redémarre seul.</p>
+<aside>Toujours sauvegarder kube-apiserver.yaml HORS du dossier manifests : une copie dedans serait lancée comme un second API server.</aside>
+</section>
+<section id="c9-niveaux" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 9 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Une politique : la première règle gagne</h2>
+<div style="display:flex;gap:36px">
+<div style="width:640px;display:flex;flex-direction:column;gap:10px">
+<div style="background:#F3E9DA;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700">None</p><p style="font-size:24px;color:#5A4636">rien : les sondes, les events, le bruit</p></div>
+<div style="background:#D6E4F2;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700">Metadata</p><p style="font-size:24px;color:#2B1D14">qui, quoi, quand, sans le contenu</p></div>
+<div style="background:#8FB4DB;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700">Request</p><p style="font-size:24px;color:#2B1D14">+ le corps de la requête</p></div>
+<div style="background:#2F6FB0;border-radius:12px;padding:16px 20px"><p style="font-size:28px;font-weight:700;color:#FBF6EE">RequestResponse</p><p style="font-size:24px;color:#FBF6EE">+ la réponse : tout, mais volumineux</p></div>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">Les Secrets : jamais au-delà de <span style="color:#2B1D14"><b>Metadata</b></span>, sinon les mots de passe finissent dans le journal.</p>
+</div>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">apiVersion: audit.k8s.io/v1<br>kind: Policy<br>rules:<br><span style="color:#A89580"># 1. le bruit</span><br>- level: None<br>&#160;&#160;resources: [{resources: [events]}]<br><span style="color:#A89580"># 2. secrets : qui, jamais quoi</span><br>- level: <span style="color:#E9A23B">Metadata</span><br>&#160;&#160;resources: [{resources: [secrets]}]<br><span style="color:#A89580"># 3. les lectures</span><br>- level: None<br>&#160;&#160;verbs: [get, list, watch]<br><span style="color:#A89580"># 4. modifs dans croustino</span><br>- level: <span style="color:#E9A23B">RequestResponse</span><br>&#160;&#160;namespaces: [croustino]<br>- level: Metadata</p>
+</div>
+</div>
+<aside>L'ordre compte : la règle des Secrets est avant celle des lectures, sinon la lecture d'un Secret ne serait jamais tracée. La politique complète est dans k8s/audit/audit-policy.yaml.</aside>
+</section>
+<section id="c9-jq" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 9 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Mener l'enquête avec jq</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Un événement d'audit (simplifié)</p>
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">{<br>&#160;&#160;"verb": "<span style="color:#E9A23B">delete</span>",<br>&#160;&#160;"user": {<br>&#160;&#160;&#160;&#160;"username": "<span style="color:#E9A23B">malik</span>",<br>&#160;&#160;&#160;&#160;"groups": ["dev", …]},<br>&#160;&#160;"sourceIPs": ["10.10.0.10"],<br>&#160;&#160;"userAgent": "kubectl/v1.34…",<br>&#160;&#160;"objectRef": {<br>&#160;&#160;&#160;&#160;"resource": "deployments",<br>&#160;&#160;&#160;&#160;"namespace": "croustino",<br>&#160;&#160;&#160;&#160;"name": "back"},<br>&#160;&#160;"responseStatus": {"code": 200},<br>&#160;&#160;"requestReceivedTimestamp": "…T03:02:11Z"<br>}</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">La requête qui trouve le coupable</p>
+<div style="background:#1E1814;border-radius:16px;padding:24px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">sudo jq -c '<br>&#160;&#160;select(.verb == "delete"<br>&#160;&#160;&#160;&#160;and .objectRef.name == "back")<br>&#160;&#160;| {t: .requestReceivedTimestamp,<br>&#160;&#160;&#160;&#160;&#160;qui: .user.username,<br>&#160;&#160;&#160;&#160;&#160;outil: .userAgent}' \<br>&#160;&#160;/var/log/kubernetes/audit/audit.log</p>
+</div>
+<p style="font-size:28px;color:#5A4636">Et les refus ?</p>
+<div style="background:#F3E9DA;border-radius:16px;padding:20px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#2B1D14;white-space:nowrap">select(.responseStatus.code == 403)</p>
+</div>
+</div>
+</div>
+<aside>Dans le TP, Théo essaie d'abord (403), puis Malik réussit (200). En production, l'audit part vers un système externe (SIEM, Elasticsearch) : un administrateur malveillant pourrait effacer le fichier local.</aside>
+</section>
+<section id="c9-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 09</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Trouver le coupable</p>
+<p style="font-size:30px;color:#D6E4F2">50 min</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-09-audit</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>lire la politique et prédire les niveaux</li>
+<li>activer l'audit dans le static pod</li>
+<li>rejouer la nuit avec les comptes du TP 04</li>
+<li>répondre à 4 questions avec jq</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">l'API server redémarre avec l'audit</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous nommez le coupable et l'heure</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous listez les tentatives refusées</p></div>
+</div>
+</div>
+<aside>Point de vigilance : une faute de YAML dans kube-apiserver.yaml et l'API ne revient pas. Diagnostic : sudo crictl ps -a --name kube-apiserver puis crictl logs. Correction : solutions/09-audit.md dans tp-10-harbor.</aside>
+</section>
+<section id="c10-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 10 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« Le registre public nous bloque au rush »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">Lundi<br>6h45</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Un nœud redémarre, ses pods doivent retélécharger leurs images. Le registre public répond :</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;color:#FBF6EE;background:#1E1814;padding:20px 28px;border-radius:12px"><span style="color:#E9A23B">429 Too Many Requests</span> · ImagePullBackOff</p>
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">20 minutes sans back. Le même jour, un audit trouve <span style="color:#FBF6EE"><b>une image vieille de 3 ans, avec des failles critiques.</b></span></p>
+</div>
+</div>
+<aside>Deux problèmes : la dépendance à un service extérieur au moment critique, et l'absence de contrôle sur ce qui tourne dans le cluster.</aside>
+</section>
+<section id="c10-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 10 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un registre à soi : Harbor</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:320px;display:flex;flex-direction:column;gap:14px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">ghcr.io</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">Docker Hub</p>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><x-shape kind="arrow-right" style="background:#B5651D;width:90px;height:36px"></x-shape><p style="font-size:24px;color:#5A4636">une fois</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#2B1D14;border-radius:20px;padding:30px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600;color:#E9A23B">Harbor</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">projets privés</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">comptes robots</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">scan Trivy</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">proxy cache</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">réplication</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><x-shape kind="arrow-right" style="background:#2F6FB0;width:90px;height:36px"></x-shape><p style="font-size:24px;color:#5A4636">à chaque pull</p></div>
+<div style="width:260px;background:#2F6FB0;border-radius:18px;padding:26px"><p style="font-size:30px;font-weight:700;color:#FBF6EE">Le cluster</p><p style="font-size:24px;color:#EAF1F8">containerd sur les 3 nœuds</p></div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Les images sont copiées une fois chez Croustino, <span style="color:#2B1D14"><b>scannées</b></span>, et une image avec une faille critique <span style="color:#2B1D14"><b>refuse de démarrer</b></span>.</p>
+<aside>Le proxy cache règle directement le problème du registre public : Harbor télécharge une image une seule fois puis la sert depuis son cache. C'est en bonus du TP.</aside>
+</section>
+<section id="c10-harbor" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 10 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Brancher le cluster sur Harbor</h2>
+<div style="display:flex;gap:28px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>1. Copier</b></span> les images (skopeo)</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 28px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">skopeo copy \<br>&#160;&#160;--dest-creds "$ROBOT:$SECRET" \<br>&#160;&#160;docker://ghcr.io/…/croustino-back:1.0 \<br>&#160;&#160;docker://<span style="color:#E9A23B">10.10.0.10:30002</span>/croustino/…</p>
+</div>
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>2. Faire confiance</b></span> au registre (3 nœuds)</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 28px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># /etc/containerd/certs.d/</span><br><span style="color:#A89580">#&#160;&#160;10.10.0.10:30002/hosts.toml</span><br>server = "http://10.10.0.10:30002"<br>[host."http://10.10.0.10:30002"]<br>&#160;&#160;capabilities = ["pull", "resolve"]</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>3. S'authentifier</b></span> avec le robot</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 28px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kubectl create secret docker-registry \<br>&#160;&#160;harbor-croustino -n croustino \<br>&#160;&#160;--docker-server=10.10.0.10:30002 \<br>&#160;&#160;--docker-username="$ROBOT" \<br>&#160;&#160;--docker-password="$SECRET"</p>
+</div>
+<p style="font-size:28px;color:#5A4636"><span style="color:#2B1D14"><b>4. Pointer</b></span> le chart vers Harbor</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 28px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># values-rennes.yaml</span><br>imageRegistry: <span style="color:#E9A23B">10.10.0.10:30002/croustino</span><br>imagePullSecrets:<br>&#160;&#160;- name: harbor-croustino</p>
+</div>
+</div>
+</div>
+<aside>Harbor est exposé en HTTP pour la formation : d'où la configuration explicite de containerd. En production : TLS avec un vrai certificat, et plus besoin de hosts.toml. Les valeurs imageRegistry et imagePullSecrets existent dans le chart depuis le TP 06.</aside>
+</section>
+<section id="c10-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 10</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Les images à la maison</p>
+<p style="font-size:30px;color:#D6E4F2">50 min</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-10-harbor</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>libérer la RAM (EFK), installer Harbor</li>
+<li>créer le projet croustino et un robot</li>
+<li>copier et scanner les images</li>
+<li>faire tirer Croustino depuis Harbor</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">les pods tirent depuis 10.10.0.10:30002</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">nginx:1.19 est bloquée par la politique</p></div>
+</div>
+</div>
+<aside>Harbor : http://10.10.0.10:30002, admin / Harbor12345. Le nom du robot contient un $ : toujours entre guillemets simples. Correction : branche tp-11-cycle-de-vie (values-rennes.yaml, solutions/10-harbor.md).</aside>
+</section>
+<section id="c11-incident" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">Chapitre 11 · L'incident</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:88px;font-weight:600;line-height:1.08;color:#FBF6EE">« La veille de l'Épiphanie »</h2>
+<div style="display:flex;gap:64px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:12px;min-width:max-content">
+<x-icon data-g="◷" style="color:#E9A23B;width:56px;height:56px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:40px;line-height:1.3;color:#E9A23B">5 janvier<br>22h00</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:34px;line-height:1.5;color:#E8D9C4">Demain : 4 000 galettes en commande. Ce soir, trois mauvaises nouvelles.</p>
+<div style="display:flex;gap:18px;align-items:center"><x-icon data-g="⚠" style="color:#E9A23B;width:44px;height:44px"></x-icon><p style="font-size:32px;line-height:1.4;color:#FBF6EE">Un script de Malik a supprimé le namespace <b>croustino-lyon</b>.</p></div>
+<div style="display:flex;gap:18px;align-items:center"><x-icon data-g="⚠" style="color:#E9A23B;width:44px;height:44px"></x-icon><p style="font-size:32px;line-height:1.4;color:#FBF6EE">La VM du control plane a planté hier : <b>plus rien ne se pilotait</b>.</p></div>
+<div style="display:flex;gap:18px;align-items:center"><x-icon data-g="⚠" style="color:#E9A23B;width:44px;height:44px"></x-icon><p style="font-size:32px;line-height:1.4;color:#FBF6EE">La v1.34 ne recevra bientôt plus de correctifs.</p></div>
+</div>
+</div>
+<aside>Trois sujets d'architecture et de cycle de vie : sauvegarde, disponibilité, mises à jour. C'est le dernier chapitre, il rassemble tout ce qu'on a vu.</aside>
+</section>
+<section id="c11-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 11 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Sauvegarder, maintenir, ne plus dépendre d'une machine</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon data-g="⛁" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">Sauvegarder etcd</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Tout l'état du cluster tient dans etcd. Un snapshot, et on peut remonter le temps.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon data-g="⚙" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">Maintenir sans couper</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">drain, mise à jour, uncordon, un nœud à la fois. Les PDB protègent l'appli.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon data-g="☁" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">Haute disponibilité</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">3 control planes, stockage répliqué : plus aucune machine indispensable.</p>
+</div>
+</div>
+<aside>Dans le TP, on fait les deux premiers sur le cluster. La haute disponibilité se dessine : il faudrait 3 VM de plus pour la monter.</aside>
+</section>
+<section id="c11-ha" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 11 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">D'un cluster fragile à un cluster HA</h2>
+<div style="display:flex;gap:40px">
+<div style="width:560px;display:flex;flex-direction:column;gap:16px;background:#F3E9DA;border-radius:20px;padding:28px">
+<p style="font-size:26px;font-weight:700;color:#B5651D">AUJOURD'HUI</p>
+<div style="background:#B5651D;border-radius:14px;padding:18px"><p style="font-size:28px;font-weight:700;color:#FBF6EE">1 control plane</p><p style="font-size:24px;color:#FBF6EE">s'il tombe, plus rien ne se pilote</p></div>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:16px"><p style="font-size:26px">worker1</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:16px"><p style="font-size:26px">worker2</p></div>
+</div>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">PostgreSQL sur un disque local, Harbor sans réplique, NodePort sur une IP.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#EAF1F8;border-radius:20px;padding:28px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">CIBLE</p>
+<div style="background:#2B1D14;border-radius:12px;padding:14px;display:flex;justify-content:center"><p style="font-size:26px;color:#E9A23B">load balancer · api.croustino:6443</p></div>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#2F6FB0;border-radius:12px;padding:14px"><p style="font-size:24px;font-weight:700;color:#FBF6EE">cp1</p><p style="font-size:24px;color:#EAF1F8">API + etcd</p></div>
+<div style="flex:1;background:#2F6FB0;border-radius:12px;padding:14px"><p style="font-size:24px;font-weight:700;color:#FBF6EE">cp2</p><p style="font-size:24px;color:#EAF1F8">API + etcd</p></div>
+<div style="flex:1;background:#2F6FB0;border-radius:12px;padding:14px"><p style="font-size:24px;font-weight:700;color:#FBF6EE">cp3</p><p style="font-size:24px;color:#EAF1F8">API + etcd</p></div>
+</div>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:14px"><p style="font-size:24px">worker × N</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:14px"><p style="font-size:24px">stockage répliqué</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:12px;padding:14px"><p style="font-size:24px">Ingress + IP virtuelle</p></div>
+</div>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">etcd vote à la majorité : 3 membres tolèrent 1 panne, 5 en tolèrent 2.</p>
+</div>
+</div>
+<aside>Topologie « etcd empilé » (stacked) : etcd sur les control planes, la plus simple. Topologie « etcd externe » : etcd sur ses propres machines, plus robuste mais plus de VM. Best practices : nombre impair de membres etcd, sauvegardes externalisées, nœuds répartis sur plusieurs zones.</aside>
+</section>
+<section id="c11-etcd" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 11 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Sauvegarder et restaurer etcd</h2>
+<div style="display:flex;align-items:center;gap:16px">
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">snapshot save</p><p style="font-size:24px;color:#EAF1F8">photo de tout le cluster</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:46px;height:24px"></x-shape>
+<div style="flex:1;background:#B5651D;border-radius:14px;padding:18px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">l'accident</p><p style="font-size:24px;color:#FBF6EE">namespace supprimé</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:46px;height:24px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:18px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">snapshot restore</p><p style="font-size:24px;color:#EAF1F8">dans un nouveau dossier</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:46px;height:24px"></x-shape>
+<div style="flex:1;background:#1F4F82;border-radius:14px;padding:18px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">etcd.yaml</p><p style="font-size:24px;color:#EAF1F8">pointe vers ce dossier</p></div>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:26px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># sauvegarde (etcdctl est dans le pod etcd)</span><br>kubectl -n kube-system exec etcd-controlplane -- etcdctl --endpoints=https://127.0.0.1:2379 \<br>&#160;&#160;--cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=…/server.crt --key=…/server.key \<br>&#160;&#160;snapshot save <span style="color:#E9A23B">/var/lib/etcd/sauvegarde-tp11.db</span><br><span style="color:#A89580"># restauration dans un nouveau dossier</span><br>kubectl -n kube-system exec etcd-controlplane -- etcdutl snapshot restore \<br>&#160;&#160;/var/lib/etcd/sauvegarde-tp11.db --data-dir <span style="color:#E9A23B">/var/lib/etcd/restauration</span> …<br><span style="color:#A89580"># puis dans /etc/kubernetes/manifests/etcd.yaml : hostPath → /var/lib/etcd/restauration</span></p>
+</div>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">Une restauration ramène <span style="color:#2B1D14"><b>tout</b></span> le cluster en arrière : à réserver aux catastrophes. Pour un namespace, on redéploie depuis Git et Helm.</p>
+<aside>La sauvegarde doit partir hors du control plane (stockage objet, autre site) et être testée. Velero est l'outil de référence pour sauvegarder des namespaces et leurs volumes.</aside>
+</section>
+<section id="c11-upgrade" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 11 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Mettre à jour, un nœud à la fois</h2>
+<div style="display:flex;gap:16px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#2F6FB0;border-radius:16px;padding:22px">
+<p style="font-size:24px;font-weight:700;color:#FBE3BC">1 · CONTROL PLANE</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#FBF6EE">kubeadm upgrade plan<br>kubeadm upgrade apply<br>drain · kubelet · uncordon</p>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:46px;height:24px;align-self:center"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#F3E9DA;border-radius:16px;padding:22px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">2 · WORKER1</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5">kubeadm upgrade node<br>drain · kubelet<br>uncordon</p>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:46px;height:24px;align-self:center"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#F3E9DA;border-radius:16px;padding:22px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">3 · WORKER2</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5">kubeadm upgrade node<br>drain · kubelet<br>uncordon</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<p style="font-size:28px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>drain</b></span> évince les pods du nœud. Le <span style="color:#2B1D14"><b>PodDisruptionBudget</b></span> interdit d'en retirer trop à la fois.</p>
+<p style="font-size:28px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Une mineure à la fois</b></span> : 1.34 → 1.35 → 1.36. Jamais de saut.</p>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">Piège : <span style="color:#2B1D14"><b>postgres-0</b></span> est lié à son disque local. Pendant le drain de son nœud, il attend.</p>
+</div>
+<div style="width:640px;background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">apiVersion: policy/v1<br>kind: PodDisruptionBudget<br>metadata:<br>&#160;&#160;name: back<br>spec:<br>&#160;&#160;<span style="color:#E9A23B">maxUnavailable: 1</span><br>&#160;&#160;selector:<br>&#160;&#160;&#160;&#160;matchLabels: {app: back}</p>
+</div>
+</div>
+<aside>Pendant tout le TP, une boucle curl surveille le site : les participants voient en direct ce que protège le PDB, et ce qui casse quand le nœud de PostgreSQL est drainé. Excellente discussion pour la question des single points of failure.</aside>
+</section>
+<section id="c11-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon data-g="⚒" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 11</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Sauver l'Épiphanie</p>
+<p style="font-size:30px;color:#D6E4F2">1 h 05</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-11-cycle-de-vie</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>ajouter des PodDisruptionBudgets au chart</li>
+<li>sauvegarder etcd, supprimer Lyon, restaurer</li>
+<li>passer le cluster en v1.35, nœud par nœud</li>
+<li>surveiller le site pendant toute l'opération</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">croustino-lyon est revenu</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">les 3 nœuds sont en v1.35</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon data-g="✔" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">vous expliquez chaque coupure vue</p></div>
+</div>
+</div>
+<aside>Toujours copier etcd.yaml hors du dossier manifests avant de le modifier. Si l'API ne revient pas après la restauration : sudo systemctl restart kubelet. Correction : branche solution-finale.</aside>
+</section>
+<section id="epilogue" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Épilogue</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Croustino, trois jours plus tard</h2>
+<div style="display:flex;gap:36px;align-items:stretch">
+<div style="width:420px;display:flex;flex-direction:column;gap:16px;background:#FBF6EE;border-radius:20px;padding:30px">
+<p style="font-size:26px;font-weight:700;color:#B5651D">AVANT</p>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;border:3px dashed #B5651D;border-radius:16px;padding:24px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;text-align:center">1 VM</p>
+<p style="font-size:26px;text-align:center;color:#5A4636">front · back · PostgreSQL</p>
+<p style="font-size:26px;text-align:center;color:#5A4636">37 commandes perdues à chaque mise à jour</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#FBF6EE;border-radius:20px;padding:30px">
+<p style="font-size:26px;font-weight:700;color:#2F6FB0">APRÈS</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">1 · cluster kubeadm</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">2 · mises à jour sans coupure</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">3 · données persistantes</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">4 · une identité, des droits</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">5 · des limites par équipe</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">6 · Rennes et Lyon en Helm</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">7 · métriques et alertes</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">8 · logs centralisés</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">9 · audit de chaque action</p>
+<p style="font-size:26px;background:#EAF1F8;padding:12px 16px;border-radius:10px">10 · images privées, scannées</p>
+<p style="font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:12px 16px;border-radius:10px">11 · sauvegardes et mises à jour</p>
+<p style="font-size:26px;background:#2B1D14;color:#E9A23B;padding:12px 16px;border-radius:10px">prochaine étape : la HA</p>
+</div>
+</div>
+</div>
+<aside>Reprendre les réponses notées au chapitre 0 (ce qui n'allait pas sur la VM) et cocher ce qui est réglé. Demander aux participants ce qu'ils appliqueront en premier chez eux.</aside>
+</section>
+<section id="fin" data-transition="fade" style="background:#2B1D14;color:#F3E9DC;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:44px">
+<p style="font-size:28px;font-weight:700;letter-spacing:6px;text-transform:uppercase;color:#E9A23B">Fin de l'histoire… pour cette fois</p>
+<h1 style="font-family:'Fraunces', Georgia, serif;font-size:140px;font-weight:700;line-height:1.0;color:#FBF6EE">Merci !</h1>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:48px;font-style:italic;line-height:1.3;color:#E8D9C4">Les croissants arrivent chauds. Le site ne tombe plus.</p>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;border:2px solid #E9A23B;border-radius:18px;padding:28px">
+<x-icon data-g="✔" style="color:#E9A23B;width:48px;height:48px"></x-icon>
+<p style="font-size:30px;color:#FBF6EE">QCM final</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;border:2px solid #E9A23B;border-radius:18px;padding:28px">
+<x-icon data-g="✉" style="color:#E9A23B;width:48px;height:48px"></x-icon>
+<p style="font-size:30px;color:#FBF6EE">Questions et évaluation</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;border:2px solid #E9A23B;border-radius:18px;padding:28px">
+<x-icon data-g="&lt;/&gt;" style="color:#E9A23B;width:48px;height:48px"></x-icon>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#FBF6EE">branche solution-finale</p>
+</div>
+</div>
+<aside>Rappeler que le dépôt reste accessible : chaque branche permet de refaire un TP depuis son point de départ.</aside>
+</section>
+</div>
+<div id="notes"></div>
+<div id="compteur"></div>
+<script>
+  const slides = [...document.querySelectorAll('section')];
+  const scene = document.getElementById('scene');
+  const notes = document.getElementById('notes');
+  // la taille des icônes vient de leur largeur
+  document.querySelectorAll('x-icon').forEach(i => { i.style.fontSize = i.style.width || '48px'; });
+  let n = Math.max(0, slides.findIndex(s => '#' + s.id === location.hash));
+  function afficher() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === n));
+    const a = slides[n].querySelector('aside');
+    notes.textContent = a ? a.textContent : '';
+    document.getElementById('compteur').textContent = (n + 1) + ' / ' + slides.length;
+    history.replaceState(null, '', '#' + slides[n].id);
+  }
+  function ajuster() {
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    scene.style.transform = 'translate(-50%, -50%) scale(' + k + ')';
+  }
+  addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) n = Math.min(n + 1, slides.length - 1);
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) n = Math.max(n - 1, 0);
+    else if (e.key === 'Home') n = 0;
+    else if (e.key === 'End') n = slides.length - 1;
+    else if (e.key === 'n' || e.key === 'N') notes.style.display = notes.style.display === 'block' ? 'none' : 'block';
+    else if (e.key === 'f' || e.key === 'F') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    else return;
+    e.preventDefault(); afficher();
+  });
+  addEventListener('click', e => { if (e.target.closest('#notes')) return; n = Math.min(n + 1, slides.length - 1); afficher(); });
+  addEventListener('resize', ajuster);
+  ajuster(); afficher();
+</script>
+</body>
+</html>

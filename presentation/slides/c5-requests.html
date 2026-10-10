@@ -1,0 +1,31 @@
+<section id="c5-requests" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 5 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Requests pour placer, limits pour protéger</h2>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:26px;color:#5A4636">Mémoire allocatable de worker1 (3,5 Gi) : le scheduler additionne les <span style="color:#2B1D14"><b>requests</b></span></p>
+<div style="display:flex;height:72px;border:2px solid #5A4636;border-radius:12px;overflow:hidden">
+<div style="width:15%;background:#2F6FB0;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#FBF6EE">postgres</p></div>
+<div style="width:7%;background:#1F4F82;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#FBF6EE">back</p></div>
+<div style="width:20%;background:#5A4636;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#FBF6EE">système</p></div>
+<div style="flex:1;background:#F3E9DA;display:flex;align-items:center;justify-content:center"><p style="font-size:24px;color:#5A4636">libre pour de nouveaux pods</p></div>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F3E9DA;border-radius:16px;padding:26px">
+<h3 style="font-size:32px;font-weight:700">Dépasser sa limite CPU</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Le conteneur est <span style="color:#2B1D14"><b>ralenti</b></span> (throttling). Il survit.</p>
+<h3 style="font-size:32px;font-weight:700">Dépasser sa limite mémoire</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Le conteneur est <span style="color:#2B1D14"><b>tué</b></span> : OOMKilled.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<table style="font-size:26px;color:#2B1D14">
+<tr><th style="width:30%">Classe QoS</th><th style="width:40%">Quand</th><th style="width:30%">Évincé</th></tr>
+<tr><td>BestEffort</td><td>rien de déclaré</td><td>en premier</td></tr>
+<tr><td>Burstable</td><td>requests &lt; limits</td><td>ensuite</td></tr>
+<tr><td>Guaranteed</td><td>requests = limits</td><td>en dernier</td></tr>
+</table>
+<p style="font-size:26px;line-height:1.4;color:#5A4636">PostgreSQL passe en <span style="color:#2B1D14"><b>Guaranteed</b></span> : c'est lui qu'on protège.</p>
+</div>
+</div>
+<aside>Le scheduler ne regarde jamais la consommation réelle, seulement les requests. Un pod sans requests peut atterrir sur un nœud déjà plein. kubectl top (metrics-server) montre la consommation réelle, utile pour choisir les valeurs.</aside>
+</section>

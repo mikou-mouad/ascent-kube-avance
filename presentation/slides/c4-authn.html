@@ -1,0 +1,26 @@
+<section id="c4-authn" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 4 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un certificat comme carte d'identité</h2>
+<div style="display:flex;align-items:center;gap:16px">
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700">1. Clé + demande</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">openssl</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:44px;height:24px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700">2. Envoi à l'API</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">CSR</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:44px;height:24px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700">3. Approbation</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">signé par la CA</p></div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:44px;height:24px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:14px;padding:20px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">4. Kubeconfig</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#EAF1F8">malik.kubeconfig</p></div>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">openssl req -new -key malik.key \<br>&#160;&#160;-subj "/<span style="color:#E9A23B">CN=malik</span>/<span style="color:#8FC1F0">O=dev</span>"</p>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#B5651D"><b>CN</b></span> = le nom d'utilisateur<br><span style="color:#2F6FB0"><b>O</b></span> = le groupe (on donne les droits au groupe)</p>
+<p style="font-size:28px;line-height:1.45;color:#5A4636">En entreprise : <span style="color:#2B1D14"><b>OIDC</b></span> (Keycloak, Entra ID…) avec les groupes de l'annuaire.</p>
+</div>
+<div style="width:760px;background:#1E1814;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">apiVersion: certificates.k8s.io/v1<br>kind: CertificateSigningRequest<br>metadata: {name: malik}<br>spec:<br>&#160;&#160;request: LS0tLS1CRUdJTi…<br>&#160;&#160;signerName: kubernetes.io/<br>&#160;&#160;&#160;&#160;kube-apiserver-client<br>&#160;&#160;expirationSeconds: 604800 <span style="color:#A89580"># 7 j</span><br>&#160;&#160;usages: ["client auth"]<br><br><span style="color:#A89580">$ kubectl certificate approve malik</span></p>
+</div>
+</div>
+<aside>Le script tp/04-rbac/creer-utilisateur.sh enchaîne les 4 étapes. Dans le TP, Malik est créé à la main pour comprendre, Théo et Inès avec le script. Un certificat client ne se révoque pas : on préfère des certificats courts et des droits donnés aux groupes.</aside>
+</section>

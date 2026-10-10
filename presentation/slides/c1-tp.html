@@ -1,0 +1,28 @@
+<section id="c1-tp" data-transition="fade" style="background:#1F4F82;color:#FBF6EE;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:grid;grid-template-columns:560px 1fr;gap:72px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon name="Wrench" style="color:#E9A23B;width:72px;height:72px"></x-icon>
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#E9A23B">À vous de jouer</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:96px;font-weight:700;line-height:1.0;color:#FBF6EE">TP 01</h2>
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;line-height:1.2;color:#FBF6EE">Installer le cluster</p>
+<p style="font-size:30px;color:#D6E4F2">2 h · guide d'installation, sections 2 à 7</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#1F4F82;background:#FBF6EE;padding:10px 20px;border-radius:12px">tp-01-installation</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">Vous allez</h3>
+<ul style="font-size:30px;line-height:1.5;color:#FBF6EE">
+<li>préparer les 3 nœuds et comprendre chaque réglage</li>
+<li>initialiser le control plane, installer Calico</li>
+<li>joindre les workers et tester le réseau</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#163B63;border-radius:18px;padding:28px">
+<h3 style="font-size:36px;font-weight:700;color:#E9A23B">C'est réussi quand</h3>
+<div style="display:flex;gap:16px;align-items:center"><x-icon name="CheckCircle" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">3 nœuds Ready</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon name="CheckCircle" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">la page nginx répond depuis un pod busybox</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon name="CheckCircle" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">HTTP 200 sur le NodePort des 3 nœuds</p></div>
+<div style="display:flex;gap:16px;align-items:center"><x-icon name="CheckCircle" style="color:#E9A23B;width:40px;height:40px"></x-icon><p style="font-size:30px;color:#FBF6EE">snapshot des 3 VM pris</p></div>
+</div>
+</div>
+<aside>Pendant les temps d'attente (apt, pull des images), poser les questions de l'énoncé : swap, br_netfilter, driver cgroup, apt-mark hold. Correction : solutions/01-installation.md dans la branche tp-02.</aside>
+</section>

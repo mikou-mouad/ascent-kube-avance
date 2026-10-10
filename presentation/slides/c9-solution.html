@@ -1,0 +1,20 @@
+<section id="c9-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 9 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">L'API server tient un journal de bord</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:300px;background:#1E1814;border-radius:14px;padding:22px"><p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#E9A23B">kubectl delete</p><p style="font-size:24px;color:#E8D9C4">par malik</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#2F6FB0;border-radius:18px;padding:26px"><p style="font-size:34px;font-weight:700;color:#FBF6EE">API server</p><p style="font-size:26px;color:#EAF1F8">consulte la politique d'audit</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:60px;height:30px"></x-shape>
+<div style="flex:1;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:18px;padding:26px"><p style="font-size:30px;font-weight:700">Événement d'audit</p><p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#5A4636">audit.log ou webhook</p></div>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">QUI</p><p style="font-size:28px">user, groupes</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">QUOI</p><p style="font-size:28px">verbe, ressource</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">QUAND</p><p style="font-size:28px">horodatage</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">D'OÙ</p><p style="font-size:28px">IP, outil</p></div>
+<div style="flex:1;background:#FBF6EE;border-radius:16px;padding:24px"><p style="font-size:26px;font-weight:700;color:#B5651D">RÉSULTAT</p><p style="font-size:28px">201, 403…</p></div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">L'API server est un <span style="color:#2B1D14"><b>static pod</b></span> : on l'active en modifiant <span style="color:#2B1D14"><b>/etc/kubernetes/manifests/kube-apiserver.yaml</b></span>, et le kubelet le redémarre seul.</p>
+<aside>Toujours sauvegarder kube-apiserver.yaml HORS du dossier manifests : une copie dedans serait lancée comme un second API server.</aside>
+</section>

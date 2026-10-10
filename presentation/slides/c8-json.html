@@ -1,0 +1,26 @@
+<section id="c8-json" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 8 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Logs JSON : une info, un champ</h2>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Ce que le back écrit sur stdout :</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">{"niveau": "<span style="color:#E9A23B">ERROR</span>", "evenement": "commande_rejetee", "commande_id": "<span style="color:#8FC1F0">1268863b</span>",<br>&#160;"client": "<span style="color:#E9A23B">Mme Lebrun</span>", "quantite": 30, "raison": "fournée insuffisante (max 24)"}</p>
+</div>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Ce que Fluent Bit ajoute :</p>
+<div style="background:#1E1814;border-radius:16px;padding:22px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">"kubernetes": {<br>&#160;&#160;"namespace_name": "croustino",<br>&#160;&#160;"pod_name": "back-7d9f-x2k",<br>&#160;&#160;"node": "worker2" … }</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px;color:#5A4636">Ce qu'on tape dans Kibana (KQL) :</p>
+<div style="background:#F3E9DA;border-radius:16px;padding:22px 30px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#2B1D14;white-space:nowrap">kubernetes.namespace_name : "croustino"<br>and client : "Mme Lebrun"<br>and niveau : "ERROR"</p>
+</div>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Réponse en 2 secondes : commande <span style="color:#2B1D14"><b>1268863b</b></span>, 30 croissants, rejetée car la fournée est limitée à 24. Le pod n'existe plus, la trace oui.</p>
+<aside>Avec du texte libre, il faudrait des expressions régulières fragiles. En JSON, le filtre kubernetes de Fluent Bit (Merge_Log On) transforme chaque clé en champ interrogeable.</aside>
+</section>

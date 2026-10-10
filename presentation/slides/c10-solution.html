@@ -1,0 +1,25 @@
+<section id="c10-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 10 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un registre à soi : Harbor</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:320px;display:flex;flex-direction:column;gap:14px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">ghcr.io</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#FBF6EE;padding:16px 20px;border-radius:12px">Docker Hub</p>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><x-shape kind="arrow-right" style="background:#B5651D;width:90px;height:36px"></x-shape><p style="font-size:24px;color:#5A4636">une fois</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#2B1D14;border-radius:20px;padding:30px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600;color:#E9A23B">Harbor</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">projets privés</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">comptes robots</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">scan Trivy</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">proxy cache</p>
+<p style="font-size:26px;color:#2B1D14;background:#FBE3BC;padding:8px 16px;border-radius:20px">réplication</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px"><x-shape kind="arrow-right" style="background:#2F6FB0;width:90px;height:36px"></x-shape><p style="font-size:24px;color:#5A4636">à chaque pull</p></div>
+<div style="width:260px;background:#2F6FB0;border-radius:18px;padding:26px"><p style="font-size:30px;font-weight:700;color:#FBF6EE">Le cluster</p><p style="font-size:24px;color:#EAF1F8">containerd sur les 3 nœuds</p></div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Les images sont copiées une fois chez Croustino, <span style="color:#2B1D14"><b>scannées</b></span>, et une image avec une faille critique <span style="color:#2B1D14"><b>refuse de démarrer</b></span>.</p>
+<aside>Le proxy cache règle directement le problème du registre public : Harbor télécharge une image une seule fois puis la sert depuis son cache. C'est en bonus du TP.</aside>
+</section>

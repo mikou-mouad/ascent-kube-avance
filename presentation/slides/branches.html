@@ -1,0 +1,28 @@
+<section id="branches" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Le dépôt des TP</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Une branche par TP, chacune part de la précédente</h2>
+<div style="display:flex;align-items:center;gap:14px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-01</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-02</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-03</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">…</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:14px 20px;border-radius:12px">tp-11</p>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:14px 20px;border-radius:12px">solution-finale</p>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Branche tp-NN</b></span> = l'énoncé du TP NN + l'application dans l'état attendu au début du TP.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>La correction</b></span> d'un TP, c'est la branche suivante.</p>
+<p style="font-size:30px;line-height:1.45;color:#5A4636"><span style="color:#2B1D14"><b>Bloqué ?</b></span> On repart de la bonne branche, sans perdre la suite.</p>
+</div>
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:32px 36px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.6;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># TP 02, sur le control plane</span><br>git clone https://github.com/<br>&#160;&#160;mikou-mouad/ascent-kube-avance.git<br>&#160;&#160;~/croustino<br><br><span style="color:#A89580"># début de chaque TP suivant</span><br>cd ~/croustino &amp;&amp; git fetch<br>git stash -u<br>git checkout <span style="color:#E9A23B">tp-03-stockage</span></p>
+</div>
+</div>
+<aside>Montrer le dépôt sur GitHub. Les dossiers : app/ (le code), k8s/ (les manifests), helm/ (à partir du TP 06), tp/ (les énoncés), solutions/ (les réponses aux questions).</aside>
+</section>

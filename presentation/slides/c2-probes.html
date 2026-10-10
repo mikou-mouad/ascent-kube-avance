@@ -1,0 +1,23 @@
+<section id="c2-probes" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 2 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Mettre à jour sans couper le site</h2>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<h3 style="font-size:34px;font-weight:700">Rolling update de 1.0 vers 1.1</h3>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t0</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p></div>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t1</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;border:2px dashed #2F6FB0;color:#2F6FB0;padding:8px 16px;border-radius:24px">1.1 pas prêt</p></div>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t2</p><p style="font-size:26px;background:#B5651D;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.0</p><p style="font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.1</p></div>
+<div style="display:flex;gap:16px;align-items:center"><p style="width:60px;font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">t3</p><p style="font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.1</p><p style="font-size:26px;background:#2F6FB0;color:#FBF6EE;padding:10px 18px;border-radius:24px">1.1</p></div>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Un ancien pod ne s'arrête que quand un nouveau est <span style="color:#2B1D14"><b>prêt</b></span>. Qui décide qu'il est prêt ? La readinessProbe.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># vivant ? sinon : redémarrage</span><br>livenessProbe:<br>&#160;&#160;httpGet: {path: /healthz, port: http}<br><span style="color:#A89580"># prêt ? sinon : retiré du Service</span><br>readinessProbe:<br>&#160;&#160;httpGet: {path: /readyz, port: http}</p>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.5;color:#F3E9DC;white-space:nowrap">kubectl set image deploy/front \<br>&#160;&#160;front=…/croustino-front:<span style="color:#E9A23B">1.1</span><br>kubectl rollout status deploy/front<br>kubectl rollout undo deploy/front</p>
+</div>
+</div>
+</div>
+<aside>/readyz du back teste la base : si PostgreSQL est arrêté, le back sort du Service au lieu de renvoyer des erreurs. Bonus du TP : passer PostgreSQL à 0 réplica et observer les endpoints.</aside>
+</section>

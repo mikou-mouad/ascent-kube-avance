@@ -1,0 +1,30 @@
+<section id="c7-archi" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 7 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Prometheus va chercher les métriques</h2>
+<div style="display:flex;align-items:center;gap:24px">
+<div style="width:440px;display:flex;flex-direction:column;gap:14px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#B5651D;color:#FBF6EE;padding:16px 20px;border-radius:12px">back:8080/metrics</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:16px 20px;border-radius:12px">kube-state-metrics</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:16px 20px;border-radius:12px">node-exporter</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;background:#F3E9DA;padding:16px 20px;border-radius:12px">kubelet / cAdvisor</p>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<x-shape kind="arrow-left" style="background:#2F6FB0;width:110px;height:40px"></x-shape>
+<p style="font-size:24px;color:#2F6FB0;text-align:center">scrape<br>15 s</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<div style="background:#EAF1F8;border:2px dashed #2F6FB0;border-radius:14px;padding:16px 20px"><p style="font-size:26px;color:#2F6FB0"><b>ServiceMonitor</b> : dit quoi collecter</p></div>
+<div style="background:#2F6FB0;border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600;color:#FBF6EE">Prometheus</p>
+<p style="font-size:26px;color:#EAF1F8">stocke les séries, évalue les règles d'alerte</p>
+</div>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="width:340px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#2B1D14;border-radius:14px;padding:22px"><p style="font-size:30px;font-weight:700;color:#E9A23B">Grafana</p><p style="font-size:24px;color:#E8D9C4">requêtes PromQL</p></div>
+<div style="background:#2B1D14;border-radius:14px;padding:22px"><p style="font-size:30px;font-weight:700;color:#E9A23B">Alertmanager</p><p style="font-size:24px;color:#E8D9C4">mail, Slack, SMS…</p></div>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.45;color:#5A4636">Modèle <span style="color:#2B1D14"><b>pull</b></span> : l'application expose ses chiffres, Prometheus découvre les cibles via l'API Kubernetes. Une cible muette, c'est <span style="color:#2B1D14"><b>up == 0</b></span> : une alerte de plus.</p>
+<aside>Dans un cluster kubeadm, etcd, scheduler et controller-manager écoutent sur 127.0.0.1 : leurs cibles apparaissent DOWN. C'est une question du TP.</aside>
+</section>

@@ -1,0 +1,18 @@
+<section id="c2-yaml" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 2 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:64px;font-weight:600;line-height:1.1">Le back en YAML : les labels font le lien</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Deployment<br>metadata: {name: back}<br>spec:<br>&#160;&#160;replicas: 2<br>&#160;&#160;selector:<br>&#160;&#160;&#160;&#160;matchLabels: {<span style="color:#E9A23B">app: back</span>}<br>&#160;&#160;template:<br>&#160;&#160;&#160;&#160;metadata:<br>&#160;&#160;&#160;&#160;&#160;&#160;labels: {<span style="color:#E9A23B">app: back</span>}<br>&#160;&#160;&#160;&#160;spec:<br>&#160;&#160;&#160;&#160;&#160;&#160;containers:<br>&#160;&#160;&#160;&#160;&#160;&#160;- name: back<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;image: …/croustino-back:1.0<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;envFrom:<br>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;- configMapRef: {name: <span style="color:#8FC1F0">back-config</span>}</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: Service<br>metadata: {name: back}<br>spec:<br>&#160;&#160;selector: {<span style="color:#E9A23B">app: back</span>}<br>&#160;&#160;ports:<br>&#160;&#160;- port: 8080<br>&#160;&#160;&#160;&#160;targetPort: http</p>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.45;color:#F3E9DC;white-space:nowrap">kind: ConfigMap<br>metadata: {name: <span style="color:#8FC1F0">back-config</span>}<br>data:<br>&#160;&#160;DB_HOST: postgres<br>&#160;&#160;STOCK_MAX: "24"</p>
+</div>
+</div>
+</div>
+<aside>Le selector du Deployment doit correspondre aux labels du template. Le Service utilise les mêmes labels. DB_HOST vaut « postgres » : c'est le nom du Service de la base, résolu par le DNS du cluster.</aside>
+</section>

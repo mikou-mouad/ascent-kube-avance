@@ -1,0 +1,28 @@
+<section id="c1-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 1 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Un cluster kubeadm sur 3 VM</h2>
+<div style="display:flex;gap:28px">
+<div style="flex:1;background:#2F6FB0;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700;color:#FBF6EE">controlplane</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#EAF1F8">10.10.0.10</p>
+<p style="font-size:28px;color:#FBF6EE">API server, etcd, scheduler, controller-manager</p>
+</div>
+<div style="flex:1;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700">worker1</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">10.10.0.11</p>
+<p style="font-size:28px;color:#5A4636">Les pods de Croustino</p>
+</div>
+<div style="flex:1;background:#FBF6EE;border:2px solid #E3D3BC;border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', monospace;font-size:30px;font-weight:700">worker2</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:26px;color:#5A4636">10.10.0.12</p>
+<p style="font-size:28px;color:#5A4636">Les pods de Croustino</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:0px">
+<div style="display:flex;background:#2B1D14;border-radius:14px 14px 0 0;padding:18px 28px"><p style="font-size:28px;color:#FBF6EE"><span style="color:#E9A23B"><b>CNI · Calico v3.31</b></span>  le réseau des pods et les NetworkPolicies</p></div>
+<div style="display:flex;background:#5A4636;padding:18px 28px"><p style="font-size:28px;color:#FBF6EE"><span style="color:#E9A23B"><b>kubeadm · kubelet · kubectl v1.34</b></span>  installer, faire tourner, piloter</p></div>
+<div style="display:flex;background:#8A6E55;padding:18px 28px"><p style="font-size:28px;color:#FBF6EE"><span style="color:#FBE3BC"><b>containerd</b></span>  le runtime qui lance les conteneurs</p></div>
+<div style="display:flex;background:#C9B49A;border-radius:0 0 14px 14px;padding:18px 28px"><p style="font-size:28px;color:#2B1D14"><b>Ubuntu 22.04 / 24.04</b>  swap coupé, modules et sysctl réseau</p></div>
+</div>
+<aside>La pile se lit de bas en haut : c'est aussi l'ordre de l'installation. Le CIDR des pods (192.168.0.0/16) ne doit pas chevaucher le réseau des VM.</aside>
+</section>

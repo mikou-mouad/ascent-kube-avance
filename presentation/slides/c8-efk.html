@@ -1,0 +1,31 @@
+<section id="c8-efk" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 8 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Le chemin d'une ligne de log</h2>
+<div style="display:flex;align-items:center;gap:20px">
+<div style="width:620px;display:flex;flex-direction:column;gap:14px;border:3px dashed #B5651D;border-radius:18px;padding:22px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">CHAQUE NŒUD</p>
+<div style="display:flex;align-items:center;gap:14px">
+<div style="flex:1;background:#F3E9DA;border-radius:12px;padding:16px"><p style="font-size:26px;font-weight:700">pod back</p><p style="font-size:24px;color:#5A4636">écrit sur stdout</p></div>
+<x-shape kind="arrow-right" style="background:#B5651D;width:40px;height:22px"></x-shape>
+<div style="flex:1;background:#F3E9DA;border-radius:12px;padding:16px"><p style="font-family:'JetBrains Mono', monospace;font-size:24px">/var/log/<br>containers/</p></div>
+</div>
+<div style="background:#B5651D;border-radius:12px;padding:16px"><p style="font-size:26px;font-weight:700;color:#FBF6EE">Fluent Bit · DaemonSet</p><p style="font-size:24px;color:#FBF6EE">lit les fichiers, ajoute pod, namespace, labels</p></div>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#2F6FB0;border-radius:18px;padding:26px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:38px;font-weight:600;color:#FBF6EE">Elasticsearch</p>
+<p style="font-size:24px;color:#EAF1F8">un index par jour</p>
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;color:#FBE3BC">kube-2026.10.09</p>
+</div>
+<x-shape kind="arrow-right" style="background:#2F6FB0;width:70px;height:34px"></x-shape>
+<div style="width:260px;display:flex;flex-direction:column;gap:8px;background:#2B1D14;border-radius:18px;padding:26px">
+<p style="font-family:'Fraunces', Georgia, serif;font-size:38px;font-weight:600;color:#E9A23B">Kibana</p>
+<p style="font-size:24px;color:#E8D9C4">recherche, filtres, visualisations</p>
+</div>
+</div>
+<div style="display:flex;gap:28px">
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:24px"><h3 style="font-size:30px;font-weight:700">Pourquoi un DaemonSet ?</h3><p style="font-size:26px;line-height:1.4;color:#5A4636">Un collecteur par nœud lit les fichiers locaux. Un nœud ajouté = un collecteur de plus, automatiquement.</p></div>
+<div style="flex:1;background:#F3E9DA;border-radius:16px;padding:24px"><h3 style="font-size:30px;font-weight:700">Pourquoi un opérateur (ECK) ?</h3><p style="font-size:26px;line-height:1.4;color:#5A4636">Elasticsearch a besoin de certificats, de mots de passe, de volumes : l'opérateur gère tout ça.</p></div>
+</div>
+<aside>ECK crée le Secret logs-es-elastic-user (mot de passe), les certificats TLS et le PVC. Elasticsearch demande 2 Go : vérifier kubectl top nodes avant l'installation.</aside>
+</section>

@@ -1,0 +1,13 @@
+<section id="c0-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 0 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">On décrit l'état voulu, Kubernetes s'en charge</h2>
+<table style="font-size:30px;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif">
+<tr><th style="width:24%">Situation</th><th style="width:38%">Sur la VM</th><th style="width:38%">Avec Kubernetes</th></tr>
+<tr><td>Mise à jour</td><td>On arrête, on remplace, on relance</td><td>Rolling update, sans coupure</td></tr>
+<tr><td>Un processus plante</td><td>Quelqu'un le redémarre à la main</td><td>Redémarrage automatique</td></tr>
+<tr><td>Rush de 7h</td><td>La VM sature</td><td>On ajoute des réplicas, sur plusieurs nœuds</td></tr>
+<tr><td>Configuration</td><td>Des fichiers édités sur la VM</td><td>ConfigMap et Secret, versionnés</td></tr>
+<tr><td>Une machine tombe</td><td>Tout tombe</td><td>Les pods sont replanifiés ailleurs</td></tr>
+</table>
+<aside>Insister sur le modèle déclaratif : on ne dit pas « lance ce conteneur », on dit « je veux 3 copies de ce conteneur ». Des boucles de contrôle rapprochent en permanence l'état réel de l'état voulu.</aside>
+</section>

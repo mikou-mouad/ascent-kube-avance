@@ -1,0 +1,22 @@
+<section id="c11-solution" data-transition="fade" style="background:#F3E9DA;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#B5651D">Chapitre 11 · La solution</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Sauvegarder, maintenir, ne plus dépendre d'une machine</h2>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon name="Database" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">Sauvegarder etcd</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">Tout l'état du cluster tient dans etcd. Un snapshot, et on peut remonter le temps.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon name="Settings" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">Maintenir sans couper</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">drain, mise à jour, uncordon, un nœud à la fois. Les PDB protègent l'appli.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:18px;background:#FBF6EE;border-radius:20px;padding:36px">
+<x-icon name="Cloud" style="color:#B5651D;width:60px;height:60px"></x-icon>
+<h3 style="font-family:'Fraunces', Georgia, serif;font-size:44px;font-weight:600">Haute disponibilité</h3>
+<p style="font-size:28px;line-height:1.4;color:#5A4636">3 control planes, stockage répliqué : plus aucune machine indispensable.</p>
+</div>
+</div>
+<aside>Dans le TP, on fait les deux premiers sur le cluster. La haute disponibilité se dessine : il faudrait 3 VM de plus pour la monter.</aside>
+</section>

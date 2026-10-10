@@ -1,0 +1,29 @@
+<section id="c1-etapes" data-transition="fade" style="background:#FBF6EE;color:#2B1D14;font-family:'DM Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-size:26px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#2F6FB0">Chapitre 1 · Le concept</p>
+<h2 style="font-family:'Fraunces', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Monter le cluster en 6 étapes</h2>
+<div style="display:flex;gap:16px;align-items:stretch">
+<div style="flex:3;display:flex;flex-direction:column;gap:12px;background:#F3E9DA;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">SUR LES 3 NŒUDS</p>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">1. Préparer</p><p style="font-size:24px;color:#5A4636">swap, modules, sysctl</p></div>
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">2. containerd</p><p style="font-size:24px;color:#5A4636">SystemdCgroup</p></div>
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">3. Paquets</p><p style="font-size:24px;color:#5A4636">bloqués (hold)</p></div>
+</div>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:12px;background:#EAF1F8;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#2F6FB0">CONTROL PLANE</p>
+<div style="display:flex;gap:12px">
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">4. init</p><p style="font-size:24px;color:#5A4636">kubeadm init</p></div>
+<div style="flex:1;background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">5. CNI</p><p style="font-size:24px;color:#5A4636">Calico</p></div>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#F3E9DA;border-radius:16px;padding:20px">
+<p style="font-size:24px;font-weight:700;color:#B5651D">WORKERS</p>
+<div style="background:#FFFDF8;border-radius:12px;padding:16px"><p style="font-size:28px;font-weight:700">6. join</p><p style="font-size:24px;color:#5A4636">kubeadm join</p></div>
+</div>
+</div>
+<div style="background:#1E1814;border-radius:16px;padding:28px 36px;display:flex;flex-direction:column">
+<p style="font-family:'JetBrains Mono', monospace;font-size:24px;line-height:1.55;color:#F3E9DC;white-space:nowrap"><span style="color:#A89580"># 4. sur controlplane</span><br>sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=10.10.0.10<br><span style="color:#A89580"># 5. le réseau des pods</span><br>kubectl create -f $BASE/tigera-operator.yaml &amp;&amp; kubectl create -f $BASE/custom-resources.yaml<br><span style="color:#A89580"># 6. sur worker1 et worker2 (commande affichée par init)</span><br>sudo kubeadm join 10.10.0.10:6443 --token <span style="color:#E9A23B">&lt;token&gt;</span> --discovery-token-ca-cert-hash sha256:<span style="color:#E9A23B">&lt;hash&gt;</span></p>
+</div>
+<aside>Étapes détaillées dans guide-installation-cluster.md. Faire remarquer que kubeadm init crée les static pods dans /etc/kubernetes/manifests et les certificats dans /etc/kubernetes/pki : on s'en resservira aux chapitres 9 et 11.</aside>
+</section>
