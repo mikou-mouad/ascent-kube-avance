@@ -2,9 +2,7 @@
 
 Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
 
-- `README.md`
 - `helm/croustino/templates/pdb.yaml`
-- `programme-3-jours.md`
 
 Pour les comparer à votre travail : `diff -r solutions/11-cycle-de-vie/k8s k8s` (ou `helm`).
 
