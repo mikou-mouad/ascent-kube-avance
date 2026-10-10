@@ -58,8 +58,27 @@ kubectl apply -f k8s/capacite/promos.yaml
 watch -n 2 'kubectl top nodes; kubectl top pods -n croustino'
 ```
 
-Observez la mémoire des nœuds et les redémarrages (`kubectl get pods -w`, `kubectl describe node worker1 | grep -i pressure`).
-Supprimez ensuite `promos` : `kubectl delete -f k8s/capacite/promos.yaml`.
+Chaque pod `promos` s'alloue 90 % de la mémoire disponible de son nœud (voir `kubectl logs -l app=promos`). Dans un second terminal, suivez les pods :
+
+```bash
+kubectl get pods -n croustino -o wide -w
+```
+
+Au bout d'une à deux minutes, vous devez observer :
+
+- des nœuds proches de 100 % de mémoire dans `kubectl top nodes` ;
+- la condition `MemoryPressure` à `True` : `kubectl describe node worker1 | grep -A 8 Conditions` ;
+- des pods tués ou évincés : colonne `RESTARTS`, statut `OOMKilled` ou `Evicted`, et les événements :
+
+```bash
+kubectl get events -n croustino --sort-by=.lastTimestamp | tail -15
+```
+
+Sur le worker concerné, le noyau trace aussi ses interventions : `sudo dmesg | grep -i -E "oom|killed process"`.
+
+**Question :** quels pods ont été tués ou évincés ? Est-ce toujours `promos` ? Pourquoi ce choix est-il imprévisible tant que personne ne déclare de ressources ?
+
+Supprimez ensuite `promos` : `kubectl delete -f k8s/capacite/promos.yaml`. Vérifiez que les pods de Croustino sont tous revenus (`kubectl get pods -n croustino`).
 
 ### 4. Des valeurs par défaut avec LimitRange
 

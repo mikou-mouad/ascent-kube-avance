@@ -1,5 +1,6 @@
-# Le service « promos » écrit à la va-vite par un prestataire : il consomme
-# de plus en plus de mémoire. Ne pas garder en production !
+# Le service « promos » écrit à la va-vite par un prestataire : chaque pod
+# s'alloue 90 % de la mémoire disponible du nœud où il tourne, sans aucune limite.
+# Ne pas garder en production !
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,5 +21,10 @@ spec:
       containers:
         - name: promos
           image: polinux/stress
-          command: ["stress"]
-          args: ["--vm", "1", "--vm-bytes", "1500M", "--vm-hang", "0"]
+          command: ["sh", "-c"]
+          # /proc/meminfo montre la mémoire du nœud : on en prend 90 %.
+          args:
+            - |
+              MO=$(awk '/MemAvailable/ {print int($2 * 0.9 / 1024)}' /proc/meminfo)
+              echo "promos : allocation de ${MO} Mo"
+              exec stress --vm 1 --vm-bytes "${MO}M" --vm-hang 0
