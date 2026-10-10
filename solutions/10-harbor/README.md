@@ -6,11 +6,13 @@ Pour ceux qui n'ont pas réussi à les écrire, dans ce dossier :
 
 - `hosts.toml` : la configuration containerd de l'étape 5, à copier dans `/etc/containerd/certs.d/10.10.0.10:30002/` sur les 3 nœuds
 
-Les fichiers corrigés sont dans ce dossier, aux mêmes chemins que dans le dépôt :
+Le **chart complet corrigé** est dans `solutions/10-harbor/helm/croustino/`. On peut l'installer tel quel :
 
-- `helm/croustino/values-rennes.yaml`
+```bash
+helm upgrade croustino solutions/10-harbor/helm/croustino -n croustino -f solutions/10-harbor/helm/croustino/values-rennes.yaml
+```
 
-Pour les comparer à votre travail : `diff -r solutions/10-harbor/helm helm`.
+Pour voir ce qui change par rapport à votre chart : `diff -r solutions/10-harbor/helm helm`.
 
 `helm/croustino/values-rennes.yaml` pointe maintenant vers `10.10.0.10:30002/croustino` avec le secret `harbor-croustino`.
 
