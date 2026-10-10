@@ -66,7 +66,15 @@ Créez un **ServiceMonitor** dans le chart (`helm/croustino/templates/monitoring
 helm upgrade croustino helm/croustino -n croustino -f helm/croustino/values-rennes.yaml --set monitoring.enabled=true
 ```
 
-Vérifiez que la cible `serviceMonitor/croustino/back` apparaît dans Prometheus.
+Vérifiez que Prometheus collecte bien le back. Dans le navigateur de ClientWeb, sur `http://10.10.0.11:30090` :
+
+1. menu **Status > Target health** (sur les anciennes versions : **Status > Targets**) ;
+2. tapez `croustino` dans la recherche ;
+3. vous devez voir le groupe **`serviceMonitor/croustino/back/0`** avec **2 cibles `UP`**, une par pod du back (`http://<IP du pod>:8080/metrics`).
+
+Prometheus peut mettre jusqu'à 30 secondes à prendre en compte le ServiceMonitor : rafraîchissez la page.
+
+> Pas de groupe `croustino` ? `kubectl get servicemonitor -n croustino` : s'il n'existe pas, le monitoring n'est pas activé dans la release. S'il existe sans cible, son `selector` ne trouve pas le Service : vérifiez le label `app: back` et le nom de port `http` (`kubectl get svc back -n croustino -o yaml`). Des cibles `DOWN` : lisez l'erreur affichée à côté.
 
 ### 3. Simuler le rush et écrire du PromQL
 
