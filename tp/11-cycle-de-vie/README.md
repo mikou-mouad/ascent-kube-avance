@@ -144,6 +144,8 @@ sudo systemctl daemon-reload && sudo systemctl restart kubelet
 kubectl uncordon controlplane
 ```
 
+> Pendant le drain du control plane, vous verrez sans doute `Cannot evict pod as it would violate the pod's disruption budget` pour `calico-apiserver`. Ce n'est pas une erreur : Calico protège ses pods avec un PodDisruptionBudget, comme on vient de le faire pour Croustino. `kubectl drain` réessaie toutes les 5 s, jusqu'à ce qu'une autre copie soit prête ailleurs.
+
 #### Chaque worker, l'un après l'autre
 
 ```bash
