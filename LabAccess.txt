@@ -1,3 +1,6 @@
+https://hra-ng.hexceos.cloud/
+
+
 Prenom		Identifiant	Mot de passe
 
 Denis   	stagiaire1	https://hra-ng.hexceos.cloud/p/700381b3-b10c-4e9b-9f21-56cb1eee9cebab56yd5x
