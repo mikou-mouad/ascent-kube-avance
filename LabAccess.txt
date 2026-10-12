@@ -1,0 +1,6 @@
+Prenom		Identifiant	Mot de passe
+
+Denis   	stagiaire1	https://hra-ng.hexceos.cloud/p/700381b3-b10c-4e9b-9f21-56cb1eee9cebab56yd5x
+Alexandre	stagiaire2  https://hra-ng.hexceos.cloud/p/700381b3-b10c-4e9b-9f21-56cb1eee9cebw2ztzfp4
+Stepahn   	stagiaire3  https://hra-ng.hexceos.cloud/p/700381b3-b10c-4e9b-9f21-56cb1eee9cebjs8g3mse
+Benjamin	stagiaire4  https://hra-ng.hexceos.cloud/p/700381b3-b10c-4e9b-9f21-56cb1eee9cebc3p96xm6
